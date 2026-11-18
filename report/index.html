@@ -566,7 +566,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   const SCAN = '3D 掃描儀';
   const MACH_ORDER = ['Pro3 HS', 'Pro3 HS(B)', 'E3', 'Form 4L(SLA)', SCAN];
   const MACH_SLOT = ['var(--s1)', 'var(--s7)', 'var(--s2)', 'var(--s3)', 'var(--s4)', 'var(--s5)', 'var(--s6)', 'var(--s8)'];
-  function machines() { const set = [...new Set(S.d.outputs.filter(o => o.l === '3D打印' && o.pr).map(o => o.pr.trim()))]; if (S.d.outputs.some(o => o.l === '3D掃描')) set.push(SCAN); set.sort((a, b) => (MACH_ORDER.indexOf(a) + 1 || 99) - (MACH_ORDER.indexOf(b) + 1 || 99) || (a < b ? -1 : 1)); return set; }
+  function machines() { const set = [...new Set(S.d.outputs.filter(o => o.l === '3D打印' && o.pr).map(o => o.pr.trim()))]; set.sort((a, b) => (MACH_ORDER.indexOf(a) + 1 || 99) - (MACH_ORDER.indexOf(b) + 1 || 99) || (a < b ? -1 : 1)); return set; }
   const machColor = (mc, list) => MACH_SLOT[list.indexOf(mc) % MACH_SLOT.length];
   const tg = k => { const t = S.settings.targets; return t[k] != null ? t[k] : DEFAULT_SETTINGS.targets[k]; };
   const BASE_TXT = { 'mon-fri-ot': '週一～週五＋加班日', 'mon-sat': '工作日（週一～週六）', 'mon-fri': '工作日（週一～週五）', 'calendar': '日曆天' };
@@ -592,9 +592,9 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
       if (o.b) x.bs.add(o.b); else x.jobs++; x.q += o.q; x.h += o.ph; x.g += o.g; x.ml += o.ml; x.days.add(o.a); if (!o.ph && !o.b) x.noT++;
     });
     const sc = S.d.outputs.filter(o => o.l === '3D掃描' && o.am === m);
-    if (sc.length) { const x = res[SCAN] = { jobs: sc.length, q: sc.length, h: sc.length * tg('scanMin') / 60, g: 0, ml: 0, days: new Set(sc.map(o => o.a)), noT: 0, bs: new Set(), std: true }; }
+    const scan = sc.length ? { q: sc.length, h: sc.length * tg('scanMin') / 60, days: new Set(sc.map(o => o.a)).size, people: [...new Set(sc.flatMap(o => o.makers))].filter(isShown).map(pname) } : null;
     Object.values(res).forEach(x => { x.jobs += x.bs.size; x.avail = avail; x.util = avail ? x.h / avail : null; x.pph = x.h ? x.q / x.h : null; x.hpu = x.q ? x.h / x.q : null; x.gpu = x.q ? x.g / x.q : null; x.mlpu = x.q ? x.ml / x.q : null; x.nd = x.days.size; });
-    const out = { wd, avail, res }; eqCache.set(ck, out); return out;
+    const out = { wd, avail, res, scan }; eqCache.set(ck, out); return out;
   }
   const lineCache = new Map();
   function lineOf(sub) {
@@ -813,9 +813,10 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const noT = sum(act.map(k => E.res[k].noT));
     return `${act.length ? `<div class="tiles">${tiles}</div>` : '<p class="muted">本月無 3D 打印紀錄</p>'}
       ${card('設備月度稼動表', `可用時數 = 本月${BASE_TXT[tg('equipBase')] || ''} ${E.wd} 天${tg('equipBase') === 'mon-fri-ot' && otDays(m).length ? `（含加班日 ${otDays(m).map(d => d.slice(5).replace('-', '/')).join('、')}）` : ''}${m === CUR_M ? '（截至今天）' : ''} × 每日 ${H} h = ${fmt(E.avail)} h；稼動率目標 ≥ ${tU}%（可在設定調整）${noT ? `；<span class="bad-t">有 ${noT} 筆未填打印時間（且不屬於同日同機台的批次），稼動率會偏低</span>` : ''}`, table([{ h: '設備' }, { h: '批次', n: 1 }, { h: '只數／尺碼', n: 1 }, { h: '開機天', n: 1 }, { h: '機時 h', n: 1 }, { h: '可用 h', n: 1 }, { h: '稼動率', n: 1 }, { h: 'PPH 只/h', n: 1 }, { h: '單只機時 h', n: 1 }, { h: '單只耗材', n: 1 }, { h: '缺時間', n: 1 }], rows))}
+      ${E.scan ? card('3D 掃描作業量（不列入稼動率）', `以標準工時 ${tg('scanMin')} 分鐘/尺碼換算，僅供參考`, `<dl class="kv"><dt>掃描尺碼</dt><dd>${fmt(E.scan.q)} 個${P.scan ? `（上月 ${fmt(P.scan.q)}）` : ''}</dd><dt>換算工時</dt><dd>${fmt(E.scan.h, 1)} h</dd><dt>掃描天數</dt><dd>${fmt(E.scan.days)} 天</dd><dt>掃描人員</dt><dd>${esc(E.scan.people.join('、') || '—')}</dd></dl>`) : ''}
       <div class="g2">${card('近 12 個月稼動率', '實際打印時數 ÷ 可用時數', legend(list.map(k => [k, machColor(k, list)])) + lineChart(M12, ser, { yMin: 0, yMax: Math.max(1, Math.ceil(Math.max(0, ...ser.flatMap(s => s.values.filter(v => v != null))) * 2) / 2), ticks: Math.max(4, Math.ceil(Math.max(0, ...ser.flatMap(s => s.values.filter(v => v != null))) * 2) * 2 / 2), fmt: v => (v * 100).toFixed(0) + '%', target: tU / 100, hi: 11 }))}
       ${card('近 12 個月 PPH（只 / 機時）', '3D 打印機；越高代表每小時產出越多，受模型大小、層高、填充率影響（掃描儀為固定標準工時不列入）', legend(list.filter(k => k !== SCAN).map(k => [k, machColor(k, list)])) + lineChart(M12, pser, { fmt: v => fmt(v, 1), hi: 11, yMax: Math.ceil(Math.max(1, ...pser.flatMap(s => s.values.filter(v => v != null))) * 1.1), ticks: Math.min(6, Math.ceil(Math.max(1, ...pser.flatMap(s => s.values.filter(v => v != null))) * 1.1)) }))}</div>
-      ${card('指標定義', '', `<ul class="def"><li><b>稼動率</b> = 實際打印時數（3D打印總表「打印時間」加總）÷ 可用時數；可用時數 = 當月可用天數 × 每日可用時數（預設（週一～週五＋加班日）× 每日 7 h；加班日 = 週六日有人員工時紀錄或有打印完成紀錄的日子；若改為夜間無人值守打印，可在設定改成 24 h）。</li><li><b>PPH</b>（Pieces Per Hour）= 只數 ÷ 機時；<b>單只機時</b> = 機時 ÷ 只數。</li><li><b>3D 掃描儀</b>：3D掃描總表每一列為一個尺碼，機時 = 尺碼數 × 標準工時（預設 10 分鐘/尺碼，可在設定調整）；PPH 固定 = 60 ÷ 標準分鐘。</li><li><b>打印批次</b>：有打印時間的那一列算一批；同機台、同完成日、緊接在下方且沒填時間的列（如 Form 4L 一次打多只）歸入同一批，不算缺時間。</li><li><b>開機天</b>：當月有打印完成紀錄的天數。設備指標不受組別篩選影響。</li><li>此為時間稼動率（Availability 面向）；若要完整 OEE，還需記錄打印失敗／重印（良率）與標準打印時間（性能效率）。</li></ul>`)}`;
+      ${card('指標定義', '', `<ul class="def"><li><b>稼動率</b> = 實際打印時數（3D打印總表「打印時間」加總）÷ 可用時數；可用時數 = 當月可用天數 × 每日可用時數（預設（週一～週五＋加班日）× 每日 7 h；加班日 = 週六日有人員工時紀錄或有打印完成紀錄的日子；若改為夜間無人值守打印，可在設定改成 24 h）。</li><li><b>PPH</b>（Pieces Per Hour）= 只數 ÷ 機時；<b>單只機時</b> = 機時 ÷ 只數。</li><li><b>3D 掃描</b>：不列入設備稼動率；另以「尺碼數 × 標準工時（預設 10 分鐘/尺碼，可在設定調整）」顯示作業量。</li><li><b>打印批次</b>：有打印時間的那一列算一批；同機台、同完成日、緊接在下方且沒填時間的列（如 Form 4L 一次打多只）歸入同一批，不算缺時間。</li><li><b>開機天</b>：當月有打印完成紀錄的天數。設備指標不受組別篩選影響。</li><li>此為時間稼動率（Availability 面向）；若要完整 OEE，還需記錄打印失敗／重印（良率）與標準打印時間（性能效率）。</li></ul>`)}`;
   }
 
   /* ---------- 直接作業內容解析 ---------- */
