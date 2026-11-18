@@ -118,7 +118,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
         <span id="ctl" class="ctl" hidden>
           <select id="msel" aria-label="月份"></select>
           <select id="gsel" aria-label="組別"></select>
-          <button class="btn ghost" id="rep" type="button" title="6 個模塊連續排列，方便截圖做簡報">連續報告模式</button>
+          <button class="btn ghost" id="rep" type="button" title="所有模塊連續排列，方便截圖做簡報">連續模式</button>
         </span>
         <label class="btn" id="imp">⬆ 匯入 Excel<input type="file" id="fi" accept=".xlsx" hidden></label>
       </div>
@@ -504,7 +504,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
 
   const DEFAULT_SETTINGS = {
     leftStaff: ['韋雨桐', '毛倩', '黄俊滔'],
-    targets: { direct: 60, problem: 20, otd: 95, dayH: 8, equipH: 7, equipU: 60, equipBase: 'mon-fri-ot' },
+    targets: { direct: 60, problem: 20, otd: 95, dayH: 8, equipH: 7, equipU: 60, equipBase: 'mon-fri-ot', scanMin: 10 },
     lineMap: [
       { line: '位置版', kw: ['位置版'] },
       { line: '印刷圖稿', kw: ['ai 圖稿', 'ai圖稿', '菲林', 'ai 製圖'] },
@@ -563,9 +563,10 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   const shownKeys = () => S.d.staffKeys.filter(isShown);
   const pname = k => (S.d.staff[k] && S.d.staff[k].name) || k;
 
-  const MACH_ORDER = ['Pro3 HS', 'Pro3 HS(B)', 'E3', 'Form 4L(SLA)'];
+  const SCAN = '3D 掃描儀';
+  const MACH_ORDER = ['Pro3 HS', 'Pro3 HS(B)', 'E3', 'Form 4L(SLA)', SCAN];
   const MACH_SLOT = ['var(--s1)', 'var(--s7)', 'var(--s2)', 'var(--s3)', 'var(--s4)', 'var(--s5)', 'var(--s6)', 'var(--s8)'];
-  function machines() { const set = [...new Set(S.d.outputs.filter(o => o.l === '3D打印' && o.pr).map(o => o.pr.trim()))]; set.sort((a, b) => (MACH_ORDER.indexOf(a) + 1 || 99) - (MACH_ORDER.indexOf(b) + 1 || 99) || (a < b ? -1 : 1)); return set; }
+  function machines() { const set = [...new Set(S.d.outputs.filter(o => o.l === '3D打印' && o.pr).map(o => o.pr.trim()))]; if (S.d.outputs.some(o => o.l === '3D掃描')) set.push(SCAN); set.sort((a, b) => (MACH_ORDER.indexOf(a) + 1 || 99) - (MACH_ORDER.indexOf(b) + 1 || 99) || (a < b ? -1 : 1)); return set; }
   const machColor = (mc, list) => MACH_SLOT[list.indexOf(mc) % MACH_SLOT.length];
   const tg = k => { const t = S.settings.targets; return t[k] != null ? t[k] : DEFAULT_SETTINGS.targets[k]; };
   const BASE_TXT = { 'mon-fri-ot': '週一～週五＋加班日', 'mon-sat': '工作日（週一～週六）', 'mon-fri': '工作日（週一～週五）', 'calendar': '日曆天' };
@@ -584,12 +585,14 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   }
   const eqCache = new Map();
   function equip(m) {
-    const ck = m + '|' + S.importId + '|' + tg('equipH') + '|' + tg('equipBase'); if (eqCache.has(ck)) return eqCache.get(ck);
+    const ck = m + '|' + S.importId + '|' + tg('equipH') + '|' + tg('equipBase') + '|' + tg('scanMin'); if (eqCache.has(ck)) return eqCache.get(ck);
     const wd = workdays(m), avail = wd * tg('equipH'), res = {};
     S.d.outputs.filter(o => o.l === '3D打印' && o.am === m && o.pr).forEach(o => {
       const k = o.pr.trim(); const x = res[k] = res[k] || { jobs: 0, q: 0, h: 0, g: 0, ml: 0, days: new Set(), noT: 0, bs: new Set() };
       if (o.b) x.bs.add(o.b); else x.jobs++; x.q += o.q; x.h += o.ph; x.g += o.g; x.ml += o.ml; x.days.add(o.a); if (!o.ph && !o.b) x.noT++;
     });
+    const sc = S.d.outputs.filter(o => o.l === '3D掃描' && o.am === m);
+    if (sc.length) { const x = res[SCAN] = { jobs: sc.length, q: sc.length, h: sc.length * tg('scanMin') / 60, g: 0, ml: 0, days: new Set(sc.map(o => o.a)), noT: 0, bs: new Set(), std: true }; }
     Object.values(res).forEach(x => { x.jobs += x.bs.size; x.avail = avail; x.util = avail ? x.h / avail : null; x.pph = x.h ? x.q / x.h : null; x.hpu = x.q ? x.h / x.q : null; x.gpu = x.q ? x.g / x.q : null; x.mlpu = x.q ? x.ml / x.q : null; x.nd = x.days.size; });
     const out = { wd, avail, res }; eqCache.set(ck, out); return out;
   }
@@ -801,18 +804,18 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   function vEquip(m) {
     const E = equip(m), P = equip(addM(m, -1)), list = machines(), M12 = back(m, 12), tU = tg('equipU'), H = tg('equipH');
     const act = list.filter(k => E.res[k]);
-    const tiles = act.map(k => { const x = E.res[k], p = P.res[k]; return `<div class="tile"><div class="tile-st">${chip(status(x.util, tU, true))}</div><div class="tile-l"><i class="dot" style="background:${machColor(k, list)}"></i>${esc(k)}</div><div class="tile-v">${pct(x.util)}<small>稼動率</small></div><div class="tile-x">${delta(x.util, p ? p.util : null, 'pt')}<br>PPH ${fmt(x.pph, 2)} 只/h · 機時 ${fmt(x.h, 1)} h</div></div>`; }).join('');
-    const rows = act.map(k => { const x = E.res[k]; return [`<i class="dot" style="background:${machColor(k, list)}"></i><b>${esc(k)}</b>`, fmt(x.jobs), fmt(x.q), fmt(x.nd), fmt(x.h, 1), fmt(x.avail), `<b>${pct(x.util)}</b>`, fmt(x.pph, 2), fmt(x.hpu, 2), x.g ? fmt(x.gpu, 1) + ' g' : x.ml ? fmt(x.mlpu, 1) + ' mL' : '—', x.noT ? `<span class="bad-t">${x.noT}</span>` : '0']; });
+    const tiles = act.map(k => { const x = E.res[k], p = P.res[k]; return `<div class="tile"><div class="tile-st">${chip(status(x.util, tU, true))}</div><div class="tile-l"><i class="dot" style="background:${machColor(k, list)}"></i>${esc(k)}</div><div class="tile-v">${pct(x.util)}<small>稼動率</small></div><div class="tile-x">${delta(x.util, p ? p.util : null, 'pt')}${x.std ? ' · 標準工時估算' : ''}<br>PPH ${fmt(x.pph, 2)} 只/h · 機時 ${fmt(x.h, 1)} h</div></div>`; }).join('');
+    const rows = act.map(k => { const x = E.res[k]; return [`<i class="dot" style="background:${machColor(k, list)}"></i><b>${esc(k)}</b>${x.std ? `<br><small class="muted">標準工時 ${tg('scanMin')} 分鐘/尺碼</small>` : ''}`, fmt(x.jobs), fmt(x.q), fmt(x.nd), fmt(x.h, 1), fmt(x.avail), `<b>${pct(x.util)}</b>`, fmt(x.pph, 2), fmt(x.hpu, 2), x.g ? fmt(x.gpu, 1) + ' g' : x.ml ? fmt(x.mlpu, 1) + ' mL' : '—', x.noT ? `<span class="bad-t">${x.noT}</span>` : '0']; });
     const fam = {}; act.forEach(k => { const f = /pro3/i.test(k) ? 'Pro3 系列' : null; if (!f) return; const a = fam[f] = fam[f] || { n: 0, jobs: 0, q: 0, h: 0, avail: 0 }; const x = E.res[k]; a.n++; a.jobs += x.jobs; a.q += x.q; a.h += x.h; a.avail += x.avail; });
     Object.entries(fam).filter(([, a]) => a.n > 1).forEach(([f, a]) => { const r = [`<b>${f} 合計（${a.n} 台）</b>`, fmt(a.jobs), fmt(a.q), '', fmt(a.h, 1), fmt(a.avail), `<b>${pct(a.h / a.avail)}</b>`, fmt(a.q / a.h, 2), fmt(a.h / a.q, 2), '', '']; r._cls = 'tot'; rows.push(r); });
     const ser = list.map(k => ({ name: k, color: machColor(k, list), values: M12.map(x => { const r = equip(x).res[k]; return r ? r.util : null; }) }));
-    const pser = list.map(k => ({ name: k, color: machColor(k, list), values: M12.map(x => { const r = equip(x).res[k]; return r ? r.pph : null; }) }));
+    const pser = list.filter(k => k !== SCAN).map(k => ({ name: k, color: machColor(k, list), values: M12.map(x => { const r = equip(x).res[k]; return r ? r.pph : null; }) }));
     const noT = sum(act.map(k => E.res[k].noT));
     return `${act.length ? `<div class="tiles">${tiles}</div>` : '<p class="muted">本月無 3D 打印紀錄</p>'}
-      ${card('設備月度稼動表', `可用時數 = 本月${BASE_TXT[tg('equipBase')] || ''} ${E.wd} 天${tg('equipBase') === 'mon-fri-ot' && otDays(m).length ? `（含加班日 ${otDays(m).map(d => d.slice(5).replace('-', '/')).join('、')}）` : ''}${m === CUR_M ? '（截至今天）' : ''} × 每日 ${H} h = ${fmt(E.avail)} h；稼動率目標 ≥ ${tU}%（可在設定調整）${noT ? `；<span class="bad-t">有 ${noT} 筆未填打印時間（且不屬於同日同機台的批次），稼動率會偏低</span>` : ''}`, table([{ h: '設備' }, { h: '打印批次', n: 1 }, { h: '只數', n: 1 }, { h: '開機天', n: 1 }, { h: '機時 h', n: 1 }, { h: '可用 h', n: 1 }, { h: '稼動率', n: 1 }, { h: 'PPH 只/h', n: 1 }, { h: '單只機時 h', n: 1 }, { h: '單只耗材', n: 1 }, { h: '缺時間', n: 1 }], rows))}
+      ${card('設備月度稼動表', `可用時數 = 本月${BASE_TXT[tg('equipBase')] || ''} ${E.wd} 天${tg('equipBase') === 'mon-fri-ot' && otDays(m).length ? `（含加班日 ${otDays(m).map(d => d.slice(5).replace('-', '/')).join('、')}）` : ''}${m === CUR_M ? '（截至今天）' : ''} × 每日 ${H} h = ${fmt(E.avail)} h；稼動率目標 ≥ ${tU}%（可在設定調整）${noT ? `；<span class="bad-t">有 ${noT} 筆未填打印時間（且不屬於同日同機台的批次），稼動率會偏低</span>` : ''}`, table([{ h: '設備' }, { h: '批次', n: 1 }, { h: '只數／尺碼', n: 1 }, { h: '開機天', n: 1 }, { h: '機時 h', n: 1 }, { h: '可用 h', n: 1 }, { h: '稼動率', n: 1 }, { h: 'PPH 只/h', n: 1 }, { h: '單只機時 h', n: 1 }, { h: '單只耗材', n: 1 }, { h: '缺時間', n: 1 }], rows))}
       <div class="g2">${card('近 12 個月稼動率', '實際打印時數 ÷ 可用時數', legend(list.map(k => [k, machColor(k, list)])) + lineChart(M12, ser, { yMin: 0, yMax: Math.max(1, Math.ceil(Math.max(0, ...ser.flatMap(s => s.values.filter(v => v != null))) * 2) / 2), ticks: Math.max(4, Math.ceil(Math.max(0, ...ser.flatMap(s => s.values.filter(v => v != null))) * 2) * 2 / 2), fmt: v => (v * 100).toFixed(0) + '%', target: tU / 100, hi: 11 }))}
-      ${card('近 12 個月 PPH（只 / 機時）', '越高代表每小時產出越多；受模型大小、層高、填充率影響', legend(list.map(k => [k, machColor(k, list)])) + lineChart(M12, pser, { fmt: v => fmt(v, 1), hi: 11, yMax: Math.ceil(Math.max(1, ...pser.flatMap(s => s.values.filter(v => v != null))) * 1.1), ticks: Math.min(6, Math.ceil(Math.max(1, ...pser.flatMap(s => s.values.filter(v => v != null))) * 1.1)) }))}</div>
-      ${card('指標定義', '', `<ul class="def"><li><b>稼動率</b> = 實際打印時數（3D打印總表「打印時間」加總）÷ 可用時數；可用時數 = 當月可用天數 × 每日可用時數（預設（週一～週五＋加班日）× 每日 7 h；加班日 = 週六日有人員工時紀錄或有打印完成紀錄的日子；若改為夜間無人值守打印，可在設定改成 24 h）。</li><li><b>PPH</b>（Pieces Per Hour）= 只數 ÷ 機時；<b>單只機時</b> = 機時 ÷ 只數。</li><li><b>打印批次</b>：有打印時間的那一列算一批；同機台、同完成日、緊接在下方且沒填時間的列（如 Form 4L 一次打多只）歸入同一批，不算缺時間。</li><li><b>開機天</b>：當月有打印完成紀錄的天數。設備指標不受組別篩選影響。</li><li>此為時間稼動率（Availability 面向）；若要完整 OEE，還需記錄打印失敗／重印（良率）與標準打印時間（性能效率）。</li></ul>`)}`;
+      ${card('近 12 個月 PPH（只 / 機時）', '3D 打印機；越高代表每小時產出越多，受模型大小、層高、填充率影響（掃描儀為固定標準工時不列入）', legend(list.filter(k => k !== SCAN).map(k => [k, machColor(k, list)])) + lineChart(M12, pser, { fmt: v => fmt(v, 1), hi: 11, yMax: Math.ceil(Math.max(1, ...pser.flatMap(s => s.values.filter(v => v != null))) * 1.1), ticks: Math.min(6, Math.ceil(Math.max(1, ...pser.flatMap(s => s.values.filter(v => v != null))) * 1.1)) }))}</div>
+      ${card('指標定義', '', `<ul class="def"><li><b>稼動率</b> = 實際打印時數（3D打印總表「打印時間」加總）÷ 可用時數；可用時數 = 當月可用天數 × 每日可用時數（預設（週一～週五＋加班日）× 每日 7 h；加班日 = 週六日有人員工時紀錄或有打印完成紀錄的日子；若改為夜間無人值守打印，可在設定改成 24 h）。</li><li><b>PPH</b>（Pieces Per Hour）= 只數 ÷ 機時；<b>單只機時</b> = 機時 ÷ 只數。</li><li><b>3D 掃描儀</b>：3D掃描總表每一列為一個尺碼，機時 = 尺碼數 × 標準工時（預設 10 分鐘/尺碼，可在設定調整）；PPH 固定 = 60 ÷ 標準分鐘。</li><li><b>打印批次</b>：有打印時間的那一列算一批；同機台、同完成日、緊接在下方且沒填時間的列（如 Form 4L 一次打多只）歸入同一批，不算缺時間。</li><li><b>開機天</b>：當月有打印完成紀錄的天數。設備指標不受組別篩選影響。</li><li>此為時間稼動率（Availability 面向）；若要完整 OEE，還需記錄打印失敗／重印（良率）與標準打印時間（性能效率）。</li></ul>`)}`;
   }
 
   /* ---------- 直接作業內容解析 ---------- */
@@ -926,6 +929,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
         <label>標準日工時 <input type="number" name="dayH" value="${tg.dayH}" min="1" max="24" step="0.5" ${canEdit ? '' : 'disabled'}> h</label>
         <label>設備每日可用時數 <input type="number" name="equipH" value="${tg.equipH != null ? tg.equipH : 7}" min="1" max="24" step="0.5" ${canEdit ? '' : 'disabled'}> h</label>
         <label>設備可用天數 <select name="equipBase" ${canEdit ? '' : 'disabled'}>${Object.entries(BASE_TXT).map(([k, v]) => `<option value="${k}" ${(tg.equipBase || 'mon-fri-ot') === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
+        <label>3D 掃描標準工時 <input type="number" name="scanMin" value="${tg.scanMin != null ? tg.scanMin : 10}" min="1" max="120" ${canEdit ? '' : 'disabled'}> 分鐘/尺碼</label>
         <label>設備稼動率目標 ≥ <input type="number" name="equipU" value="${tg.equipU != null ? tg.equipU : 60}" min="0" max="100" ${canEdit ? '' : 'disabled'}> %</label>
         <label class="full">離職人員（不在人員相關圖表顯示；部門合計工時仍保留；多人用逗號分隔）<input type="text" name="leftStaff" value="${esc((st.leftStaff || DEFAULT_SETTINGS.leftStaff).join('、'))}" style="width:100%" ${canEdit ? '' : 'disabled'}></label>
         <label class="full">業務線工時歸類（每行：業務線 | 作業分類關鍵字（逗號分隔）；由上往下第一個符合者生效，都不符合歸為「其他」）<textarea name="lineMap" rows="6" ${canEdit ? '' : 'disabled'}>${esc(lmTxt)}</textarea></label>
@@ -963,7 +967,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     let html = '';
     if (!has && S.route !== 'data') { $('#ttl').innerHTML = '項目管理平台'; html = emptyState(); }
     else if (S.report && S.route !== 'data') {
-      $('#ttl').innerHTML = `${mLabel(S.month)} 月報<small>${S.group === '全部' ? 'DPC 全部門' : esc(S.group)} · 連續報告模式</small>`;
+      $('#ttl').innerHTML = `${mLabel(S.month)} 月報<small>${S.group === '全部' ? 'DPC 全部門' : esc(S.group)} · 連續模式</small>`;
       html = ROUTES.filter(x => VIEWS[x.id]).map(x => `<div class="page"><div class="ph"><span>${x.n}</span><h2>${x.t}<small>${x.e}</small></h2></div>${VIEWS[x.id](S.month)}</div>`).join('');
     } else {
       $('#ttl').innerHTML = `${r.n ? `<span class="num">${r.n}</span>` : ''}${r.t}<small>${r.e}${has && r.id !== 'data' ? ` · ${mLabel(S.month)} · ${S.group === '全部' ? 'DPC 全部門' : esc(S.group)}` : ''}</small>`;
@@ -992,7 +996,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
       const um = String(fd.get('unitMap') || '').split('\n').map(l => l.split('|').map(s => s.trim())).filter(a => a.length >= 3 && a[0]).map(a => ({ name: a[0], kw: a[1].split(/[,，]/).map(s => s.trim()).filter(Boolean), line: LINES.includes(a[2]) ? a[2] : '印刷圖稿' }));
       const lm = String(fd.get('lineMap') || '').split('\n').map(l => l.split('|').map(s => s.trim())).filter(a => a.length >= 2 && LINES.includes(a[0])).map(a => ({ line: a[0], kw: a[1].split(/[,，]/).map(s => s.trim()).filter(Boolean) }));
       const left = String(fd.get('leftStaff') || '').split(/[,，、\s]+/).map(s => s.trim()).filter(Boolean);
-      const ns = { leftStaff: left, lineMap: lm.length ? lm : clone(DEFAULT_SETTINGS.lineMap), targets: { direct: +fd.get('direct') || 60, problem: +fd.get('problem') || 20, otd: +fd.get('otd') || 95, dayH: +fd.get('dayH') || 8, equipH: +fd.get('equipH') || 7, equipU: +fd.get('equipU') || 60, equipBase: String(fd.get('equipBase') || 'mon-fri-ot') }, unitMap: um.length ? um : clone(DEFAULT_SETTINGS.unitMap) };
+      const ns = { leftStaff: left, lineMap: lm.length ? lm : clone(DEFAULT_SETTINGS.lineMap), targets: { direct: +fd.get('direct') || 60, problem: +fd.get('problem') || 20, otd: +fd.get('otd') || 95, dayH: +fd.get('dayH') || 8, equipH: +fd.get('equipH') || 7, equipU: +fd.get('equipU') || 60, equipBase: String(fd.get('equipBase') || 'mon-fri-ot'), scanMin: +fd.get('scanMin') || 10 }, unitMap: um.length ? um : clone(DEFAULT_SETTINGS.unitMap) };
       await saveSettings(ns); $('#set-st') && ($('#set-st').textContent = '已儲存 ✓');
     };
   }
