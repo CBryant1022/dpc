@@ -177,7 +177,7 @@ dd{margin:0;font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-ali
 <div class="login" id="login">
   <form class="login-card" id="loginForm" autocomplete="on">
     <div class="brand-logo" role="img" aria-label="DATIAN"></div>
-    <div class="style-id brand-id">DATIAN shoes<b>Digital Product Creation</b><span class="login-sub" data-i18n="loginSub"></span></div>
+    <div class="style-id brand-id"><span data-i18n="brandEyebrow">DATIAN shoes</span><b data-i18n="brandTitle">Digital Product Creation</b><span class="login-sub" data-i18n="loginSub"></span></div>
     <label for="lu"><span data-i18n="user">帳號</span><input id="lu" name="username" autocomplete="username" required></label>
     <label for="lp"><span data-i18n="pass">密碼</span><input id="lp" name="password" type="password" autocomplete="current-password" required></label>
     <button class="go" id="goBtn" type="submit" data-i18n="login">登入</button>
@@ -196,7 +196,7 @@ dd{margin:0;font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-ali
 <div class="wrap" id="wrap" hidden>
   <section class="stage" data-i18n-aria="stageAria">
     <div class="stage-top">
-      <div class="style-id">DATIAN shoes · DPC · <span id="verTag"></span><b id="styleName">LACEUP</b></div>
+      <div class="style-id"><span data-i18n="stageBrand">DATIAN shoes · DPC</span> · <span id="verTag"></span><b id="styleName">LACEUP</b></div>
       <div class="stage-actions">
       <button class="back" id="backBtn" type="button" data-i18n="back">← 鞋款列表</button>
       <button class="logout" id="logout" type="button" data-i18n="logout">登出</button>
@@ -263,9 +263,9 @@ let LANG='en'; try{const v=localStorage.getItem('dpc_lang'); if(v==='zh'||v==='e
 const L=(zh,en)=>LANG==='en'?en:zh;
 const I18N={
   user:['帳號','Account'], pass:['密碼','Password'], login:['登入','Sign in'], verifying:['驗證中…','Verifying…'], unlocking:['解密中…','Unlocking…'],
-  loginSub:['數字化產品',''], loginFoot:['模型與渲染圖已加密，需以帳號密碼解鎖。','Models and renders are encrypted. Sign in to unlock them.'],
+  loginSub:['Digital Product Creation',''], loginFoot:['模型與渲染圖已加密，需以帳號密碼解鎖。','Models and renders are encrypted. Sign in to unlock them.'],
   badLogin:['帳號或密碼錯誤，請再試一次。','Incorrect account or password. Try again.'], unlockFail:['無法解鎖：','Could not unlock: '],
-  pickEyebrow:['DATIAN shoes - Digital Product Creation · 數字化產品','DATIAN shoes - Digital Product Creation'], pickTitle:['DPC 鞋款','DPC Styles'],
+  pickEyebrow:['大田鞋業 - 數字化產品','DATIAN shoes - Digital Product Creation'], brandEyebrow:['大田鞋業','DATIAN shoes'], brandTitle:['數字化產品','Digital Product Creation'], stageBrand:['大田鞋業 · DPC','DATIAN shoes · DPC'], pickTitle:['DPC 鞋款','DPC Styles'],
   logout:['登出','Sign out'], back:['← 鞋款列表','← All styles'], mRender:['渲染圖','Renders'], m3d:['3D 旋轉','3D view'],
   stageAria:['樣品檢視','Sample viewer'], modeAria:['檢視模式','View mode'], viewsAria:['視角','Views'],
   badge:['KeyShot 2500×2000 · 點擊放大','KeyShot 2500×2000 · Click to zoom'], hint:['拖曳旋轉　滾輪／雙指縮放','Drag to rotate · Scroll or pinch to zoom'],
@@ -280,10 +280,11 @@ const I18N={
   tRotate:['自動旋轉','Auto-rotate'], tShadow:['地面陰影','Ground shadow'], tLight:['加強曝光','Brighter'], tFull:['全螢幕','Fullscreen'],
   changed:['已改 {0}','{0} changed'],
   texSrc:['3D 紋理來源','3D texture source'], updated:['更新','Updated'], count:['共 {0} 款','{0} styles'], renderAlt:['渲染圖','render'],
-  title:['DATIAN shoes - Digital Product Creation','DATIAN shoes - Digital Product Creation']
+  title:['大田鞋業 - 數字化產品','DATIAN shoes - Digital Product Creation']
 };
 const t=(k,...a)=>{let v=(I18N[k]||[k,k])[LANG==='en'?1:0];a.forEach((x,i)=>v=v.replace('{'+i+'}',x));return v};
 const CHANGELOG=[
+ ['v1.17','2026-11-24','繁中模式顯示中文平台名稱「大田鞋業 - 數字化產品」。','In 繁中 mode the platform name shows in Chinese (大田鞋業 - 數字化產品).'],
  ['v1.16','2026-11-24','平台名稱改為 DATIAN shoes - Digital Product Creation，加入公司 Logo 與網頁圖示。','Platform renamed to DATIAN shoes - Digital Product Creation; added the company logo and favicon.'],
  ['v1.15','2026-11-24','新增離線版（單一 HTML 檔，雙擊即可開啟）與 GitHub Pages 版。','Added an offline build (single HTML file, opens with a double-click) and a GitHub Pages build.'],
  ['v1.14','2026-11-12','更換登入帳號密碼；新增 GitHub Pages 版本。','Changed the sign-in account and password; added a GitHub Pages version.'],
