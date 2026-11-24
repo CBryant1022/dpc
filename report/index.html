@@ -102,14 +102,27 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
 .busy{position:fixed;inset:0;background:#0006;display:grid;place-items:center;z-index:70}.busy div{background:var(--card);padding:18px 26px;border-radius:12px;font-weight:500}
 @media (max-width:860px){.app{grid-template-columns:minmax(0,1fr)}main{min-width:0}.side{min-width:0;position:sticky;top:0;z-index:30;height:auto;flex-direction:column;gap:6px;padding:10px 0 6px}.brand{padding:0 14px}.brand span{display:none}.nav{flex-direction:row;flex-wrap:nowrap;overflow-x:auto;gap:4px;padding:0 10px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.nav::-webkit-scrollbar{display:none}.nav a{white-space:nowrap;padding:8px 12px;flex:none}.nav a span{display:none}.nav a.sep{margin:0;border:0;padding-top:8px;border-radius:8px}.side .foot{display:none}main{padding:14px}.top{gap:10px}.ctl{margin-left:0;width:100%}#ctl{display:flex;gap:8px;width:100%}#ctl[hidden]{display:none}#ctl select{flex:1;min-width:0}.chart .ax{font-size:17px}.chart .xo:not(.axhi){display:none}.chart .vl{font-size:18px}.chart .el{font-size:16px}.tile-v{font-size:26px}.stk-r{grid-template-columns:72px 1fr 52px}.hb-r{grid-template-columns:minmax(70px,34%) 1fr 46px}}
 @media (forced-colors:active){.stk-b span,.hb-t span{border:1px solid CanvasText}}
+#gate{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px}
+#gate[hidden]{display:none}body.locked .app{visibility:hidden}
+.gate-c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;width:min(360px,100%);box-shadow:0 8px 30px rgba(0,0,0,.08)}
+.gate-c h2{margin:0 0 4px;font-size:20px}.gate-c p{margin:0 0 18px;color:var(--text2);font-size:13px}
+.gate-c label{display:block;font-size:13px;color:var(--text2);margin:10px 0 4px}
+.gate-c input[type=text],.gate-c input[type=password]{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);font:inherit}
+.gate-c .rem{display:flex;gap:6px;align-items:center;margin:12px 0 16px;font-size:13px;color:var(--text2)}
+.gate-c .btn{width:100%;justify-content:center;padding:10px}#gate-msg{min-height:20px;margin-top:10px;font-size:13px;color:var(--bad,#c0392b)}
 </style>
 </head>
 <body>
+<div id="gate" hidden><form class="gate-c" id="gate-f" autocomplete="on"><h2>DPC 項目管理平台</h2><p>請登入以檢視資料</p>
+<label for="g-id">帳號</label><input type="text" id="g-id" name="id" autocomplete="username" required>
+<label for="g-pw">密碼</label><input type="password" id="g-pw" name="pw" autocomplete="current-password" required>
+<label class="rem"><input type="checkbox" name="rem"> 在這台裝置記住登入</label>
+<button class="btn" type="submit">登入</button><div id="gate-msg" role="alert" aria-live="assertive"></div></form></div>
 <div class="app">
   <aside class="side">
     <div class="brand"><b>DPC 項目管理平台</b><span>Digital Product Creation · 大田鞋業</span></div>
     <nav class="nav" id="nav"></nav>
-    <div class="foot"><a href="#data" id="ver" style="color:inherit;text-decoration:none" title="查看版本紀錄"></a><span id="mode"></span><span id="last"></span></div>
+    <div class="foot"><a href="#data" id="ver" style="color:inherit;text-decoration:none" title="查看版本紀錄"></a><span id="mode"></span><a href="#" id="logout" hidden style="color:inherit">登出</a><span id="last"></span></div>
   </aside>
   <main>
     <div class="top">
@@ -491,7 +504,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   const pct = (v, d = 1) => v == null || !isFinite(v) ? '—' : (v * 100).toFixed(d) + '%';
   const sum = a => a.reduce((x, y) => x + y, 0);
 
-  const CHANGELOG = [{"v": "v2.2", "t": "2026-11-24 09:50", "c": ["本月重點結論新增「補充結論」：可自行新增、編輯、刪除，並標示達標／接近／未達／資訊／待追蹤", "補充結論依月份保存，共享模式下所有檢視者都看得到；複製月報摘要與連續模式會一起帶出"]}, {"v": "v2.1", "t": "2026-11-24 09:40", "c": ["圖表點一下即可固定顯示數值，iPad／手機也能看；圖表可用鍵盤 Tab 逐月查看", "每張趨勢圖新增「表格檢視」，可直接看 12 個月數字", "總覽移除不同單位相加的「完成案件」，改為「主要產出」（印刷圖稿筆、劃線模支、3D建模件）", "OTD 新增計畫日覆蓋率；低於 80% 顯示「資料不足」，不再顯示綠色達標", "網址記住目前頁面、月份、組別，可直接傳連結；瀏覽器上一頁可回到前一個篩選", "手機版：選單改為頂部橫滑分頁列、圖表字級放大、KPI 標題不再被切掉", "說明文字加深、焦點框加粗、提示訊息可被螢幕閱讀器讀出"]}, {"v": "v2.0", "t": "2026-11-18 10:19", "c": ["交期達成新增 3D 打印（依单号對應画线模总表「3D打印 計畫完成日期」）", "劃線模改以支數呈現，柱狀圖依 DTC／DTP／DJC／未填 堆疊", "3D 打印分為「劃線模」與「其他模具」（依画线模总表部件名稱判定）", "交期清單隱藏離職人員姓名"]}, {"v": "v1.9", "t": "2026-11-18 10:09", "c": ["3D 掃描不列入設備稼動，改為獨立「作業量」卡片", "設備可用天數改用工作日誌實際上班日（漏填但有打印紀錄的日子自動補計）", "舊版共享資料自動補算 Form 4L 批次"]}, {"v": "v1.8", "t": "2026-11-18 09:53", "c": ["「連續報告模式」改名為「連續模式」", "3D 掃描以每尺碼 10 分鐘換算工時"]}, {"v": "v1.7", "t": "2026-11-18 09:21", "c": ["隱藏離職人員：韋雨桐、毛倩、黄俊滔（部門合計保留）", "設定頁新增「離職人員」欄位"]}, {"v": "v1.6", "t": "2026-11-18 09:19", "c": ["新增「直接作業分析」模塊：動作、部位、季節×系列、斬刀 Top 12、人員×作業分類熱度圖、明細搜尋"]}, {"v": "v1.5", "t": "2026-11-18 09:14", "c": ["Form 4L 批次打印：同機台同日下方空白列歸入同一批，不算缺時間"]}, {"v": "v1.4", "t": "2026-11-18 09:06", "c": ["設備稼動以每日 7 h 計算；週六不上班，週末加班日另計"]}, {"v": "v1.3", "t": "2026-11-18 08:42", "c": ["新增「設備稼動」模塊（Pro3 HS、Pro3 HS(B)、E3、Form 4L：稼動率、PPH、單只機時、耗材）", "產出量新增「月度投入工時曲線（依業務線）」"]}, {"v": "v1.2", "t": "2026-11-18 08:37", "c": ["平台改名為「DPC 項目管理平台」"]}, {"v": "v1.1", "t": "2026-11-18 08:32", "c": ["內建 11.17 版 Excel 初始資料，打開即顯示"]}, {"v": "v1.0", "t": "2026-11-18 08:19", "c": ["初版：月度總覽、產出量、工時結構、交期達成、人員與培訓、專項與改善", "每月匯入 Excel、共享資料、資料品質檢查、目標值設定"]}];
+  const CHANGELOG = [{"v": "v2.4", "t": "2026-11-24 14:40", "c": ["新增登入：開啟平台需輸入帳號密碼，初始資料改為加密檔（AES-256），沒有密碼無法讀取", "本月重點結論不再顯示「資料不足」的項目（交期頁仍保留覆蓋率提示）", "側欄新增「登出」"]}, {"v": "v2.3", "t": "2026-11-24 14:25", "c": ["劃線模卡片新增工序拆解：繪製建模／3D 打印／檢查修改／3D 掃描（依工作日誌作業分類與內容判定）", "3D 打印卡片改顯示人員操作工時（切片打印＋打磨後處理，含在劃線模工時內）與每只人員工時，另列機器運轉機時", "3D 掃描卡片改顯示人員掃描工時，並與標準工時（10 分鐘/尺碼）比較實際效率"]}, {"v": "v2.2", "t": "2026-11-24 09:50", "c": ["本月重點結論新增「補充結論」：可自行新增、編輯、刪除，並標示達標／接近／未達／資訊／待追蹤", "補充結論依月份保存，共享模式下所有檢視者都看得到；複製月報摘要與連續模式會一起帶出"]}, {"v": "v2.1", "t": "2026-11-24 09:40", "c": ["圖表點一下即可固定顯示數值，iPad／手機也能看；圖表可用鍵盤 Tab 逐月查看", "每張趨勢圖新增「表格檢視」，可直接看 12 個月數字", "總覽移除不同單位相加的「完成案件」，改為「主要產出」（印刷圖稿筆、劃線模支、3D建模件）", "OTD 新增計畫日覆蓋率；低於 80% 顯示「資料不足」，不再顯示綠色達標", "網址記住目前頁面、月份、組別，可直接傳連結；瀏覽器上一頁可回到前一個篩選", "手機版：選單改為頂部橫滑分頁列、圖表字級放大、KPI 標題不再被切掉", "說明文字加深、焦點框加粗、提示訊息可被螢幕閱讀器讀出"]}, {"v": "v2.0", "t": "2026-11-18 10:19", "c": ["交期達成新增 3D 打印（依单号對應画线模总表「3D打印 計畫完成日期」）", "劃線模改以支數呈現，柱狀圖依 DTC／DTP／DJC／未填 堆疊", "3D 打印分為「劃線模」與「其他模具」（依画线模总表部件名稱判定）", "交期清單隱藏離職人員姓名"]}, {"v": "v1.9", "t": "2026-11-18 10:09", "c": ["3D 掃描不列入設備稼動，改為獨立「作業量」卡片", "設備可用天數改用工作日誌實際上班日（漏填但有打印紀錄的日子自動補計）", "舊版共享資料自動補算 Form 4L 批次"]}, {"v": "v1.8", "t": "2026-11-18 09:53", "c": ["「連續報告模式」改名為「連續模式」", "3D 掃描以每尺碼 10 分鐘換算工時"]}, {"v": "v1.7", "t": "2026-11-18 09:21", "c": ["隱藏離職人員：韋雨桐、毛倩、黄俊滔（部門合計保留）", "設定頁新增「離職人員」欄位"]}, {"v": "v1.6", "t": "2026-11-18 09:19", "c": ["新增「直接作業分析」模塊：動作、部位、季節×系列、斬刀 Top 12、人員×作業分類熱度圖、明細搜尋"]}, {"v": "v1.5", "t": "2026-11-18 09:14", "c": ["Form 4L 批次打印：同機台同日下方空白列歸入同一批，不算缺時間"]}, {"v": "v1.4", "t": "2026-11-18 09:06", "c": ["設備稼動以每日 7 h 計算；週六不上班，週末加班日另計"]}, {"v": "v1.3", "t": "2026-11-18 08:42", "c": ["新增「設備稼動」模塊（Pro3 HS、Pro3 HS(B)、E3、Form 4L：稼動率、PPH、單只機時、耗材）", "產出量新增「月度投入工時曲線（依業務線）」"]}, {"v": "v1.2", "t": "2026-11-18 08:37", "c": ["平台改名為「DPC 項目管理平台」"]}, {"v": "v1.1", "t": "2026-11-18 08:32", "c": ["內建 11.17 版 Excel 初始資料，打開即顯示"]}, {"v": "v1.0", "t": "2026-11-18 08:19", "c": ["初版：月度總覽、產出量、工時結構、交期達成、人員與培訓、專項與改善", "每月匯入 Excel、共享資料、資料品質檢查、目標值設定"]}];
   const VERSION = CHANGELOG[0].v;
   const LINES = ['印刷圖稿', '位置版', '劃線模', '3D建模', '3D掃描', '3D打印'];
   const UNIT = { '印刷圖稿': '筆', '位置版': '筆', '劃線模': '單', '3D建模': '件', '3D掃描': '件', '3D打印': '只' };
@@ -633,7 +646,12 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const T = T_of(m), O = O_done(m);
     const by = {}; CATS.forEach(c => by[c] = 0); let hours = 0;
     const lineH = { '其他': 0 }; LINES.forEach(l => lineH[l] = 0);
-    T.forEach(t => { by[t.b] += t.h; hours += t.h; if (t.b !== '休假') lineH[lineOf(t.s)] += t.h; });
+    const hxProc = { '繪製建模': 0, '3D 打印': 0, '檢查修改': 0, '3D 掃描': 0, '其他': 0 };
+    T.forEach(t => { by[t.b] += t.h; hours += t.h; if (t.b === '休假') return; const ln = lineOf(t.s); lineH[ln] += t.h;
+      if (ln === '劃線模') { const sb = DPC.simp(t.s || ''); let p;
+        if (/扫描/.test(sb)) p = '3D 掃描';
+        else { const ac = parseCont(t).action; p = ac === '繪製建模' ? '繪製建模' : (ac === '3D 切片打印' || ac === '打磨後處理') ? '3D 打印' : ac === '檢查／修改' ? '檢查修改' : ac === '3D 掃描' ? '3D 掃描' : '其他'; }
+        hxProc[p] += t.h; } });
     const eff = hours - by['休假'];
     const out = {}; LINES.forEach(l => out[l] = 0); O.forEach(o => out[o.l] += o.q);
     const otd = {}; let on = 0, n = 0, doneAll = 0;
@@ -646,7 +664,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const unit = S.settings.unitMap.map((r, i) => { const h = sum(T.filter(t => ruleOf(t.s) === i).map(t => t.h)); const u = out[r.line] || 0; return { name: r.name, line: r.line, h, u, hpu: u ? h / u : null }; });
     const pr = S.d.outputs.filter(o => o.l === '3D打印' && o.am === m && outOk(o));
     const res = {
-      m, hours, eff, by, lineH, people: new Set(T.map(t => t.k)).size, days: new Set(T.map(t => t.d)).size,
+      m, hours, eff, by, lineH, hxProc, people: new Set(T.map(t => t.k)).size, days: new Set(T.map(t => t.d)).size,
       direct: eff ? by['直接作業'] / eff : null, problem: eff ? by['問題解決'] / eff : null, training: by['培訓練習'], coaching: by['指導教學'], special: by['專項工作'],
       out, cases: sum(OTD_LINES.map(l => out[l])), otd, otdAll: n ? on / n : null, otdN: n, otdCov: doneAll ? n / doneAll : null, otdDone: doneAll, unit,
       print: { g: sum(pr.map(o => o.g)), ml: sum(pr.map(o => o.ml)), h: sum(pr.map(o => o.ph)), jobs: pr.length }
@@ -772,7 +790,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const EQ = equip(m), el = Object.entries(EQ.res).filter(([, x]) => x.h > 0).sort((a, b) => a[1].util - b[1].util);
     if (el.length) { const [lo, x] = el[0], [hi, y] = el[el.length - 1]; list.push([status(y.util, tg('equipU'), true) || 'info', `3D 打印稼動率：最高 ${hi} ${pct(y.util)}、最低 ${lo} ${pct(x.util)}（目標 ≥ ${tg('equipU')}%，以每日 ${tg('equipH')} h 計）。`]); }
     if (K.eff && K.training / K.eff >= 0.12) list.push(['info', `培訓練習 ${fmt(K.training, 1)} h（佔 ${pct(K.training / K.eff)}），新人帶訓仍佔用明顯產能。`]);
-    return list;
+    return list.filter(x => x[0] !== 'data');
   }
 
   /* ---------- 各模塊 ---------- */
@@ -818,12 +836,19 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const hxCard = hTot || sum(UNITS.map(u => HP[u].q)) ? card('劃線模支數｜依需求單位', `依 3D 打印總表「需求單位」與只數統計（只計单号對應到画线模总表、部件為鞋頭／後包片／鞋墊的打印）；「未填」= 需求單位空白或填「/」`, table([{ h: '需求單位' }, { h: '本月支數', n: 1 }, { h: '打印筆數', n: 1 }, { h: '佔比', n: 1 }, { h: '上月支數', n: 1 }, { h: '變化', n: 1 }], UNITS.filter(u => HU[u].q || HP[u].q).map(u => [`<i class="dot" style="background:${UCOL[u]}"></i><b>${u}</b>`, `<b>${fmt(HU[u].q)}</b>`, fmt(HU[u].n), hTot ? pct(HU[u].q / hTot, 0) : '—', fmt(HP[u].q), HP[u].q ? `${HU[u].q >= HP[u].q ? '▲' : '▼'} ${Math.abs((HU[u].q - HP[u].q) / HP[u].q * 100).toFixed(0)}%` : '—']).concat([Object.assign(['<b>合計</b>', `<b>${fmt(hTot)}</b>`, fmt(sum(UNITS.map(u => HU[u].n))), '', fmt(sum(UNITS.map(u => HP[u].q))), ''], { _cls: 'tot' })]))) : '';
     const prSplit = mm => { const r = { hx: 0, other: 0 }; S.d.outputs.forEach(x => { if (x.l === '3D打印' && x.am === mm && outOk(x)) { if (x.u && x.u !== 'x') r.hx += x.q; else r.other += x.q; } }); return r; };
     const PS = prSplit(m);
+    const HX = K.hxProc, scanStd = K.out['3D掃描'] * tg('scanMin') / 60;
+    const hoursLine = l => {
+      if (l === '劃線模') return `<div class="mini">投入工時 ${fmt(K.lineH[l], 1)} h${K.out[l] && K.lineH[l] >= 10 ? ` · 每單 ${fmt(K.lineH[l] / K.out[l], 1)} h` : ''}</div>${K.lineH[l] ? `<div class="mini">工序：${['繪製建模', '3D 打印', '檢查修改', '3D 掃描'].map(p => `${p.replace('3D ', '')} <b>${fmt(HX[p], 0)}</b>`).join(' · ')}${HX['其他'] ? ` · 其他 ${fmt(HX['其他'], 0)}` : ''} h</div>` : ''}`;
+      if (l === '3D打印') { const ph = HX['3D 打印'], q = K.out[l]; return `<div class="mini">人員操作 <b>${fmt(ph, 1)}</b> h（含在劃線模工時內）${q && ph ? ` · 每只 ${fmt(ph / q, 2)} h` : ''}${K.lineH[l] ? ` · 另其他打印 ${fmt(K.lineH[l], 1)} h` : ''}</div>`; }
+      if (l === '3D掃描') { const sh = HX['3D 掃描'] + K.lineH[l], q = K.out[l]; return `<div class="mini">人員掃描 <b>${fmt(sh, 1)}</b> h（含在劃線模工時內）${q ? ` · 標準 ${fmt(scanStd, 1)} h` : ''}</div>${q && sh ? `<div class="mini">實際 ÷ 標準 <b>${pct(sh / scanStd, 0)}</b> · 每尺碼 ${fmt(sh * 60 / q, 1)} 分鐘（標準 ${tg('scanMin')} 分鐘）</div>` : ''}`; }
+      return `<div class="mini">投入工時 ${fmt(K.lineH[l], 1)} h${K.out[l] && K.lineH[l] >= 10 ? ` · 每${UNIT[l]} ${fmt(K.lineH[l] / K.out[l], 2)} h` : ''}</div>`;
+    };
     const cards = LINES.map(l => {
       let extra = '';
       if (l === '劃線模' && hTot) extra = `<div class="mini">${['DTC', 'DTP', 'DJC'].map(u => `${u} <b>${fmt(HU[u].q)}</b>`).join(' · ')}${HU['其他'].q + HU['未填'].q ? ` · 未填 ${fmt(HU['其他'].q + HU['未填'].q)}` : ''} 支</div>`;
       if (l === '3D打印') extra = `<div class="mini">劃線模 <b>${fmt(PS.hx)}</b> 只 · 其他模具 <b>${fmt(PS.other)}</b> 只</div><div class="mini">耗材 ${fmt(K.print.g, 0)} g · 光固化 ${fmt(K.print.ml, 0)} mL · 機時 ${fmt(K.print.h, 1)} h</div>`;
       return `<section class="card oc"><header><h3><i class="dot" style="background:${LINE_COLOR[l]}"></i>${l}</h3></header>
-        ${l === '劃線模' ? `<div class="oc-v">${fmt(hTot)}<small>支</small></div><div class="oc-d">${delta(hTot, sum(UNITS.map(u => HP[u].q)))} · 完成 ${fmt(K.out[l])} 單</div>` : `<div class="oc-v">${fmt(K.out[l])}<small>${UNIT[l]}</small></div><div class="oc-d">${delta(K.out[l], P.out[l])}</div>`}<div class="mini">投入工時 ${fmt(K.lineH[l], 1)} h${K.out[l] && K.lineH[l] >= 10 ? ` · 每${UNIT[l]} ${fmt(K.lineH[l] / K.out[l], 2)} h` : ''}</div>${extra}
+        ${l === '劃線模' ? `<div class="oc-v">${fmt(hTot)}<small>支</small></div><div class="oc-d">${delta(hTot, sum(UNITS.map(u => HP[u].q)))} · 完成 ${fmt(K.out[l])} 單</div>` : `<div class="oc-v">${fmt(K.out[l])}<small>${UNIT[l]}</small></div><div class="oc-d">${delta(K.out[l], P.out[l])}</div>`}${hoursLine(l)}${extra}
         ${l === '劃線模' ? legend(UNITS.filter(u => M12.some(x => hxU(x)[u].q)).map(u => [u, UCOL[u]])) + barStack(M12, UNITS.filter(u => M12.some(x => hxU(x)[u].q)).map(u => ({ name: u, color: UCOL[u], values: M12.map(x => hxU(x)[u].q) })), { hi: 11, unit: '支', h: 140 })
           : l === '3D打印' ? legend([['劃線模', 'var(--s3)'], ['其他模具', 'var(--s7)']]) + barStack(M12, [{ name: '劃線模', color: 'var(--s3)', values: M12.map(x => prSplit(x).hx) }, { name: '其他模具', color: 'var(--s7)', values: M12.map(x => prSplit(x).other) }], { hi: 11, unit: '只', h: 140 })
           : barTrend(M12, M12.map(x => kpi(x).out[l]), { hi: 11, unit: UNIT[l], color: LINE_COLOR[l], h: 130 })}</section>`;
@@ -1200,7 +1225,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   async function upgradeShared(meta) {
     /* 共享資料是舊版格式：若頁面內建的初始資料是同一份或更新的檔案，直接用新格式重新寫入 */
     try {
-      const r = await fetch('init-data.json', { cache: 'no-cache' }); const seed = r.ok ? await r.json() : null;
+      const seed = await getSeed();
       if (seed && (!meta.importedAt || seed.importedAt >= meta.importedAt || meta.fileName === seed.fileName)) { seed.seed = true; S.importId = 'seed'; setData(seed); await publishShared(seed); busy(null); toast('共享資料已更新為新版格式'); return; }
     } catch (_) { busy(null); }
     S.seeding = false; banner('共享資料是舊版格式，部分新指標（如 3D 打印 OTD）需要重新匯入一次 Excel 才會完整。', 'warn'); loadShared(meta);
@@ -1237,8 +1262,49 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     } catch (_) { clearTimeout(timer); S.loading = false; render(); }
   }
 
+
+  /* ---------- 登入與加密初始資料 ---------- */
+  const AUTH = { key: null, enc: null };
+  const b64d = t => Uint8Array.from(atob(t), c => c.charCodeAt(0));
+  const b64e = u => { let x = ''; const a = new Uint8Array(u); for (let i = 0; i < a.length; i += 0x8000) x += String.fromCharCode.apply(null, a.subarray(i, i + 0x8000)); return btoa(x); };
+  async function fetchEnc() { if (AUTH.enc) return AUTH.enc; const r = await fetch('init-data.json', { cache: 'no-cache' }); if (!r.ok) throw new Error('seed'); AUTH.enc = await r.json(); return AUTH.enc; }
+  async function deriveKey(id, pw, salt, iter) {
+    const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(id.trim() + '\n' + pw), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: iter }, base, { name: 'AES-GCM', length: 256 }, true, ['decrypt']);
+  }
+  async function decryptWith(key, e) { const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(e.iv) }, key, b64d(e.data)); return JSON.parse(new TextDecoder().decode(pt)); }
+  async function getSeed() { try { const e = await fetchEnc(); if (!e.enc) return null; return await decryptWith(AUTH.key, e); } catch (_) { return null; } }
+  function storeGet(k) { try { return sessionStorage.getItem(k) || localStorage.getItem(k); } catch (_) { return null; } }
+  function storeSet(k, v, remember) { try { (remember ? localStorage : sessionStorage).setItem(k, v); } catch (_) { } }
+  function storeDel(k) { try { sessionStorage.removeItem(k); localStorage.removeItem(k); } catch (_) { } }
+  async function tryStoredKey(e) {
+    const k = storeGet('dpc-k'); if (!k) return false;
+    try { const key = await crypto.subtle.importKey('raw', b64d(k), { name: 'AES-GCM' }, true, ['decrypt']); await decryptWith(key, e); AUTH.key = key; return true; } catch (_) { storeDel('dpc-k'); return false; }
+  }
+  async function login() {
+    let e; try { e = await fetchEnc(); } catch (_) { e = null; }
+    if (!e || !e.enc) return; /* 無加密初始資料（舊版部署）時不擋 */
+    if (await tryStoredKey(e)) return;
+    const g = $('#gate'); g.hidden = false; document.body.classList.add('locked');
+    const f = $('#gate-f'), msg = $('#gate-msg'); setTimeout(() => f.elements.id.focus(), 50);
+    await new Promise(done => {
+      f.onsubmit = async ev => {
+        ev.preventDefault(); const id = f.elements.id.value, pw = f.elements.pw.value;
+        if (!id || !pw) { msg.textContent = '請輸入帳號與密碼'; return; }
+        const btn = f.querySelector('button'); btn.disabled = true; msg.textContent = '驗證中…';
+        try {
+          const key = await deriveKey(id, pw, b64d(e.salt), e.iter); await decryptWith(key, e);
+          AUTH.key = key; storeSet('dpc-k', b64e(await crypto.subtle.exportKey('raw', key)), f.elements.rem.checked);
+          g.hidden = true; document.body.classList.remove('locked'); f.reset(); msg.textContent = ''; done();
+        } catch (_) { msg.textContent = '帳號或密碼錯誤'; f.elements.pw.value = ''; f.elements.pw.focus(); }
+        btn.disabled = false;
+      };
+    });
+  }
+  async function logout() { storeDel('dpc-k'); try { await IDB.set('data', null); } catch (_) { } location.reload(); }
+
   async function loadSeed() {
-    try { const r = await fetch('init-data.json', { cache: 'no-cache' }); if (!r.ok) return; const raw = await r.json(); raw.seed = true; S.importId = 'seed'; S.raw = raw; S.d = hydrate(raw); kpiCache.clear(); eqCache.clear(); lineCache.clear(); const prev = addM(CUR_M, -1); S.month = S.d.months.includes(prev) ? prev : S.d.months[S.d.months.length - 1]; } catch (_) { }
+    try { const raw = await getSeed(); if (!raw) return; raw.seed = true; S.importId = 'seed'; S.raw = raw; S.d = hydrate(raw); kpiCache.clear(); eqCache.clear(); lineCache.clear(); const prev = addM(CUR_M, -1); S.month = S.d.months.includes(prev) ? prev : S.d.months[S.d.months.length - 1]; } catch (_) { }
   }
   /* ---------- 啟動 ---------- */
   const gIdx = g => g === '全部' ? 0 : (S.d ? S.d.groups.indexOf(g) + 1 : 0);
@@ -1255,6 +1321,8 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     render(); syncHash();
   }
   async function boot() {
+    await login();
+    const lo = $('#logout'); if (lo) { lo.hidden = !AUTH.key; lo.onclick = e => { e.preventDefault(); logout(); }; }
     $('#nav').innerHTML = ROUTES.map(r => `<a href="#${r.id}" data-r="${r.id}"${r.id === 'data' ? ' class="sep"' : ''}><span>${r.n || '⚙'}</span>${r.t}</a>`).join('');
     $('#msel').onchange = e => { S.month = e.target.value; render(); syncHash(); };
     $('#gsel').onchange = e => { S.group = e.target.value; kpiCache.clear(); eqCache.clear(); lineCache.clear(); render(); syncHash(); };
