@@ -531,7 +531,7 @@ body.proj .card header p{font-size:13px}
   const pct = (v, d = 1) => v == null || !isFinite(v) ? '—' : (v * 100).toFixed(d) + '%';
   const sum = a => a.reduce((x, y) => x + y, 0);
 
-  const CHANGELOG = [{"v": "v3.1", "t": "2026-11-24 16:55", "c": ["新增「投影模式」：整體放大（筆電 1.2 倍、1080p 投影 1.4 倍）、KPI 一行 3 張、圖表與結論改為單欄，適合會議投影（會記住開關）", "一般模式在中等寬度螢幕（筆電、1080p 以下）KPI 卡片改為一行 3 張，不再擠成一排"]}, {"v": "v3.0", "t": "2026-11-24 16:45", "c": ["平台更名為「Digital Product Creation」，左上角加上公司 logo，移除「DPC 項目管理平台」與「大田鞋業」文字", "登入畫面同步加上 logo 與新名稱"]}, {"v": "v2.9", "t": "2026-11-24 16:35", "c": ["「問題解決」全平台改名為「問題解決（檢驗/校正）」：KPI、圖表、圖例、表格、自動結論、月報摘要"]}, {"v": "v2.8", "t": "2026-11-24 16:40", "c": ["本月重點結論：自動結論也能直接編輯文字與狀態、隱藏、還原；可新增手動結論", "結論可拖曳 ⋮⋮ 或用 ↑↓ 調整順序，依月份保存，複製月報摘要依同樣順序", "印刷圖稿修改表：修改多的整行高亮（高＝紅、中＝黃，並標示「高／中」文字）"]}, {"v": "v2.7", "t": "2026-11-24 15:50", "c": ["3D 掃描標準工時改為：劃線模（鞋頭）掃描全過程 8 分鐘/尺碼、白模（楦頭）1.5 h/件", "3D 掃描卡片與設備稼動頁顯示標準工時拆解（劃線模尺碼數 × 8 分 ＋ 白模件數 × 1.5 h）", "設定頁新增白模掃描標準；之前存成 10 分鐘的設定自動改為 8 分鐘"]}, {"v": "v2.6", "t": "2026-11-24 15:30", "c": ["印刷圖稿改以「菲林張數＝版號 × 段別數量 × 顏色數量」計算產量", "新增修改次數：同一菲林版號＋同類型（基本碼／全套／特殊）第 2 次以後的繪製算一次修改；需求類別只有「菲林」視為僅出菲林，不算修改", "修改重畫以首次繪製工作量的 70% 估算佔用工時（設定頁可調）", "產出量新增：菲林張數首次繪製 vs 修改重畫趨勢、本月修改來源（類型／申請單位）、修改最多的版號 Top 10、近 12 個月產量與修改表"]}, {"v": "v2.5", "t": "2026-11-24 14:50", "c": ["印刷圖稿新增三個計算口徑：總版號數（不重複斬刀編號）、實際圖稿數量（段別數量合計）、實際顏色數量（顏色數量合計）", "產出量新增「印刷圖稿｜版號・圖稿・顏色」近 12 個月表，含每版圖稿數與每張圖稿工時", "資料格式升級（schema 5）：之前匯入的 Excel 需重新匯入一次才會有版號／圖稿／顏色數"]}, {"v": "v2.4", "t": "2026-11-24 14:40", "c": ["新增登入：開啟平台需輸入帳號密碼，初始資料改為加密檔（AES-256），沒有密碼無法讀取", "本月重點結論不再顯示「資料不足」的項目（交期頁仍保留覆蓋率提示）", "側欄新增「登出」"]}, {"v": "v2.3", "t": "2026-11-24 14:25", "c": ["劃線模卡片新增工序拆解：繪製建模／3D 打印／檢查修改／3D 掃描（依工作日誌作業分類與內容判定）", "3D 打印卡片改顯示人員操作工時（切片打印＋打磨後處理，含在劃線模工時內）與每只人員工時，另列機器運轉機時", "3D 掃描卡片改顯示人員掃描工時，並與標準工時（10 分鐘/尺碼）比較實際效率"]}, {"v": "v2.2", "t": "2026-11-24 09:50", "c": ["本月重點結論新增「補充結論」：可自行新增、編輯、刪除，並標示達標／接近／未達／資訊／待追蹤", "補充結論依月份保存，共享模式下所有檢視者都看得到；複製月報摘要與連續模式會一起帶出"]}, {"v": "v2.1", "t": "2026-11-24 09:40", "c": ["圖表點一下即可固定顯示數值，iPad／手機也能看；圖表可用鍵盤 Tab 逐月查看", "每張趨勢圖新增「表格檢視」，可直接看 12 個月數字", "總覽移除不同單位相加的「完成案件」，改為「主要產出」（印刷圖稿筆、劃線模支、3D建模件）", "OTD 新增計畫日覆蓋率；低於 80% 顯示「資料不足」，不再顯示綠色達標", "網址記住目前頁面、月份、組別，可直接傳連結；瀏覽器上一頁可回到前一個篩選", "手機版：選單改為頂部橫滑分頁列、圖表字級放大、KPI 標題不再被切掉", "說明文字加深、焦點框加粗、提示訊息可被螢幕閱讀器讀出"]}, {"v": "v2.0", "t": "2026-11-18 10:19", "c": ["交期達成新增 3D 打印（依单号對應画线模总表「3D打印 計畫完成日期」）", "劃線模改以支數呈現，柱狀圖依 DTC／DTP／DJC／未填 堆疊", "3D 打印分為「劃線模」與「其他模具」（依画线模总表部件名稱判定）", "交期清單隱藏離職人員姓名"]}, {"v": "v1.9", "t": "2026-11-18 10:09", "c": ["3D 掃描不列入設備稼動，改為獨立「作業量」卡片", "設備可用天數改用工作日誌實際上班日（漏填但有打印紀錄的日子自動補計）", "舊版共享資料自動補算 Form 4L 批次"]}, {"v": "v1.8", "t": "2026-11-18 09:53", "c": ["「連續報告模式」改名為「連續模式」", "3D 掃描以每尺碼 10 分鐘換算工時"]}, {"v": "v1.7", "t": "2026-11-18 09:21", "c": ["隱藏離職人員：韋雨桐、毛倩、黄俊滔（部門合計保留）", "設定頁新增「離職人員」欄位"]}, {"v": "v1.6", "t": "2026-11-18 09:19", "c": ["新增「直接作業分析」模塊：動作、部位、季節×系列、斬刀 Top 12、人員×作業分類熱度圖、明細搜尋"]}, {"v": "v1.5", "t": "2026-11-18 09:14", "c": ["Form 4L 批次打印：同機台同日下方空白列歸入同一批，不算缺時間"]}, {"v": "v1.4", "t": "2026-11-18 09:06", "c": ["設備稼動以每日 7 h 計算；週六不上班，週末加班日另計"]}, {"v": "v1.3", "t": "2026-11-18 08:42", "c": ["新增「設備稼動」模塊（Pro3 HS、Pro3 HS(B)、E3、Form 4L：稼動率、PPH、單只機時、耗材）", "產出量新增「月度投入工時曲線（依業務線）」"]}, {"v": "v1.2", "t": "2026-11-18 08:37", "c": ["平台改名為「DPC 項目管理平台」"]}, {"v": "v1.1", "t": "2026-11-18 08:32", "c": ["內建 11.17 版 Excel 初始資料，打開即顯示"]}, {"v": "v1.0", "t": "2026-11-18 08:19", "c": ["初版：月度總覽、產出量、工時結構、交期達成、人員與培訓、專項與改善", "每月匯入 Excel、共享資料、資料品質檢查、目標值設定"]}];
+  const CHANGELOG = [{"v": "v3.2", "t": "2026-11-24 17:05", "c": ["標準尚未訂立，取消直接作業、問題解決（檢驗/校正）、OTD 的達標判定（KPI、結論、交期頁都只呈現數字）；OTD 計畫日覆蓋不足仍標示「資料不足」", "保留設備稼動率的達標判定", "新增培訓標準：培訓練習工時 ≥ 總投入工時 5% 即達標（KPI 卡與自動結論顯示，設定頁可調）"]}, {"v": "v3.1", "t": "2026-11-24 16:55", "c": ["新增「投影模式」：整體放大（筆電 1.2 倍、1080p 投影 1.4 倍）、KPI 一行 3 張、圖表與結論改為單欄，適合會議投影（會記住開關）", "一般模式在中等寬度螢幕（筆電、1080p 以下）KPI 卡片改為一行 3 張，不再擠成一排"]}, {"v": "v3.0", "t": "2026-11-24 16:45", "c": ["平台更名為「Digital Product Creation」，左上角加上公司 logo，移除「DPC 項目管理平台」與「大田鞋業」文字", "登入畫面同步加上 logo 與新名稱"]}, {"v": "v2.9", "t": "2026-11-24 16:35", "c": ["「問題解決」全平台改名為「問題解決（檢驗/校正）」：KPI、圖表、圖例、表格、自動結論、月報摘要"]}, {"v": "v2.8", "t": "2026-11-24 16:40", "c": ["本月重點結論：自動結論也能直接編輯文字與狀態、隱藏、還原；可新增手動結論", "結論可拖曳 ⋮⋮ 或用 ↑↓ 調整順序，依月份保存，複製月報摘要依同樣順序", "印刷圖稿修改表：修改多的整行高亮（高＝紅、中＝黃，並標示「高／中」文字）"]}, {"v": "v2.7", "t": "2026-11-24 15:50", "c": ["3D 掃描標準工時改為：劃線模（鞋頭）掃描全過程 8 分鐘/尺碼、白模（楦頭）1.5 h/件", "3D 掃描卡片與設備稼動頁顯示標準工時拆解（劃線模尺碼數 × 8 分 ＋ 白模件數 × 1.5 h）", "設定頁新增白模掃描標準；之前存成 10 分鐘的設定自動改為 8 分鐘"]}, {"v": "v2.6", "t": "2026-11-24 15:30", "c": ["印刷圖稿改以「菲林張數＝版號 × 段別數量 × 顏色數量」計算產量", "新增修改次數：同一菲林版號＋同類型（基本碼／全套／特殊）第 2 次以後的繪製算一次修改；需求類別只有「菲林」視為僅出菲林，不算修改", "修改重畫以首次繪製工作量的 70% 估算佔用工時（設定頁可調）", "產出量新增：菲林張數首次繪製 vs 修改重畫趨勢、本月修改來源（類型／申請單位）、修改最多的版號 Top 10、近 12 個月產量與修改表"]}, {"v": "v2.5", "t": "2026-11-24 14:50", "c": ["印刷圖稿新增三個計算口徑：總版號數（不重複斬刀編號）、實際圖稿數量（段別數量合計）、實際顏色數量（顏色數量合計）", "產出量新增「印刷圖稿｜版號・圖稿・顏色」近 12 個月表，含每版圖稿數與每張圖稿工時", "資料格式升級（schema 5）：之前匯入的 Excel 需重新匯入一次才會有版號／圖稿／顏色數"]}, {"v": "v2.4", "t": "2026-11-24 14:40", "c": ["新增登入：開啟平台需輸入帳號密碼，初始資料改為加密檔（AES-256），沒有密碼無法讀取", "本月重點結論不再顯示「資料不足」的項目（交期頁仍保留覆蓋率提示）", "側欄新增「登出」"]}, {"v": "v2.3", "t": "2026-11-24 14:25", "c": ["劃線模卡片新增工序拆解：繪製建模／3D 打印／檢查修改／3D 掃描（依工作日誌作業分類與內容判定）", "3D 打印卡片改顯示人員操作工時（切片打印＋打磨後處理，含在劃線模工時內）與每只人員工時，另列機器運轉機時", "3D 掃描卡片改顯示人員掃描工時，並與標準工時（10 分鐘/尺碼）比較實際效率"]}, {"v": "v2.2", "t": "2026-11-24 09:50", "c": ["本月重點結論新增「補充結論」：可自行新增、編輯、刪除，並標示達標／接近／未達／資訊／待追蹤", "補充結論依月份保存，共享模式下所有檢視者都看得到；複製月報摘要與連續模式會一起帶出"]}, {"v": "v2.1", "t": "2026-11-24 09:40", "c": ["圖表點一下即可固定顯示數值，iPad／手機也能看；圖表可用鍵盤 Tab 逐月查看", "每張趨勢圖新增「表格檢視」，可直接看 12 個月數字", "總覽移除不同單位相加的「完成案件」，改為「主要產出」（印刷圖稿筆、劃線模支、3D建模件）", "OTD 新增計畫日覆蓋率；低於 80% 顯示「資料不足」，不再顯示綠色達標", "網址記住目前頁面、月份、組別，可直接傳連結；瀏覽器上一頁可回到前一個篩選", "手機版：選單改為頂部橫滑分頁列、圖表字級放大、KPI 標題不再被切掉", "說明文字加深、焦點框加粗、提示訊息可被螢幕閱讀器讀出"]}, {"v": "v2.0", "t": "2026-11-18 10:19", "c": ["交期達成新增 3D 打印（依单号對應画线模总表「3D打印 計畫完成日期」）", "劃線模改以支數呈現，柱狀圖依 DTC／DTP／DJC／未填 堆疊", "3D 打印分為「劃線模」與「其他模具」（依画线模总表部件名稱判定）", "交期清單隱藏離職人員姓名"]}, {"v": "v1.9", "t": "2026-11-18 10:09", "c": ["3D 掃描不列入設備稼動，改為獨立「作業量」卡片", "設備可用天數改用工作日誌實際上班日（漏填但有打印紀錄的日子自動補計）", "舊版共享資料自動補算 Form 4L 批次"]}, {"v": "v1.8", "t": "2026-11-18 09:53", "c": ["「連續報告模式」改名為「連續模式」", "3D 掃描以每尺碼 10 分鐘換算工時"]}, {"v": "v1.7", "t": "2026-11-18 09:21", "c": ["隱藏離職人員：韋雨桐、毛倩、黄俊滔（部門合計保留）", "設定頁新增「離職人員」欄位"]}, {"v": "v1.6", "t": "2026-11-18 09:19", "c": ["新增「直接作業分析」模塊：動作、部位、季節×系列、斬刀 Top 12、人員×作業分類熱度圖、明細搜尋"]}, {"v": "v1.5", "t": "2026-11-18 09:14", "c": ["Form 4L 批次打印：同機台同日下方空白列歸入同一批，不算缺時間"]}, {"v": "v1.4", "t": "2026-11-18 09:06", "c": ["設備稼動以每日 7 h 計算；週六不上班，週末加班日另計"]}, {"v": "v1.3", "t": "2026-11-18 08:42", "c": ["新增「設備稼動」模塊（Pro3 HS、Pro3 HS(B)、E3、Form 4L：稼動率、PPH、單只機時、耗材）", "產出量新增「月度投入工時曲線（依業務線）」"]}, {"v": "v1.2", "t": "2026-11-18 08:37", "c": ["平台改名為「DPC 項目管理平台」"]}, {"v": "v1.1", "t": "2026-11-18 08:32", "c": ["內建 11.17 版 Excel 初始資料，打開即顯示"]}, {"v": "v1.0", "t": "2026-11-18 08:19", "c": ["初版：月度總覽、產出量、工時結構、交期達成、人員與培訓、專項與改善", "每月匯入 Excel、共享資料、資料品質檢查、目標值設定"]}];
   const VERSION = CHANGELOG[0].v;
   const LINES = ['印刷圖稿', '位置版', '劃線模', '3D建模', '3D掃描', '3D打印'];
   const UNIT = { '印刷圖稿': '筆', '位置版': '筆', '劃線模': '單', '3D建模': '件', '3D掃描': '件', '3D打印': '只' };
@@ -555,7 +555,7 @@ body.proj .card header p{font-size:13px}
 
   const DEFAULT_SETTINGS = {
     leftStaff: ['韋雨桐', '毛倩', '黄俊滔'],
-    targets: { direct: 60, problem: 20, otd: 95, dayH: 8, equipH: 7, equipU: 60, equipBase: 'log', scanMin: 8, scanWhite: 90, otdCov: 80, rwk: 70 },
+    targets: { direct: 60, problem: 20, otd: 95, dayH: 8, equipH: 7, equipU: 60, equipBase: 'log', scanMin: 8, scanWhite: 90, otdCov: 80, rwk: 70, trainPct: 5 },
     lineMap: [
       { line: '位置版', kw: ['位置版'] },
       { line: '印刷圖稿', kw: ['ai 圖稿', 'ai圖稿', '菲林', 'ai 製圖'] },
@@ -835,24 +835,25 @@ body.proj .card header p{font-size:13px}
   function tile(label, value, unit, extra, st) { return `<div class="tile"><div class="tile-h"><span class="tile-l">${label}</span>${st ? chip(st) : ''}</div><div class="tile-v">${value}<small>${unit || ''}</small></div><div class="tile-x">${extra || ''}</div></div>`; }
 
   /* ---------- 結論產生 ---------- */
+  /* 培訓標準：培訓練習工時 ÷ 總投入工時 ≥ trainPct% 即達標 */
+  const trainSt = K => K.hours ? { r: K.training / K.hours, st: K.training / K.hours >= tg('trainPct') / 100 ? 'good' : 'bad' } : null;
   function conclusions(m) {
     const K = kpi(m), P = kpi(addM(m, -1)), t = S.settings.targets, list = [];
-    const sd = status(K.direct, t.direct, true);
-    if (sd) list.push([sd, `直接作業佔比 ${pct(K.direct)}，${sd === 'good' ? '達到' : '低於'}目標 ${t.direct}%${P.direct != null ? `（上月 ${pct(P.direct)}）` : ''}。`, 'direct']);
-    const sp = status(K.problem, t.problem, false);
-    if (sp) list.push([sp, `問題解決（檢驗/校正）佔 ${pct(K.problem)}，${sp === 'good' ? '控制在' : '超過'}上限 ${t.problem}% ${sp === 'good' ? '內' : '，一次做對率需改善'}。`, 'problem']);
+    /* 直接作業、問題解決、OTD 標準尚未訂立：只陳述數字，不判定達標 */
+    if (K.direct != null) list.push(['info', `直接作業佔比 ${pct(K.direct)}${P.direct != null ? `（上月 ${pct(P.direct)}）` : ''}。`, 'direct']);
+    if (K.problem != null) list.push(['info', `問題解決（檢驗/校正）佔 ${pct(K.problem)}${P.problem != null ? `（上月 ${pct(P.problem)}）` : ''}。`, 'problem']);
     const so = otdSt(K.otdAll, K.otdCov);
     const lowCov = OTD_LINES.filter(l => K.otd[l].done >= 5 && !covOk(K.otd[l].cov));
     if (lowCov.length) list.push(['data', `計畫日覆蓋率不足 ${tg('otdCov')}%：${lowCov.map(l => `${l} ${pct(K.otd[l].cov, 0)}（${K.otd[l].n}/${K.otd[l].done}）`).join('、')}，這些業務線的 OTD 僅供參考，請補填計畫完成日。`, 'otdcov']);
-    if (so) {
+    if (so && so !== 'data') {
       const worst = OTD_LINES.filter(l => K.otd[l].n >= 3).sort((a, b) => K.otd[a].rate - K.otd[b].rate)[0];
-      list.push([so, `交期達成率 OTD ${pct(K.otdAll)}（${K.otdN} 筆有計畫日）${worst && K.otd[worst].late ? `；最弱為 ${worst} ${pct(K.otd[worst].rate)}，逾期 ${K.otd[worst].late} 筆` : '，無逾期'}。`, 'otd']);
+      list.push(['info', `交期達成率 OTD ${pct(K.otdAll)}（${K.otdN} 筆有計畫日）${worst && K.otd[worst].late ? `；最弱為 ${worst} ${pct(K.otd[worst].rate)}，逾期 ${K.otd[worst].late} 筆` : '，無逾期'}。`, 'otd']);
     }
     const mv = LINES.filter(l => P.out[l] >= 5).map(l => ({ l, d: (K.out[l] - P.out[l]) / P.out[l] })).filter(x => Math.abs(x.d) >= 0.15).sort((a, b) => Math.abs(b.d) - Math.abs(a.d))[0];
     if (mv) list.push(['info', `${mv.l} 完成 ${fmt(K.out[mv.l])} ${UNIT[mv.l]}，較上月${mv.d > 0 ? '增加' : '減少'} ${Math.abs(mv.d * 100).toFixed(0)}%。`, 'move']);
     const EQ = equip(m), el = Object.entries(EQ.res).filter(([, x]) => x.h > 0).sort((a, b) => a[1].util - b[1].util);
     if (el.length) { const [lo, x] = el[0], [hi, y] = el[el.length - 1]; list.push([status(y.util, tg('equipU'), true) || 'info', `3D 打印稼動率：最高 ${hi} ${pct(y.util)}、最低 ${lo} ${pct(x.util)}（目標 ≥ ${tg('equipU')}%，以每日 ${tg('equipH')} h 計）。`, 'equip']); }
-    if (K.eff && K.training / K.eff >= 0.12) list.push(['info', `培訓練習 ${fmt(K.training, 1)} h（佔 ${pct(K.training / K.eff)}），新人帶訓仍佔用明顯產能。`, 'train']);
+    const tr = trainSt(K); if (tr) list.push([tr.st, `培訓練習 ${fmt(K.training, 1)} h，佔總投入工時 ${pct(tr.r)}，${tr.st === 'good' ? '達到' : '未達'}每月 ≥ ${tg('trainPct')}% 標準。`, 'train']);
     return list.filter(x => x[0] !== 'data');
   }
 
@@ -881,12 +882,12 @@ body.proj .card header p{font-size:13px}
     const K = kpi(m), P = kpi(addM(m, -1)), t = S.settings.targets, M12 = back(m, 12);
     const tiles = [
       tile('總投入工時', fmt(K.hours, 0), 'h', `${delta(K.hours, P.hours)}<br>${K.people} 人 · ${K.days} 個工作日`),
-      tile('直接作業佔比', pct(K.direct), '', `${delta(K.direct, P.direct, 'pt')}<br>目標 ≥ ${t.direct}%`, status(K.direct, t.direct, true)),
-      tile('問題解決（檢驗/校正）佔比', pct(K.problem), '', `${delta(K.problem, P.problem, 'pt')}<br>上限 ≤ ${t.problem}%`, status(K.problem, t.problem, false)),
-      tile('交期達成率 OTD', pct(K.otdAll), '', `${delta(K.otdAll, P.otdAll, 'pt')}<br>目標 ≥ ${t.otd}% · 計畫日覆蓋 ${pct(K.otdCov, 0)}`, otdSt(K.otdAll, K.otdCov)),
+      tile('直接作業佔比', pct(K.direct), '', `${delta(K.direct, P.direct, 'pt')}`),
+      tile('問題解決（檢驗/校正）佔比', pct(K.problem), '', `${delta(K.problem, P.problem, 'pt')}`),
+      tile('交期達成率 OTD', pct(K.otdAll), '', `${delta(K.otdAll, P.otdAll, 'pt')}<br>計畫日覆蓋 ${pct(K.otdCov, 0)}`, otdSt(K.otdAll, K.otdCov) === 'data' ? 'data' : null),
       (() => { const hs = hxSup(m), hp = hxSup(addM(m, -1)); const li = [['印刷圖稿', K.out['印刷圖稿'], P.out['印刷圖稿'], '筆'], ['劃線模', hs, hp, '支'], ['3D建模', K.out['3D建模'], P.out['3D建模'], '件']];
         return `<div class="tile"><div class="tile-h"><span class="tile-l">主要產出</span></div><ul class="tile-list">${li.map(([n, v, p, u]) => `<li><span>${n}</span><b>${fmt(v)}</b><small>${u}</small><em>${p ? (v === p ? '持平' : `${v > p ? '▲' : '▼'} ${Math.abs((v - p) / p * 100).toFixed(0)}%`) : '—'}</em></li>`).join('')}</ul><div class="tile-x">其他業務線見「產出量」</div></div>`; })(),
-      tile('培訓＋指導工時', fmt(K.training + K.coaching, 1), 'h', `${delta(K.training + K.coaching, P.training + P.coaching)}<br>培訓 ${fmt(K.training, 1)} · 指導 ${fmt(K.coaching, 1)}`)
+      (() => { const tr = trainSt(K); return tile('培訓＋指導工時', fmt(K.training + K.coaching, 1), 'h', `${delta(K.training + K.coaching, P.training + P.coaching)}<br>培訓 ${fmt(K.training, 1)} · 指導 ${fmt(K.coaching, 1)}${tr ? `<br>培訓佔總工時 ${pct(tr.r)}（標準 ≥ ${tg('trainPct')}%）` : ''}`, tr && tr.st); })()
     ].join('');
     const canEditC = S.mode === 'local' || DB.canWrite !== false;
     const MC = mergedConcl(m), CL = MC.list;
@@ -984,8 +985,8 @@ body.proj .card header p{font-size:13px}
   function vOtd(m) {
     const K = kpi(m), t = S.settings.targets, M12 = back(m, 12);
     const covCell = (c, n, d) => `<span class="${covOk(c) ? '' : 'warn-t'}">${pct(c, 0)}</span><small class="muted"> ${fmt(n)}/${fmt(d)}</small>`;
-    const rows = OTD_LINES.map(l => { const o = K.otd[l]; return [`<i class="dot" style="background:${LINE_COLOR[l]}"></i>${l}`, o.done ? covCell(o.cov, o.n, o.done) : '—', fmt(o.on), fmt(o.late), `<b>${pct(o.rate)}</b>`, o.late ? fmt(o.avgLate, 1) : '—', chip(otdSt(o.rate, o.cov))]; });
-    rows.push(['<b>合計</b>', K.otdDone ? covCell(K.otdCov, K.otdN, K.otdDone) : '—', fmt(sum(OTD_LINES.map(l => K.otd[l].on))), fmt(sum(OTD_LINES.map(l => K.otd[l].late))), `<b>${pct(K.otdAll)}</b>`, '', chip(otdSt(K.otdAll, K.otdCov))]);
+    const rows = OTD_LINES.map(l => { const o = K.otd[l]; return [`<i class="dot" style="background:${LINE_COLOR[l]}"></i>${l}`, o.done ? covCell(o.cov, o.n, o.done) : '—', fmt(o.on), fmt(o.late), `<b>${pct(o.rate)}</b>`, o.late ? fmt(o.avgLate, 1) : '—', otdSt(o.rate, o.cov) === 'data' ? chip('data') : '—']; });
+    rows.push(['<b>合計</b>', K.otdDone ? covCell(K.otdCov, K.otdN, K.otdDone) : '—', fmt(sum(OTD_LINES.map(l => K.otd[l].on))), fmt(sum(OTD_LINES.map(l => K.otd[l].late))), `<b>${pct(K.otdAll)}</b>`, '', otdSt(K.otdAll, K.otdCov) === 'data' ? chip('data') : '—']);
     rows[rows.length - 1]._cls = 'tot';
     const late = O_done(m).filter(o => o.p && o.a > o.p).map(o => ({ o, d: ddiff(o.a, o.p) })).sort((a, b) => b.d - a.d).slice(0, 15);
     const asOf = m === CUR_M ? TODAY : mEnd(m) < TODAY ? mEnd(m) : TODAY;
@@ -993,7 +994,7 @@ body.proj .card header p{font-size:13px}
     const open = S.d.outputs.filter(o => o.p && !o.a && o.p <= asOf && o.p >= from && outOk(o)).map(o => ({ o, d: ddiff(asOf, o.p) })).sort((a, b) => b.d - a.d);
     const r = x => [`<i class="dot" style="background:${LINE_COLOR[x.o.l]}"></i>${x.o.l}`, esc(x.o.k), esc(x.o.makers.filter(isShown).map(pname).join('/') || '—'), x.o.o || '—', x.o.p, x.o.a || '未完成', `<b class="bad-t">${x.d}</b>`];
     return `<div class="g2">${card('各業務線交期達成', `依實際完成日 ≤ 計畫完成日判定；3D 打印的計畫日依单号對應画线模总表「3D打印 計畫完成日期」，本月 ${fmt(O_done(m).filter(o => o.l === '3D打印').length)} 筆中有 ${fmt(K.otd['3D打印'].n)} 筆有計畫日`, table([{ h: '業務線' }, { h: '計畫日覆蓋', n: 1 }, { h: '準時', n: 1 }, { h: '逾期', n: 1 }, { h: 'OTD', n: 1 }, { h: '平均逾期天', n: 1 }, { h: '狀態' }], rows) + `<p class="muted" style="font-size:12px;margin:8px 0 0">計畫日覆蓋 = 有計畫完成日的完成筆數 ÷ 全部完成筆數；低於 ${tg('otdCov')}% 顯示「資料不足」</p>`)}
-      ${card('近 12 個月 OTD 趨勢', '', legend(OTD_LINES.map(l => [l, LINE_COLOR[l]])) + lineChart(M12, OTD_LINES.map(l => ({ name: l, color: LINE_COLOR[l], values: M12.map(x => kpi(x).otd[l].rate) })), { yMin: 0, yMax: 1, fmt: v => (v * 100).toFixed(0) + '%', target: t.otd / 100, hi: 11 }))}</div>
+      ${card('近 12 個月 OTD 趨勢', '', legend(OTD_LINES.map(l => [l, LINE_COLOR[l]])) + lineChart(M12, OTD_LINES.map(l => ({ name: l, color: LINE_COLOR[l], values: M12.map(x => kpi(x).otd[l].rate) })), { yMin: 0, yMax: 1, fmt: v => (v * 100).toFixed(0) + '%', hi: 11 }))}</div>
       ${card(`逾期完成清單 Top 15`, `本月共 ${fmt(sum(OTD_LINES.map(l => K.otd[l].late)))} 筆逾期完成`, table([{ h: '業務線' }, { h: '項目' }, { h: '負責人' }, { h: '接單' }, { h: '計畫完成' }, { h: '實際完成' }, { h: '逾期天', n: 1 }], late.map(r), { empty: '本月無逾期完成 ✓' }))}
       ${card(`到期未完成（截至 ${asOf}）`, `計畫日在 ${from} 之後且尚未填實際完成日，共 ${open.length} 筆；請確認是否已完成但未登記`, table([{ h: '業務線' }, { h: '項目' }, { h: '負責人' }, { h: '接單' }, { h: '計畫完成' }, { h: '狀態' }, { h: '已逾期天', n: 1 }], open.slice(0, 30).map(r), { empty: '無到期未完成項目 ✓' }))}`;
   }
@@ -1131,6 +1132,7 @@ body.proj .card header p{font-size:13px}
         <label>劃線模掃描標準（全過程） <input type="number" name="scanMin" value="${tg.scanMin != null ? tg.scanMin : 8}" min="1" max="120" ${canEdit ? '' : 'disabled'}> 分鐘/尺碼</label>
         <label>白模掃描標準 <input type="number" name="scanWhite" value="${tg.scanWhite != null ? tg.scanWhite : 90}" min="1" max="600" ${canEdit ? '' : 'disabled'}> 分鐘/件</label>
         <label>印刷圖稿修改重畫工作量 <input type="number" name="rwk" value="${tg.rwk != null ? tg.rwk : 70}" min="0" max="200" ${canEdit ? '' : 'disabled'}> %（相對首次繪製）</label>
+        <label>培訓達標標準 ≥ <input type="number" name="trainPct" value="${tg.trainPct != null ? tg.trainPct : 5}" min="0" max="100" step="0.5" ${canEdit ? '' : 'disabled'}> %（培訓練習工時 ÷ 總投入工時）</label>
         <label>設備稼動率目標 ≥ <input type="number" name="equipU" value="${tg.equipU != null ? tg.equipU : 60}" min="0" max="100" ${canEdit ? '' : 'disabled'}> %</label>
         <label class="full">離職人員（不在人員相關圖表顯示；部門合計工時仍保留；多人用逗號分隔）<input type="text" name="leftStaff" value="${esc((st.leftStaff || DEFAULT_SETTINGS.leftStaff).join('、'))}" style="width:100%" ${canEdit ? '' : 'disabled'}></label>
         <label class="full">業務線工時歸類（每行：業務線 | 作業分類關鍵字（逗號分隔）；由上往下第一個符合者生效，都不符合歸為「其他」）<textarea name="lineMap" rows="6" ${canEdit ? '' : 'disabled'}>${esc(lmTxt)}</textarea></label>
@@ -1215,7 +1217,7 @@ body.proj .card header p{font-size:13px}
       const um = String(fd.get('unitMap') || '').split('\n').map(l => l.split('|').map(s => s.trim())).filter(a => a.length >= 3 && a[0]).map(a => ({ name: a[0], kw: a[1].split(/[,，]/).map(s => s.trim()).filter(Boolean), line: LINES.includes(a[2]) ? a[2] : '印刷圖稿' }));
       const lm = String(fd.get('lineMap') || '').split('\n').map(l => l.split('|').map(s => s.trim())).filter(a => a.length >= 2 && LINES.includes(a[0])).map(a => ({ line: a[0], kw: a[1].split(/[,，]/).map(s => s.trim()).filter(Boolean) }));
       const left = String(fd.get('leftStaff') || '').split(/[,，、\s]+/).map(s => s.trim()).filter(Boolean);
-      const ns = { leftStaff: left, lineMap: lm.length ? lm : clone(DEFAULT_SETTINGS.lineMap), targets: { direct: +fd.get('direct') || 60, problem: +fd.get('problem') || 20, otd: +fd.get('otd') || 95, dayH: +fd.get('dayH') || 8, equipH: +fd.get('equipH') || 7, equipU: +fd.get('equipU') || 60, equipBase: String(fd.get('equipBase') || 'log'), scanMin: +fd.get('scanMin') || 8, scanWhite: +fd.get('scanWhite') || 90, otdCov: fd.get('otdCov') === '' ? 80 : +fd.get('otdCov'), rwk: fd.get('rwk') === '' || fd.get('rwk') == null ? 70 : +fd.get('rwk') }, unitMap: um.length ? um : clone(DEFAULT_SETTINGS.unitMap) };
+      const ns = { leftStaff: left, lineMap: lm.length ? lm : clone(DEFAULT_SETTINGS.lineMap), targets: { direct: +fd.get('direct') || 60, problem: +fd.get('problem') || 20, otd: +fd.get('otd') || 95, dayH: +fd.get('dayH') || 8, equipH: +fd.get('equipH') || 7, equipU: +fd.get('equipU') || 60, equipBase: String(fd.get('equipBase') || 'log'), scanMin: +fd.get('scanMin') || 8, scanWhite: +fd.get('scanWhite') || 90, otdCov: fd.get('otdCov') === '' ? 80 : +fd.get('otdCov'), rwk: fd.get('rwk') === '' || fd.get('rwk') == null ? 70 : +fd.get('rwk'), trainPct: fd.get('trainPct') === '' || fd.get('trainPct') == null ? 5 : +fd.get('trainPct') }, unitMap: um.length ? um : clone(DEFAULT_SETTINGS.unitMap) };
       await saveSettings(ns); $('#set-st') && ($('#set-st').textContent = '已儲存 ✓');
     };
   }
