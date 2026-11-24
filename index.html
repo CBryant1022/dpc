@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>DPC數字化產品</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<style>
+/* Layout: sample-room bench — a KeyShot-grey stage on the left (render photos or live 3D), spec card on the right; stacks on phones */
+:root{
+  --bg:#e9ebee; --panel:#ffffff; --fg:#1b2028; --muted:#5d6672;
+  --line:#d3d8de; --accent:#d9631e; --chip:#eef0f3; --warn-bg:#fdf0e6; --warn-fg:#8a3a0c;
+  --stage:#383838; --stage-fg:#eceae6; --stage-muted:#a9a6a1; --stage-line:#4c4c4c; --stage-btn:#2c2c2c;
+  --f-body:"IBM Plex Sans","Noto Sans TC",system-ui,sans-serif;
+  --f-cjk:"Noto Sans TC","IBM Plex Sans",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#14171c; --panel:#1f242c; --fg:#e7eaee; --muted:#9aa3ae;
+  --line:#323943; --accent:#ef7a35; --chip:#272d36; --warn-bg:#3a2516; --warn-fg:#f3b38a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14171c; --panel:#1f242c; --fg:#e7eaee; --muted:#9aa3ae;
+  --line:#323943; --accent:#ef7a35; --chip:#272d36; --warn-bg:#3a2516; --warn-fg:#f3b38a; color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.5}
+.wrap{min-height:100%;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;
+  padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));box-sizing:border-box}
+.wrap{align-items:start}
+.stage{position:sticky;top:16px;height:calc(100vh - 32px);background:var(--stage);color:var(--stage-fg);border-radius:6px;min-height:520px;overflow:hidden;display:flex;flex-direction:column}
+.stage-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:14px 16px 0;position:relative;z-index:3}
+.style-id{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--stage-muted);text-transform:uppercase}
+.style-id b{display:block;font-family:var(--f-body);font-size:26px;letter-spacing:.02em;color:var(--stage-fg);font-weight:600;text-transform:none}
+.mode{display:flex;gap:2px;padding:3px;background:var(--stage-btn);border-radius:6px}
+.mode button{color:var(--stage-muted)}
+.mode button[aria-pressed="true"]{background:var(--stage-fg);color:var(--stage)}
+.view{position:relative;flex:1;min-height:420px}
+.pane{position:absolute;inset:0}
+.pane[hidden]{display:none!important}
+/* render photo */
+.photo{position:absolute;inset:0;overflow:hidden;cursor:zoom-in;touch-action:pan-y}
+.photo.zoomed{cursor:zoom-out;touch-action:none}
+.photo img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:contain;transform-origin:50% 50%;transition:transform .25s ease;user-select:none;-webkit-user-drag:none}
+.photo.zoomed img{transition:none}
+.badge{position:absolute;right:16px;top:8px;font-family:var(--f-mono);font-size:11px;color:var(--stage-muted);letter-spacing:.06em;pointer-events:none}
+model-viewer{width:100%;height:100%;background:var(--stage);--poster-color:transparent;--progress-bar-color:transparent}
+.hint{position:absolute;right:16px;top:8px;font-size:12px;color:var(--stage-muted);text-align:right;font-family:var(--f-cjk);pointer-events:none}
+.loader{position:absolute;inset:0;display:grid;place-items:center;background:var(--stage);z-index:2}
+.loader[hidden]{display:none!important}
+.loader-box{width:min(280px,80%);display:grid;gap:8px;font-family:var(--f-cjk)}
+.bar{height:4px;background:var(--stage-line);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+.loader small{font-family:var(--f-mono);color:var(--stage-muted);font-size:12px}
+.err{color:#ff9a5c}
+.login{min-height:100%;display:grid;place-items:center;padding-block:32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));box-sizing:border-box}
+.login[hidden]{display:none!important}
+.login-card{width:min(360px,100%);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:28px 24px;display:grid;gap:16px;box-sizing:border-box}
+.login-card .style-id{color:var(--muted)}
+.login-card .style-id b{color:var(--fg)}
+.login-card label{display:grid;gap:6px;font-family:var(--f-cjk);font-size:13px;color:var(--muted)}
+.login-card input{font:inherit;font-family:var(--f-mono);font-size:15px;padding:10px 12px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--fg)}
+.login-card input:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.login-card .go{background:var(--accent);color:#fff;border:0;border-radius:4px;padding:11px;font-size:15px;font-weight:600}
+.login-card .go:hover{background:var(--accent);filter:brightness(1.08)}
+.login-card .go:disabled{opacity:.6;cursor:wait}
+.login-msg{min-height:1.2em;font-size:13px;font-family:var(--f-cjk);color:var(--accent);margin:0}
+.login-card .style-id b{font-size:32px;letter-spacing:.06em}
+.login-sub{display:block;margin-top:2px;font-family:var(--f-cjk);font-size:15px;letter-spacing:.12em;color:var(--fg);text-transform:none}
+.login-foot{font-size:12px;color:var(--muted);font-family:var(--f-cjk);margin:0}
+.wrap[hidden],.picker[hidden]{display:none!important}
+.picker{min-height:100%;box-sizing:border-box;padding-block:24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:20px;align-content:start;max-width:1200px;margin:0 auto}
+.picker-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.picker-head .style-id{color:var(--muted)}
+.picker-head .style-id b{color:var(--fg)}
+.picker-head .logout{color:var(--muted);border:1px solid var(--line)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.scard{display:grid;grid-template-rows:auto 1fr;padding:0;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden;color:var(--fg);cursor:pointer}
+.scard:hover{background:var(--panel);border-color:var(--accent)}
+.scard .img{aspect-ratio:5/4;background:var(--stage);display:block;width:100%;height:auto;object-fit:cover;max-width:100%}
+.scard .meta{padding:14px 16px;display:grid;gap:4px}
+.scard .nm{font-family:var(--f-body);font-size:20px;font-weight:600;letter-spacing:.02em}
+.scard .ds{font-family:var(--f-cjk);font-size:13px;color:var(--muted)}
+.scard .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.scard .tags span{font-family:var(--f-cjk);font-size:11.5px;background:var(--chip);border-radius:3px;padding:2px 6px;color:var(--muted)}
+.picker-foot{font-size:12px;color:var(--muted);font-family:var(--f-cjk);margin:0}
+.back{color:var(--stage-muted);font-size:12px;padding:6px 8px;border:1px solid var(--stage-line)!important}
+.stage-actions{display:flex;gap:8px;align-items:center}
+.logout{color:var(--stage-muted);font-size:12px;padding:6px 8px}
+/* view strip */
+.strip{display:flex;gap:6px;padding:10px 16px 14px;overflow-x:auto;position:relative;z-index:3}
+.strip button{flex:0 0 auto;display:grid;gap:4px;justify-items:center;padding:4px;border:1px solid transparent;color:var(--stage-muted);font-size:12px}
+.strip img{width:84px;height:67px;object-fit:cover;border-radius:3px;display:block;max-width:none}
+.strip button[aria-pressed="true"]{border-color:var(--accent);color:var(--stage-fg)}
+.strip button:hover{background:var(--stage-btn)}
+button{font:inherit;font-family:var(--f-cjk);color:var(--fg);background:transparent;border:1px solid transparent;border-radius:4px;padding:6px 10px;cursor:pointer}
+button:hover{background:var(--chip)}
+.stage button:hover{background:var(--stage-btn)}
+.mode button[aria-pressed="true"]:hover{background:var(--stage-fg)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+aside{display:flex;flex-direction:column;gap:16px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:12px}
+.card h2{margin:0;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:var(--f-body)}
+.card h2 span{font-family:var(--f-cjk);letter-spacing:0;text-transform:none;color:var(--fg);font-size:14px;margin-right:6px}
+.row{display:grid;gap:6px}
+.row.sub{padding-left:12px;border-left:2px solid var(--line)}
+#groups{display:grid;gap:8px}
+details.sec{border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+details.sec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:10px 12px;font-family:var(--f-cjk);font-weight:600;font-size:14px;user-select:none}
+details.sec>summary::-webkit-details-marker{display:none}
+details.sec>summary::before{content:"";width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s;margin-right:2px}
+details.sec[open]>summary::before{transform:rotate(45deg)}
+details.sec>summary:hover{background:var(--chip);border-radius:6px}
+details.sec>summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:6px}
+.sec-parts{font-family:var(--f-mono);font-size:11px;font-weight:400;color:var(--muted);background:var(--chip);border-radius:9px;padding:1px 7px}
+.secn{margin-left:auto;font-size:11.5px;font-weight:500;color:var(--accent);font-family:var(--f-cjk)}
+.sec-body{display:grid;gap:12px;padding:4px 12px 14px}
+.row-label{display:flex;justify-content:space-between;font-family:var(--f-cjk);font-size:13px}
+.row-label em{font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.swatches{display:flex;flex-wrap:wrap;gap:6px}
+.sw{width:24px;height:24px;padding:0;border-radius:50%;border:1px solid var(--line)}
+.pick{position:relative;display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 8px 0 4px;border:1px solid var(--line);border-radius:12px;font-size:12px;font-family:var(--f-cjk);color:var(--muted);cursor:pointer}
+.pick::before{content:"";width:16px;height:16px;border-radius:50%;background:var(--pick,conic-gradient(#e33,#ec3,#3c5,#39e,#a3e,#e33))}
+.pick input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;border:0;padding:0}
+.pick.on{box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--accent);color:var(--fg)}
+.pick:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--accent)}
+.sw.metal{background:linear-gradient(135deg,#fff8 0%,transparent 35%,transparent 60%,#0005 100%),var(--c)!important}
+.sw.orig{background:conic-gradient(var(--line) 0 25%,transparent 0 50%,var(--line) 0 75%,transparent 0);background-size:10px 10px}
+.toggles{display:flex;flex-wrap:wrap;gap:6px}
+.toggles button{border-color:var(--line)}
+.toggles button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:13px}
+dt{color:var(--muted);font-family:var(--f-cjk)}
+dd{margin:0;font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right}
+.parts{display:flex;flex-wrap:wrap;gap:4px}
+.parts span{font-family:var(--f-cjk);font-size:12px;background:var(--chip);border-radius:3px;padding:2px 6px}
+.ver{display:grid;gap:8px;margin:0;padding:0;list-style:none;font-size:12.5px;font-family:var(--f-cjk)}
+.ver li{display:grid;grid-template-columns:52px 1fr;gap:8px}
+.ver b{font-family:var(--f-mono);font-weight:500;color:var(--fg)}
+.ver b.cur{color:var(--accent)}
+.ver span{color:var(--muted)}
+.ver em{font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--muted);display:block}
+.note{font-size:12px;color:var(--muted);font-family:var(--f-cjk);margin:0}
+.warn{background:var(--warn-bg);color:var(--warn-fg);border-radius:4px;padding:10px 12px;font-size:12.5px;font-family:var(--f-cjk);display:grid;gap:4px}
+.warn b{font-weight:700}
+@media (max-width:860px){
+  .wrap{grid-template-columns:1fr}
+  .stage{min-height:0;height:auto;position:relative;top:0}
+  .view{min-height:0;aspect-ratio:5/4;flex:none}
+  .hint,.badge{display:none}
+  .style-id b{font-size:20px}
+}
+.lang{position:fixed;z-index:20;top:calc(env(safe-area-inset-top,0px) + 12px);left:max(12px,env(safe-area-inset-left,0px));display:flex;gap:2px;padding:3px;background:var(--panel);border:1px solid var(--line);border-radius:6px}
+.lang button{font-family:var(--f-body);font-size:12px;padding:4px 10px;color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.lang button[aria-pressed="true"]:hover{background:var(--fg)}
+.picker,.wrap{padding-top:56px!important}
+.stage{top:56px!important;height:calc(100vh - 72px)!important}
+.login-sub:empty{display:none}
+@media (max-width:860px){.stage{top:0!important;height:auto!important}}
+@media (prefers-reduced-motion:reduce){.bar i,.photo img{transition:none}}
+</style>
+
+</head>
+<body>
+<div class="lang" role="group" aria-label="Language">
+  <button type="button" data-l="en" aria-pressed="true">EN</button>
+  <button type="button" data-l="zh" aria-pressed="false">繁中</button>
+</div>
+<div class="login" id="login">
+  <form class="login-card" id="loginForm" autocomplete="on">
+    <div class="style-id">Digital Product Creation<b>DPC</b><span class="login-sub" data-i18n="loginSub"></span></div>
+    <label for="lu"><span data-i18n="user">帳號</span><input id="lu" name="username" autocomplete="username" required></label>
+    <label for="lp"><span data-i18n="pass">密碼</span><input id="lp" name="password" type="password" autocomplete="current-password" required></label>
+    <button class="go" id="goBtn" type="submit" data-i18n="login">登入</button>
+    <p class="login-msg" id="loginMsg" role="alert"></p>
+    <p class="login-foot" data-i18n="loginFoot"></p>
+  </form>
+</div>
+<div class="picker" id="picker" hidden>
+  <div class="picker-head">
+    <div class="style-id"><span data-i18n="pickEyebrow"></span><b data-i18n="pickTitle">DPC 鞋款</b></div>
+    <button class="logout" id="logout2" type="button" data-i18n="logout">登出</button>
+  </div>
+  <div class="cards" id="cards"></div>
+  <p class="picker-foot" id="pickerFoot"></p>
+</div>
+<div class="wrap" id="wrap" hidden>
+  <section class="stage" data-i18n-aria="stageAria">
+    <div class="stage-top">
+      <div class="style-id">DPC · Style · <span id="verTag"></span><b id="styleName">LACEUP</b></div>
+      <div class="stage-actions">
+      <button class="back" id="backBtn" type="button" data-i18n="back">← 鞋款列表</button>
+      <button class="logout" id="logout" type="button" data-i18n="logout">登出</button>
+      <div class="mode" role="group" data-i18n-aria="modeAria">
+        <button id="mRender" aria-pressed="true" data-i18n="mRender">渲染圖</button>
+        <button id="m3d" aria-pressed="false" data-i18n="m3d">3D 旋轉</button>
+      </div>
+      </div>
+    </div>
+    <div class="view">
+      <div class="pane" id="paneRender">
+        <div class="photo" id="photo"><img id="shot" alt="LACEUP 前 3/4 渲染圖"></div>
+        <div class="badge" data-i18n="badge"></div>
+      </div>
+      <div class="pane" id="pane3d" hidden>
+        <model-viewer id="mv" camera-controls auto-rotate auto-rotate-delay="1500" rotation-per-second="18deg"
+          interaction-prompt="none" shadow-intensity="0.9" shadow-softness="0.8" exposure="1.1"
+          environment-image="neutral" camera-orbit="135deg 72deg auto" field-of-view="28deg"
+          min-camera-orbit="auto 0deg auto" max-camera-orbit="auto 180deg auto"
+          alt="3D model"></model-viewer>
+        <div class="hint" data-i18n="hint"></div>
+        <div class="loader" id="loader">
+          <div class="loader-box">
+            <div data-i18n="loading3d"></div>
+            <div class="bar"><i id="bar"></i></div>
+            <small id="loadtxt">0.0 / 11.3 MB</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="strip" id="strip" role="group" data-i18n-aria="viewsAria"></div>
+  </section>
+
+  <aside>
+    <div class="card">
+      <h2 data-i18n-html="hCw"></h2>
+      <div id="groups"></div>
+      <div class="toggles"><button id="resetColor" data-i18n="reset">還原原始配色</button></div>
+    </div>
+    <div class="card">
+      <h2 data-i18n-html="hDisp"></h2>
+      <div class="toggles">
+        <button id="tRotate" aria-pressed="true" data-i18n="tRotate">自動旋轉</button>
+        <button id="tShadow" aria-pressed="true" data-i18n="tShadow">地面陰影</button>
+        <button id="tLight" data-i18n="tLight">加強曝光</button>
+        <button id="tFull" data-i18n="tFull">全螢幕</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2 data-i18n-html="hModel"></h2>
+      <div id="info"></div>
+      <div class="parts" id="parts"></div>
+    </div>
+    <div class="card">
+      <h2 data-i18n-html="hLog"></h2>
+      <ul class="ver" id="ver"></ul>
+    </div>
+  </aside>
+</div>
+
+<script>
+// ---- i18n: EN default, 繁中 optional; choice remembered per browser ----
+let LANG='en'; try{const v=localStorage.getItem('dpc_lang'); if(v==='zh'||v==='en') LANG=v}catch(_){}
+const L=(zh,en)=>LANG==='en'?en:zh;
+const I18N={
+  user:['帳號','Account'], pass:['密碼','Password'], login:['登入','Sign in'], verifying:['驗證中…','Verifying…'], unlocking:['解密中…','Unlocking…'],
+  loginSub:['數字化產品',''], loginFoot:['模型與渲染圖已加密，需以帳號密碼解鎖。','Models and renders are encrypted. Sign in to unlock them.'],
+  badLogin:['帳號或密碼錯誤，請再試一次。','Incorrect account or password. Try again.'], unlockFail:['無法解鎖：','Could not unlock: '],
+  pickEyebrow:['Digital Product Creation · 數字化產品','Digital Product Creation'], pickTitle:['DPC 鞋款','DPC Styles'],
+  logout:['登出','Sign out'], back:['← 鞋款列表','← All styles'], mRender:['渲染圖','Renders'], m3d:['3D 旋轉','3D view'],
+  stageAria:['樣品檢視','Sample viewer'], modeAria:['檢視模式','View mode'], viewsAria:['視角','Views'],
+  badge:['KeyShot 2500×2000 · 點擊放大','KeyShot 2500×2000 · Click to zoom'], hint:['拖曳旋轉　滾輪／雙指縮放','Drag to rotate · Scroll or pinch to zoom'],
+  loading3d:['載入 3D 模型中…','Loading 3D model…'], decoding:['解碼中…','Decoding…'], decrypting:['解密中…','Decrypting…'],
+  unzipping:['解壓縮中…','Decompressing…'], building:['建立 3D 場景…','Building 3D scene…'],
+  dlFail:['模型下載失敗（{0}），請重新整理頁面。','Model download failed ({0}). Reload the page.'], parseFail:['模型解析失敗，請重新整理頁面。','The model could not be read. Reload the page.'],
+  hCw:['<span>配色試看</span>Colorway','<span>Colorway</span>'], hDisp:['<span>3D 顯示</span>Display','<span>Display</span>'],
+  hModel:['<span>模型資訊</span>Model','<span>Model</span>'], hLog:['<span>版本紀錄</span>Changelog','<span>Changelog</span>'],
+  cwNote:['配色試看在 3D 模式使用。切到「3D 旋轉」載入模型後，這裡會出現各部件的色盤。','Colorway works in the 3D view. Switch to “3D view” and each part’s palette appears here once the model loads.'],
+  cwNone:['此模型沒有可換色的材質。','This model has no recolorable materials.'], cwFail:['配色載入失敗：','Colorway failed to load: '],
+  reset:['還原原始配色','Reset to original'], orig:['原色','Original'], custom:['自訂','Custom'], customColor:['自訂顏色','Custom color'],
+  tRotate:['自動旋轉','Auto-rotate'], tShadow:['地面陰影','Ground shadow'], tLight:['加強曝光','Brighter'], tFull:['全螢幕','Fullscreen'],
+  changed:['已改 {0}','{0} changed'],
+  texSrc:['3D 紋理來源','3D texture source'], updated:['更新','Updated'], count:['共 {0} 款','{0} styles'], renderAlt:['渲染圖','render'],
+  title:['DPC數字化產品','DPC · Digital Product Creation']
+};
+const t=(k,...a)=>{let v=(I18N[k]||[k,k])[LANG==='en'?1:0];a.forEach((x,i)=>v=v.replace('{'+i+'}',x));return v};
+const CHANGELOG=[
+ ['v1.15','2026-11-24','新增離線版（單一 HTML 檔，雙擊即可開啟）與 GitHub Pages 版。','Added an offline build (single HTML file, opens with a double-click) and a GitHub Pages build.'],
+ ['v1.14','2026-11-12','更換登入帳號密碼；新增 GitHub Pages 版本。','Changed the sign-in account and password; added a GitHub Pages version.'],
+ ['v1.13','2026-10-27','配色改為可展開的群組：鞋面組（含鞋帶、鞋眼釘扣）、車線組、底部組、內裡組，群組標題顯示已改部位數；飾條改名內沿條 FOX1，沿條改名外沿條 FOX2。','Colorway now uses collapsible groups: Upper (incl. laces and eyelets), Stitching, Bottom, Lining, each showing how many parts changed; trim renamed Inner foxing FOX1, foxing renamed Outer foxing FOX2.'],
+ ['v1.12','2026-10-27','新增語言切換（EN／繁中），預設英文介面。','Added a language switch (EN / 繁中); English is the default.'],
+ ['v1.11','2026-10-27','新增後跟標 Heel tab 換色（LACEUP 與 TC BOATSHOE 皆適用）。','Added Heel tab to the colorway (LACEUP and TC BOATSHOE).'],
+ ['v1.10','2026-10-27','TC BOATSHOE：修正沿條、飾條、前護片、後跟標、大底在 3D 顯示為紅色（KeyShot 半透明生膠匯出成深紅散射色）；改用渲染圖取樣的生膠色，並校正麂皮鞋面顏色。','TC BOATSHOE: fixed foxing, trim, toe bumper, heel tab and outsole showing red in 3D (KeyShot’s translucent gum rubber exported as its dark-red scatter color); now uses gum colors sampled from the renders, and the suede upper color is corrected.'],
+ ['v1.9','2026-10-27','修正「還原原始配色」與單排「原色」在有底色貼圖的部件無法還原的問題：改為從記憶體重新載入模型後套回其餘配色，視角保持不變。','Fixed “Reset to original” and per-row “Original” not restoring parts with base-color textures: the model now reloads from memory and re-applies the other selections, keeping the current view.'],
+ ['v1.8','2026-10-27','新增鞋款 TC BOATSHOE（船型鞋）；鞋面部件：鞋頭、鞋羽、眼片、後包、鞋眼釘扣、鞋帶；新增換色：飾條 Trim。','Added style TC BOATSHOE (boat shoe); upper parts: vamp, quarter, eyestay, heel counter, eyelet, laces; added Trim to the colorway.'],
+ ['v1.7','2026-10-27','登入後先進入鞋款列表，點選鞋款再進入檢視；檢視頁可返回列表。','After sign-in a style list opens first; pick a style to view it, and return to the list from the viewer.'],
+ ['v1.6','2026-10-27','登入頁改為 DPC（Digital Product Creation）數字化產品。','Sign-in page renamed to DPC (Digital Product Creation).'],
+ ['v1.5','2026-10-27','車線依部位分組換色：鞋頭、鞋羽、眼片、後包、鞋舌、內裡；保留「車線（全部）」一次換色。','Stitching colored by part: vamp, quarter, eyestay, heel counter, tongue, lining; “Stitching · all” still recolors everything at once.'],
+ ['v1.4','2026-10-27','新增鞋眼釘扣 Eyelet 換色：7 種電鍍金屬色（保留金屬光澤）＋20 色烤漆。','Added Eyelet colors: 7 plated metal finishes (keep metallic sheen) plus 20 painted colors.'],
+ ['v1.3','2026-10-27','加入帳號密碼登入；模型與渲染圖改為加密檔，登入後才在瀏覽器解密。','Added account sign-in; models and renders are encrypted and only decrypted in the browser after sign-in.'],
+ ['v1.2','2026-10-27','鞋面拆成部位分別換色：鞋頭、鞋羽、眼片、後包、鞋舌；保留「鞋面（全部）」一次換色。','Upper split into parts for coloring: vamp, quarter, eyestay, heel counter, tongue; “Upper · all” still recolors them together.'],
+ ['v1.1','2026-10-27','加入版本號與版本紀錄；準備擴充多鞋款。','Added version number and changelog; prepared for multiple styles.'],
+ ['v1.0','2026-10-26','改用 KeyShot 封裝檔原始貼圖（鞋面布紋、護片菱格、鞋帶、內裡、車線）；內裡換色；3D 區固定版面。','Switched to the original KeyShot package textures (upper canvas, toe-bumper knurl, laces, lining, stitching); lining colors; fixed 3D panel layout.'],
+ ['v0.4','2026-10-26','鞋帶換色。','Lace colors.'],
+ ['v0.3','2026-10-26','20 色色票＋自訂色盤；車線換色。','20-color palette plus custom picker; stitching colors.'],
+ ['v0.2','2026-10-26','KeyShot 八視角渲染圖，點擊放大。','Eight KeyShot render views with click-to-zoom.'],
+ ['v0.1','2026-10-26','首版 3D 檢視；GLB 由 82 MB 輕量化至 11 MB。','First 3D viewer; GLB reduced from 82 MB to 11 MB.']
+];
+const VERSION=CHANGELOG[0][0];
+// ---- style catalogue: add one entry per style (assets live in <base>/ encrypted) ----
+const STYLES=[
+  {id:'laceup',name:'LACEUP',desc:'綁帶休閒鞋 · 帆布鞋面 · 硫化大底',updated:'2026-10-27',
+   base:'secure15',files:["model_p0.txt", "model_p1.txt", "model_p2.txt", "model_p3.txt", "model_p4.txt", "model_p5.txt"],total:18290124,mb:13.7,
+   tags:['8 視角渲染','3D 旋轉','分部位配色'],
+   info:[['鞋面布紋','115874 · 2.4 cm/格'],['護片菱格','Knurl · ×11.7'],['鞋帶編織','109742 · ×12.5'],['內裡','6 oz Canvas'],['部件數','36'],['三角形','811,403'],['網頁 3D（壓縮後）','13.7 MB']],
+   note:'KeyShot 匯出的 GLB 貼圖只有 9–99 px，已改用 KeyShot 封裝檔（.ksp）內的原始貼圖，並套用原本的重複縮放。',
+   parts:['鞋頭','鞋頭裡','護片','眼片','鞋羽外','鞋羽內','鞋舌','鞋舌裡','後包','領口裡','後跟標','鞋帶 ×9','外沿條 FOX2 ×3','中底','大底','車線 ×9','鞋眼 ×2'],
+   en:{desc:'Lace-up casual · canvas upper · vulcanized sole',tags:['8 render views','3D view','Colorway by part'],
+     info:[['Upper canvas','115874 · 2.4 cm tile'],['Bumper knurl','Knurl · ×11.7'],['Lace weave','109742 · ×12.5'],['Lining','6 oz Canvas'],['Parts','36'],['Triangles','811,403'],['Web 3D (compressed)','13.7 MB']],
+     note:'The KeyShot GLB export carried textures of only 9–99 px; the original textures from the KeyShot package (.ksp) are used instead, with KeyShot’s tiling.',
+     parts:['Vamp','Vamp lining','Toe bumper','Eyestay','Quarter (lateral)','Quarter (medial)','Tongue','Tongue lining','Heel counter','Collar lining','Heel tab','Laces ×9','Outer foxing FOX2 ×3','Sockliner','Outsole','Stitching ×9','Eyelets ×2']}},
+  {id:'tcboat',name:'TC BOATSHOE',desc:'船型鞋 · 麂皮鞋面 · 皮革穿繩 · 生膠大底',updated:'2026-10-27',
+   base:'tcboat110',files:["model_p0.txt", "model_p1.txt", "model_p2.txt", "model_p3.txt", "model_p4.txt", "model_p5.txt"],total:20017228,mb:15.0,
+   tags:['8 視角渲染','3D 旋轉','分部位配色'],
+   info:[['鞋面麂皮','108850 · 12 cm/格'],['穿繩','麂皮 108850 ＋ 荔枝紋 105803'],['鞋墊／內裡','帆布 113098'],['大底','生膠（依渲染圖取色）'],['部件數','27'],['三角形','792,109'],['網頁 3D（壓縮後）','15.0 MB']],
+   note:'貼圖取自 KeyShot 封裝檔（.ksp）原始檔；鞋面麂皮依實際尺寸統一紋理大小，生膠部件依渲染圖取色（網頁 3D 無法呈現 KeyShot 的半透明散射效果）。',
+   parts:['鞋頭','鞋羽外','鞋羽內','眼片','後包','鞋眼釘扣','鞋帶 ×3','中底','鞋羽裡 ×2','鞋頭裡','後套','領口裡','車線 ×6','前護片','外沿條 FOX2','內沿條 FOX1 ×2','大底','後跟標'],
+   en:{desc:'Boat shoe · suede upper · leather laces · gum sole',tags:['8 render views','3D view','Colorway by part'],
+     info:[['Upper suede','108850 · 12 cm tile'],['Laces','Suede 108850 + pebble 105803'],['Sockliner / lining','Canvas 113098'],['Outsole','Gum (color from renders)'],['Parts','27'],['Triangles','792,109'],['Web 3D (compressed)','15.0 MB']],
+     note:'Textures come from the KeyShot package (.ksp). Suede tiling is normalized to real size; gum rubber parts use colors sampled from the renders (web 3D cannot show KeyShot’s translucent subsurface look).',
+     parts:['Vamp','Quarter (lateral)','Quarter (medial)','Eyestay','Heel counter','Eyelets','Laces ×3','Sockliner','Quarter lining ×2','Vamp lining','Heel lining','Collar lining','Stitching ×6','Toe bumper','Outer foxing FOX2','Inner foxing FOX1 ×2','Outsole','Heel tab']}}
+];
+let S=STYLES[0];
+const SV=(st,k)=>(LANG==='en'&&st.en&&st.en[k]!==undefined)?st.en[k]:st[k];
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function renderInfo(){
+  document.getElementById('styleName').textContent=S.name;
+  const note=SV(S,'note');
+  document.getElementById('info').innerHTML=(note?`<div class="warn"><b>${t('texSrc')}</b><span>${esc(note)}</span></div>`:'')+
+    `<dl>${SV(S,'info').map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`;
+  document.getElementById('parts').innerHTML=(SV(S,'parts')||[]).map(p=>`<span>${esc(p)}</span>`).join('');
+}
+
+// views: render image + matching 3D camera orbit (toe = +X)
+const VIEWS=[
+  {k:'front34',zh:'前 3/4',en:'Front 3/4',orbit:'135deg 72deg auto'},
+  {k:'sideL',zh:'側面 (頭朝左)',en:'Side (toe left)',orbit:'180deg 88deg auto'},
+  {k:'sideR',zh:'側面 (頭朝右)',en:'Side (toe right)',orbit:'0deg 88deg auto'},
+  {k:'back34',zh:'後 3/4',en:'Back 3/4',orbit:'-45deg 75deg auto'},
+  {k:'front',zh:'正前',en:'Front',orbit:'90deg 85deg auto'},
+  {k:'back',zh:'正後',en:'Back',orbit:'-90deg 85deg auto'},
+  {k:'top',zh:'俯視',en:'Top',orbit:'180deg 3deg auto'},
+  {k:'bottom',zh:'鞋底',en:'Bottom',orbit:'180deg 177deg auto'}
+];
+const vname=v=>L(v.zh,v.en);
+const strip=document.getElementById('strip'), shot=document.getElementById('shot'), photo=document.getElementById('photo');
+function buildStrip(){strip.innerHTML=VIEWS.map((v,i)=>`<button data-i="${i}" aria-pressed="${i===0}"><img src="${URLS[S.id+'/'+v.k+'_t']}" alt="" width="84" height="67">${vname(v)}</button>`).join('')}
+let cur=0, mode='render';
+// preload full renders
+function selectView(i){
+  cur=i; const v=VIEWS[i];
+  strip.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));
+  unzoom(); shot.src=URLS[S.id+'/'+v.k]; shot.alt=`${S.name} ${vname(v)} ${t('renderAlt')}`;
+  if(mode==='3d'){mv.autoRotate=false;setPressed('tRotate',false);mv.cameraOrbit=v.orbit;mv.cameraTarget='auto auto auto';mv.fieldOfView='28deg'}
+}
+strip.addEventListener('click',e=>{const b=e.target.closest('button');if(b)selectView(+b.dataset.i)});
+
+// zoom on render
+let zoomed=false;
+function unzoom(){zoomed=false;photo.classList.remove('zoomed');shot.style.transform=''}
+function pan(e){
+  const r=photo.getBoundingClientRect();
+  const x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height;
+  shot.style.transformOrigin=`${x*100}% ${y*100}%`;
+}
+photo.addEventListener('click',e=>{
+  if(zoomed){unzoom();return}
+  zoomed=true;photo.classList.add('zoomed');pan(e);shot.style.transform='scale(2.6)';
+});
+photo.addEventListener('pointermove',e=>{if(zoomed)pan(e)});
+
+// mode switch
+const mv=document.getElementById('mv');
+let loadStarted=false;
+function setMode(m){
+  mode=m;
+  document.getElementById('mRender').setAttribute('aria-pressed',m==='render');
+  document.getElementById('m3d').setAttribute('aria-pressed',m==='3d');
+  document.getElementById('paneRender').hidden=m!=='render';
+  document.getElementById('pane3d').hidden=m!=='3d';
+  if(m==='3d'){ if(!loadStarted){loadStarted=true;loadModel()} }
+  else unzoom();
+}
+document.getElementById('mRender').onclick=()=>setMode('render');
+document.getElementById('m3d').onclick=()=>setMode('3d');
+
+// colorway
+const PALETTE=[
+  ['#1c1c1e','黑','Black'],['#3d4045','炭灰','Charcoal'],['#8a8d91','中灰','Mid grey'],['#c9cbcd','淺灰','Light grey'],['#f4f2ee','白','White'],
+  ['#e8dfcc','米白','Off-white'],['#c2a878','卡其','Khaki'],['#a9773f','駝色','Camel'],['#6b4226','棕','Brown'],['#3e2a1e','深咖','Dark brown'],
+  ['#6e1f2b','酒紅','Burgundy'],['#b3262e','紅','Red'],['#d9631e','橘','Orange'],['#c9a227','芥末黃','Mustard'],['#5b5f3a','橄欖','Olive'],
+  ['#2f4a3a','森林綠','Forest green'],['#1f2a44','海軍藍','Navy'],['#2c4f9e','皇家藍','Royal blue'],['#8fb3d9','天藍','Sky blue'],['#e3a6ad','粉','Pink']
+];
+const GUM=[['#b9874d','生膠','Gum'],['#7a4a2b','深生膠','Dark gum']];
+const METALS=[['#c9a24a','黃銅','Brass','m'],['#8c6239','古銅','Antique brass','m'],['#d6d6d3','銀色鎳','Nickel','m'],['#4a4c50','槍黑','Gunmetal','m'],['#2a2b2e','黑鎳','Black nickel','m'],['#d8a08a','玫瑰金','Rose gold','m'],['#b8bcc2','霧銀','Matte silver','m']];
+const SECTIONS=[
+  {key:'upper',zh:'鞋面組',en:'Upper'},
+  {key:'stitch',zh:'車線組',en:'Stitching'},
+  {key:'bottom',zh:'底部組',en:'Bottom'},
+  {key:'lining',zh:'內裡組',en:'Lining'}
+];
+const GROUPS=[
+  // 鞋面組 Upper
+  {sec:'upper',key:'upper',zh:'鞋面（全部）',en:'Upper · all',test:n=>/^upper__(vamp|quarter|eyestay|heel_counter|tongue)/.test(n),colors:PALETTE,
+   children:['vamp','quarter','eyestay','heel','tongue']},
+  {sec:'upper',key:'vamp',zh:'鞋頭',en:'Vamp',sub:true,test:n=>n.startsWith('upper__vamp'),colors:PALETTE},
+  {sec:'upper',key:'quarter',zh:'鞋羽',en:'Quarter',sub:true,test:n=>n.startsWith('upper__quarter'),colors:PALETTE},
+  {sec:'upper',key:'eyestay',zh:'眼片',en:'Eyestay',sub:true,test:n=>n.startsWith('upper__eyestay'),colors:PALETTE},
+  {sec:'upper',key:'heel',zh:'後包',en:'Heel counter',sub:true,test:n=>n.startsWith('upper__heel_counter'),colors:PALETTE},
+  {sec:'upper',key:'tongue',zh:'鞋舌',en:'Tongue',sub:true,test:n=>n.startsWith('upper__tongue'),colors:PALETTE},
+  {sec:'upper',key:'laces',zh:'鞋帶',en:'Laces',test:n=>n.startsWith('upper__laces'),colors:PALETTE,tex:true},
+  {sec:'upper',key:'eyelet',zh:'鞋眼釘扣',en:'Eyelet',test:n=>n.startsWith('eyelet')||n.startsWith('Anodized'),colors:[...METALS,...PALETTE.map(([c,n,e])=>[c,n+'烤漆',e+' (painted)','p'])],finish:true},
+  // 車線組 Stitching
+  {sec:'stitch',key:'stitch',zh:'車線（全部）',en:'Stitching · all',test:n=>n.startsWith('stitch'),colors:PALETTE,tex:true,
+   children:['st_vamp','st_quarter','st_eyestay','st_heel','st_tongue','st_lining']},
+  {sec:'stitch',key:'st_vamp',zh:'鞋頭車線',en:'Vamp',sub:true,test:n=>n.startsWith('stitch__vamp'),colors:PALETTE,tex:true},
+  {sec:'stitch',key:'st_quarter',zh:'鞋羽車線',en:'Quarter',sub:true,test:n=>n.startsWith('stitch__quarter'),colors:PALETTE,tex:true},
+  {sec:'stitch',key:'st_eyestay',zh:'眼片車線',en:'Eyestay',sub:true,test:n=>n.startsWith('stitch__eyestay'),colors:PALETTE,tex:true},
+  {sec:'stitch',key:'st_heel',zh:'後包車線',en:'Heel counter',sub:true,test:n=>n.startsWith('stitch__heel_counter'),colors:PALETTE,tex:true},
+  {sec:'stitch',key:'st_tongue',zh:'鞋舌車線',en:'Tongue',sub:true,test:n=>n.startsWith('stitch__tongue'),colors:PALETTE,tex:true},
+  {sec:'stitch',key:'st_lining',zh:'內裡車線',en:'Lining',sub:true,test:n=>n.startsWith('stitch__lining'),colors:PALETTE,tex:true},
+  // 底部組 Bottom
+  {sec:'bottom',key:'trim',zh:'內沿條',en:'Inner foxing',code:'FOX1',test:n=>n.startsWith('trim__'),colors:[...PALETTE,...GUM]},
+  {sec:'bottom',key:'foxing',zh:'外沿條',en:'Outer foxing',code:'FOX2',test:n=>n.startsWith('沿條'),colors:[...PALETTE,...GUM]},
+  {sec:'bottom',key:'heeltab',zh:'後跟標',en:'Heel tab',test:n=>n.startsWith('後跟標')||n.startsWith('heel_tab'),colors:[...PALETTE,...GUM]},
+  {sec:'bottom',key:'outsole',zh:'大底',en:'Outsole',test:n=>n.startsWith('大底'),colors:[...PALETTE,...GUM]},
+  {sec:'bottom',key:'bumper',zh:'護片',en:'Toe bumper',test:n=>n.startsWith('bumper'),colors:[...PALETTE,...GUM]},
+  // 內裡組 Lining
+  {sec:'lining',key:'lining',zh:'內裡',en:'Lining',test:n=>n.startsWith('inside__'),colors:PALETTE,tex:true,keepTex:true}
+];
+const OPEN=new Set(['upper']);
+const gname=g=>L(g.zh,g.en)+(g.code?' '+g.code:'');
+const groupsEl=document.getElementById('groups');
+let origMR=new Map(), orig=new Map(), origTex=new Map(), byGroup={};
+function rowHTML(g){return `
+    <div class="row${g.sub?' sub':''}" data-g="${g.key}">
+      <div class="row-label">${gname(g)} <em>${LANG==='en'?'':g.en+' · '}<span class="cname">${t('orig')}</span></em></div>
+      <div class="swatches">
+        <button class="sw orig" data-c="" aria-pressed="true" title="${t('orig')}" aria-label="${gname(g)} ${t('orig')}"></button>
+        ${g.colors.map(([c,zh,en,k])=>`<button class="sw${k==='m'?' metal':''}" data-c="${c}" data-k="${k||''}" style="--c:${c};background:${c}" title="${L(zh,en)} ${c}" aria-label="${gname(g)} ${L(zh,en)}"></button>`).join('')}
+        <label class="pick" title="${t('customColor')}"><input type="color" value="#808080" aria-label="${gname(g)} ${t('customColor')}"><span>${t('custom')}</span></label>
+      </div>
+    </div>`}
+function swatches(){
+  const html=SECTIONS.map(sec=>{
+    const gs=GROUPS.filter(g=>g.sec===sec.key&&byGroup[g.key]?.length); if(!gs.length) return '';
+    return `<details class="sec" data-sec="${sec.key}"${OPEN.has(sec.key)?' open':''}>
+      <summary><span class="sec-name">${L(sec.zh,sec.en)}</span><span class="sec-parts">${gs.filter(g=>!g.children).length}</span><span class="secn"></span></summary>
+      <div class="sec-body">${gs.map(rowHTML).join('')}</div></details>`;
+  }).join('');
+  groupsEl.innerHTML=html||`<p class="note">${t('cwNone')}</p>`;
+  secCount();
+}
+function secCount(){
+  groupsEl.querySelectorAll('details.sec').forEach(d=>{
+    const n=GROUPS.filter(g=>g.sec===d.dataset.sec&&SEL[g.key]).length;
+    const el=d.querySelector('.secn'); el.textContent=n?t('changed',n):''; el.hidden=!n;
+  });
+}
+groupsEl.addEventListener('toggle',e=>{const d=e.target; if(!d.matches||!d.matches('details.sec')) return; d.open?OPEN.add(d.dataset.sec):OPEN.delete(d.dataset.sec)},true);
+function apply(gk,c,kind){
+  const G=GROUPS.find(g=>g.key===gk);
+  for(const m of byGroup[gk]||[]){
+    const pbr=m.pbrMetallicRoughness;
+    if(origTex.has(m) && !GROUPS.find(g=>g.key===gk).keepTex) pbr.baseColorTexture.setTexture(c?null:origTex.get(m));
+    pbr.setBaseColorFactor(c?c:orig.get(m));
+    if(G&&G.finish){
+      const o=origMR.get(m);
+      if(!c){pbr.setMetallicFactor(o[0]);pbr.setRoughnessFactor(o[1])}
+      else if(kind==='m'){pbr.setMetallicFactor(1);pbr.setRoughnessFactor(o[1])}
+      else{pbr.setMetallicFactor(0);pbr.setRoughnessFactor(0.45)}
+    }
+  }
+}
+function mark(row,btn,name){
+  row.querySelectorAll('.sw').forEach(x=>x.setAttribute('aria-pressed',x===btn));
+  row.querySelector('.pick').classList.toggle('on',!btn);
+  row.querySelector('.cname').textContent=name;
+}
+// current selections per row; "original" is restored by reloading the model (no texture re-attach)
+let SEL={}, modelBlob=null, pendingCam=null;
+function cLabel(gk,c){
+  if(!c) return t('orig');
+  const g=GROUPS.find(x=>x.key===gk); const e=g&&g.colors.find(x=>x[0]===c);
+  return e?`${L(e[1],e[2])} ${c}`:`${t('custom')} ${c}`;
+}
+function choose(gk,c,k,n){
+  const g=GROUPS.find(x=>x.key===gk);
+  if(g?.children) g.children.forEach(ch=>delete SEL[ch]);
+  if(c){ SEL[gk]={c,k,n}; apply(gk,c,k); syncChildren(gk,c,n); secCount(); }
+  else { delete SEL[gk]; secCount(); reloadModel(); }
+}
+function reloadModel(){
+  if(!modelBlob) return;
+  try{ pendingCam={orbit:mv.getCameraOrbit().toString(),fov:mv.getFieldOfView()+'deg',target:mv.getCameraTarget().toString()} }catch(_){pendingCam=null}
+  const old=mv.src; groupsEl.style.opacity='.5'; groupsEl.style.pointerEvents='none';
+  mv.src=URL.createObjectURL(modelBlob);
+  if(old&&old.startsWith('blob:')) setTimeout(()=>URL.revokeObjectURL(old),5000);
+}
+function reapplySel(){
+  for(const g of GROUPS){
+    const v=SEL[g.key]; if(!v) continue;
+    apply(g.key,v.c,v.k);
+    const r=groupsEl.querySelector(`.row[data-g="${g.key}"]`); if(!r) continue;
+    const btn=r.querySelector(`.sw[data-c="${v.c}"]`);
+    mark(r,btn||null,cLabel(g.key,v.c));
+    if(!btn){const pk=r.querySelector('.pick');pk&&pk.style.setProperty('--pick',v.c)}
+    syncChildren(g.key,v.c,v.n);
+  }
+  secCount();
+}
+groupsEl.addEventListener('click',e=>{
+  const b=e.target.closest('.sw'); if(!b) return;
+  if(mode!=='3d') setMode('3d');
+  const row=b.closest('.row'); mark(row,b,cLabel(row.dataset.g,b.dataset.c));
+  choose(row.dataset.g,b.dataset.c,b.dataset.k,'');
+});
+function syncChildren(gk,c,n){
+  const g=GROUPS.find(x=>x.key===gk); if(!g?.children) return;
+  for(const k of g.children){
+    const r=groupsEl.querySelector(`.row[data-g="${k}"]`); if(!r) continue;
+    const btn=r.querySelector(`.sw[data-c="${c||''}"]`);
+    mark(r,btn||null,cLabel(k,c));
+  }
+}
+groupsEl.addEventListener('input',e=>{
+  if(!e.target.matches('.pick input')) return;
+  if(mode!=='3d') setMode('3d');
+  const row=e.target.closest('.row'), c=e.target.value;
+  e.target.parentElement.style.setProperty('--pick',c);
+  mark(row,null,cLabel(row.dataset.g,c)); choose(row.dataset.g,c,'p','');
+});
+document.getElementById('resetColor').onclick=()=>{ SEL={}; reloadModel(); };
+mv.addEventListener('load',()=>{
+  document.getElementById('loader').hidden=true;
+  groupsEl.style.opacity=''; groupsEl.style.pointerEvents='';
+  try{ initColorway(); reapplySel(); }catch(err){ groupsEl.innerHTML='<p class="note err">'+t('cwFail')+(err&&err.message)+'</p>'; console.error(err); }
+  if(pendingCam){mv.cameraTarget=pendingCam.target;mv.fieldOfView=pendingCam.fov;mv.cameraOrbit=pendingCam.orbit;mv.jumpCameraToGoal&&mv.jumpCameraToGoal();pendingCam=null}
+  else mv.cameraOrbit=VIEWS[cur].orbit;
+});
+function initColorway(){
+  byGroup={}; orig=new Map(); origMR=new Map(); origTex=new Map();
+  for(const m of mv.model.materials){
+    const hits=GROUPS.filter(g=>g.test(m.name||''));
+    if(!hits.length) continue;
+    const tex=m.pbrMetallicRoughness.baseColorTexture?.texture;
+    for(const g of hits){
+      if(tex) origTex.set(m,tex);
+      (byGroup[g.key]??=[]).push(m);
+      if(!orig.has(m)){orig.set(m,[...m.pbrMetallicRoughness.baseColorFactor]);origMR.set(m,[m.pbrMetallicRoughness.metallicFactor,m.pbrMetallicRoughness.roughnessFactor]);}
+    }
+  }
+  swatches();
+}
+mv.addEventListener('error',()=>fail(t('parseFail')));
+
+function setPressed(id,v){document.getElementById(id).setAttribute('aria-pressed',v)}
+document.getElementById('tRotate').onclick=()=>{mv.autoRotate=!mv.autoRotate;setPressed('tRotate',mv.autoRotate)};
+document.getElementById('tShadow').onclick=()=>{const on=mv.shadowIntensity>0;mv.shadowIntensity=on?0:0.9;setPressed('tShadow',!on)};
+document.getElementById('tLight').onclick=()=>{const on=mv.exposure>1.3;mv.exposure=on?1.1:1.6;setPressed('tLight',!on)};
+document.getElementById('tFull').onclick=()=>{
+  const s=document.querySelector('.stage');
+  if(document.fullscreenElement){document.exitFullscreen?.()}else{s.requestFullscreen?.().catch(()=>{})}
+};
+
+function fail(msg){const t=document.getElementById('loadtxt');t.textContent=msg;t.classList.add('err');document.getElementById('loader').hidden=false}
+async function loadModel(){
+  const TOTAL=S.total, MB=S.mb, bar=document.getElementById('bar'), txt=document.getElementById('loadtxt');
+  try{
+    const chunks=[]; let got=0;
+    for(const part of (S.files||['model_a.txt','model_b.txt']).map(f=>S.base+'/'+f)){
+      const res=await fetch(part);
+      if(!res.ok) throw new Error(res.status);
+      const reader=res.body.getReader();
+      for(;;){const {done,value}=await reader.read(); if(done) break; chunks.push(value); got+=value.length;
+        const p=Math.min(got/TOTAL,1); bar.style.width=(p*100).toFixed(1)+'%'; txt.textContent=(p*MB).toFixed(1)+' / '+MB+' MB';}
+    }
+    txt.textContent=t('decoding');
+    const b64=(await new Blob(chunks).text()).replace(/\s+/g,'');
+    const bin=atob(b64); const bytes=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+    txt.textContent=t('decrypting');
+    let blob=new Blob([await decryptBytes(bytes)]);
+    const head=new Uint8Array(await blob.slice(0,2).arrayBuffer());
+    if(head[0]===0x1f&&head[1]===0x8b){
+      txt.textContent=t('unzipping');
+      blob=await new Response(blob.stream().pipeThrough(new DecompressionStream('gzip'))).blob();
+    }
+    txt.textContent=t('building');
+    modelBlob=new Blob([blob],{type:'model/gltf-binary'}); mv.src=URL.createObjectURL(modelBlob);
+  }catch(e){fail(t('dlFail',e.message))}
+}
+
+// ---- login / decryption ----
+const AUTH={"salt": "F8HNap3/b5IBvwjbzaXdrQ==", "iter": 600000, "entries": [{"iv": "eJy/k+4g/UBQMEvS", "wk": "GQ6UOB+gLkVvLJbrQLDI1lLiZC2zVcdEvdOeyUoehd06M+joBqweLUfLks9nATRl"}]};
+const b64=s=>{const b=atob(s);const u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+const u8b64=u=>{let s='';for(let i=0;i<u.length;i++)s+=String.fromCharCode(u[i]);return btoa(s)};
+const URLS={}; let KEY=null;
+async function unwrapKey(user,pw){
+  const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(user+':'+pw),'PBKDF2',false,['deriveKey']);
+  const kek=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(AUTH.salt),iterations:AUTH.iter,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
+  for(const e of AUTH.entries){
+    try{return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(e.iv)},kek,b64(e.wk)))}catch(_){}
+  }
+  return null;
+}
+async function decryptBytes(u8){return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:u8.slice(0,12)},KEY,u8.slice(12)))}
+async function fetchDec(path){const r=await fetch(path);if(!r.ok)throw new Error(r.status);return decryptBytes(b64((await r.text()).trim()))}
+async function decImg(st,n){
+  const key=st.id+'/'+n; if(URLS[key]) return URLS[key];
+  return URLS[key]=URL.createObjectURL(new Blob([await fetchDec(`${st.base}/renders/${n}.txt`)],{type:'image/jpeg'}));
+}
+async function unlock(raw){
+  KEY=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);
+  await Promise.all(STYLES.map(st=>decImg(st,'front34')));
+  renderCards();
+  showPicker();
+}
+function renderCards(){
+  if(!STYLES.every(st=>URLS[st.id+'/front34'])) return;
+  document.getElementById('cards').innerHTML=STYLES.map(st=>`
+    <button class="scard" data-id="${st.id}" type="button">
+      <img class="img" src="${URLS[st.id+'/front34']}" alt="${esc(st.name)} ${L('前 3/4','front 3/4')}">
+      <span class="meta"><span class="nm">${esc(st.name)}</span><span class="ds">${esc(SV(st,'desc'))}</span>
+      <span class="tags">${SV(st,'tags').map(x=>`<span>${esc(x)}</span>`).join('')}<span>${t('updated')} ${esc(st.updated)}</span></span></span>
+    </button>`).join('');
+  document.getElementById('pickerFoot').textContent=t('count',STYLES.length);
+}
+function showPicker(){
+  setMode('render');
+  document.getElementById('login').hidden=true; document.getElementById('wrap').hidden=true; document.getElementById('picker').hidden=false;
+}
+async function openStyle(id){
+  const st=STYLES.find(x=>x.id===id); if(!st) return;
+  if(st!==S){
+    if(loadStarted){mv.removeAttribute('src');loadStarted=false;}
+    document.getElementById('loader').hidden=false; document.getElementById('bar').style.width='0';
+    document.getElementById('loadtxt').classList.remove('err'); document.getElementById('loadtxt').textContent='0.0 / '+st.mb+' MB';
+    byGroup={}; orig=new Map(); origMR=new Map(); origTex=new Map(); SEL={}; modelBlob=null; pendingCam=null;
+    groupsEl.innerHTML=`<p class="note">${t('cwNote')}</p>`;
+    S=st;
+  }
+  await Promise.all(VIEWS.flatMap(v=>[decImg(S,v.k+'_t'),decImg(S,v.k)]));
+  renderInfo(); buildStrip(); selectView(0);
+  document.getElementById('picker').hidden=true; document.getElementById('wrap').hidden=false;
+  window.scrollTo(0,0);
+}
+document.getElementById('cards').addEventListener('click',e=>{const c=e.target.closest('.scard');if(c)openStyle(c.dataset.id)});
+document.getElementById('backBtn').onclick=showPicker;
+const loginForm=document.getElementById('loginForm'), loginMsg=document.getElementById('loginMsg'), goBtn=document.getElementById('goBtn');
+loginForm.addEventListener('submit',async e=>{
+  e.preventDefault();
+  const u=document.getElementById('lu').value.trim(), p=document.getElementById('lp').value;
+  goBtn.disabled=true; goBtn.textContent=t('verifying'); loginMsg.textContent='';
+  try{
+    const raw=await unwrapKey(u,p);
+    if(!raw){loginMsg.textContent=t('badLogin');document.getElementById('lp').select();return}
+    goBtn.textContent=t('unlocking');
+    await unlock(raw);
+    try{sessionStorage.setItem('lk',u8b64(raw))}catch(_){}
+    document.getElementById('lp').value='';
+  }catch(err){loginMsg.textContent=t('unlockFail')+(err&&err.message||err)}
+  finally{goBtn.disabled=false;goBtn.textContent=t('login')}
+});
+function doLogout(){
+  try{sessionStorage.removeItem('lk')}catch(_){}
+  KEY=null; Object.values(URLS).forEach(u=>URL.revokeObjectURL(u));
+  if(loadStarted){mv.removeAttribute('src');loadStarted=false;document.getElementById('loader').hidden=false;document.getElementById('bar').style.width='0';}
+  setMode('render'); shot.removeAttribute('src'); strip.innerHTML='';
+  for(const k in URLS) delete URLS[k];
+  document.getElementById('wrap').hidden=true; document.getElementById('picker').hidden=true; document.getElementById('login').hidden=false;
+  document.getElementById('lu').focus();
+}
+document.getElementById('logout').onclick=doLogout; document.getElementById('logout2').onclick=doLogout;
+function applyLang(){
+  document.documentElement.lang=LANG==='en'?'en':'zh-Hant';
+  document.title=t('title');
+  document.querySelectorAll('[data-i18n]').forEach(e=>{e.textContent=t(e.dataset.i18n)});
+  document.querySelectorAll('[data-i18n-html]').forEach(e=>{e.innerHTML=t(e.dataset.i18nHtml)});
+  document.querySelectorAll('[data-i18n-aria]').forEach(e=>{e.setAttribute('aria-label',t(e.dataset.i18nAria))});
+  document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===LANG));
+  document.getElementById('verTag').textContent=VERSION;
+  document.getElementById('ver').innerHTML=CHANGELOG.map(([v,d,zh,en],i)=>`<li><b${i?'':' class="cur"'}>${v}</b><span><em>${d}</em>${esc(L(zh,en))}</span></li>`).join('');
+  if(!loadStarted||!Object.keys(byGroup).length) groupsEl.innerHTML=`<p class="note">${t('cwNote')}</p>`;
+  else { swatches(); for(const g of GROUPS){const v=SEL[g.key]; if(!v) continue; const r=groupsEl.querySelector(`.row[data-g="${g.key}"]`); if(!r) continue;
+    const btn=r.querySelector(`.sw[data-c="${v.c}"]`); mark(r,btn||null,cLabel(g.key,v.c)); if(!btn){const pk=r.querySelector('.pick');pk&&pk.style.setProperty('--pick',v.c)} syncChildren(g.key,v.c,'');} secCount(); }
+  if(KEY){ renderCards(); if(!document.getElementById('wrap').hidden){ renderInfo(); buildStrip(); selectView(cur); } }
+  const lm=document.getElementById('loginMsg'); if(lm.textContent) lm.textContent='';
+}
+document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{LANG=b.dataset.l; try{localStorage.setItem('dpc_lang',LANG)}catch(_){} applyLang();});
+applyLang();
+(async()=>{
+  let saved=null; try{saved=sessionStorage.getItem('lk')}catch(_){}
+  if(saved){try{await unlock(b64(saved));return}catch(_){try{sessionStorage.removeItem('lk')}catch(__){}}}
+  document.getElementById('lu').focus();
+})();
+</script>
+
+</body>
+</html>
