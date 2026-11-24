@@ -1,7 +1,11 @@
-# DPC 項目管理平台｜版本紀錄
+# Digital Product Creation｜版本紀錄
 
 線上版：https://claude.ai/artifact/LdrkGBCvMpawY5237hdM4H
 GitHub 版：https://cbryant1022.github.io/dpc/report/
+
+## v3.0（2026-11-24 16:45）
+- 平台更名為「Digital Product Creation」，左上角加上公司 logo，移除「DPC 項目管理平台」與「大田鞋業」文字
+- 登入畫面同步加上 logo 與新名稱
 
 ## v2.9（2026-11-24 16:35）
 - 「問題解決」全平台改名為「問題解決（檢驗/校正）」：KPI、圖表、圖例、表格、自動結論、月報摘要
