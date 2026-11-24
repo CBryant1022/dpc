@@ -3,6 +3,9 @@
 線上版：https://claude.ai/artifact/LdrkGBCvMpawY5237hdM4H
 GitHub 版：https://cbryant1022.github.io/dpc/report/
 
+## v3.3（2026-11-24 17:10）
+- 設備稼動卡片新增「打印支數」與上月比較，並顯示批次數；PPH 單位改為支/h
+
 ## v3.2（2026-11-24 17:05）
 - 標準尚未訂立，取消直接作業、問題解決（檢驗/校正）、OTD 的達標判定（KPI、結論、交期頁都只呈現數字）；OTD 計畫日覆蓋不足仍標示「資料不足」
 - 保留設備稼動率的達標判定
