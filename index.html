@@ -227,7 +227,7 @@ dd{margin:0;font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-ali
 <div class="wrap" id="wrap" hidden>
   <section class="stage" data-i18n-aria="stageAria">
     <div class="stage-top">
-      <div class="style-id"><span data-i18n="stageBrand">DATIAN shoes · DPC</span> · <span id="verTag"></span><b id="styleName">LACEUP</b><span class="style-meta" id="styleMeta"></span></div>
+      <div class="style-id"><span data-i18n="stageBrand">DATIAN shoes · DPC</span> · <span id="verTag"></span><b id="styleName"></b><span class="style-meta" id="styleMeta"></span></div>
       <div class="stage-actions">
       <button class="back" id="backBtn" type="button" data-i18n="back">← 鞋款列表</button>
       <button class="logout" id="logout" type="button" data-i18n="logout">登出</button>
@@ -239,7 +239,7 @@ dd{margin:0;font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-ali
     </div>
     <div class="view">
       <div class="pane" id="paneRender">
-        <div class="photo" id="photo"><img id="shot" alt="LACEUP 前 3/4 渲染圖"></div>
+        <div class="photo" id="photo"><img id="shot" alt=""></div>
         <div class="badge" data-i18n="badge"></div>
       </div>
       <div class="pane" id="pane3d" hidden>
@@ -281,7 +281,7 @@ dd{margin:0;font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-ali
       <div id="info"></div>
       <div class="parts" id="parts"></div>
     </div>
-    <div class="card">
+    <div class="card" id="logCard" hidden>
       <h2 data-i18n-html="hLog"></h2>
       <ul class="ver" id="ver"></ul>
     </div>
@@ -315,56 +315,13 @@ const I18N={
   title:['大田鞋業 - 數字化產品','DATIAN shoes - Digital Product Creation']
 };
 const t=(k,...a)=>{let v=(I18N[k]||[k,k])[LANG==='en'?1:0];a.forEach((x,i)=>v=v.replace('{'+i+'}',x));return v};
-const CHANGELOG=[
- ['v1.18','2026-11-24','Logo 旁顯示平台名稱；鞋款列表新增 Brands／Style name／Color 下拉篩選（A–Z 排序）；鞋款卡片與檢視頁顯示品牌、顏色、版本。','Platform name next to the logo; Brands / Style name / Color drop-down filters (A–Z) on the style list; brand, color and version on cards and in the viewer.'],
- ['v1.17','2026-11-24','繁中模式顯示中文平台名稱「大田鞋業 - 數字化產品」。','In 繁中 mode the platform name shows in Chinese (大田鞋業 - 數字化產品).'],
- ['v1.16','2026-11-24','平台名稱改為 DATIAN shoes - Digital Product Creation，加入公司 Logo 與網頁圖示。','Platform renamed to DATIAN shoes - Digital Product Creation; added the company logo and favicon.'],
- ['v1.15','2026-11-24','新增離線版（單一 HTML 檔，雙擊即可開啟）與 GitHub Pages 版。','Added an offline build (single HTML file, opens with a double-click) and a GitHub Pages build.'],
- ['v1.14','2026-11-12','更換登入帳號密碼；新增 GitHub Pages 版本。','Changed the sign-in account and password; added a GitHub Pages version.'],
- ['v1.13','2026-10-27','配色改為可展開的群組：鞋面組（含鞋帶、鞋眼釘扣）、車線組、底部組、內裡組，群組標題顯示已改部位數；飾條改名內沿條 FOX1，沿條改名外沿條 FOX2。','Colorway now uses collapsible groups: Upper (incl. laces and eyelets), Stitching, Bottom, Lining, each showing how many parts changed; trim renamed Inner foxing FOX1, foxing renamed Outer foxing FOX2.'],
- ['v1.12','2026-10-27','新增語言切換（EN／繁中），預設英文介面。','Added a language switch (EN / 繁中); English is the default.'],
- ['v1.11','2026-10-27','新增後跟標 Heel tab 換色（LACEUP 與 TC BOATSHOE 皆適用）。','Added Heel tab to the colorway (LACEUP and TC BOATSHOE).'],
- ['v1.10','2026-10-27','TC BOATSHOE：修正沿條、飾條、前護片、後跟標、大底在 3D 顯示為紅色（KeyShot 半透明生膠匯出成深紅散射色）；改用渲染圖取樣的生膠色，並校正麂皮鞋面顏色。','TC BOATSHOE: fixed foxing, trim, toe bumper, heel tab and outsole showing red in 3D (KeyShot’s translucent gum rubber exported as its dark-red scatter color); now uses gum colors sampled from the renders, and the suede upper color is corrected.'],
- ['v1.9','2026-10-27','修正「還原原始配色」與單排「原色」在有底色貼圖的部件無法還原的問題：改為從記憶體重新載入模型後套回其餘配色，視角保持不變。','Fixed “Reset to original” and per-row “Original” not restoring parts with base-color textures: the model now reloads from memory and re-applies the other selections, keeping the current view.'],
- ['v1.8','2026-10-27','新增鞋款 TC BOATSHOE（船型鞋）；鞋面部件：鞋頭、鞋羽、眼片、後包、鞋眼釘扣、鞋帶；新增換色：飾條 Trim。','Added style TC BOATSHOE (boat shoe); upper parts: vamp, quarter, eyestay, heel counter, eyelet, laces; added Trim to the colorway.'],
- ['v1.7','2026-10-27','登入後先進入鞋款列表，點選鞋款再進入檢視；檢視頁可返回列表。','After sign-in a style list opens first; pick a style to view it, and return to the list from the viewer.'],
- ['v1.6','2026-10-27','登入頁改為 DPC（Digital Product Creation）數字化產品。','Sign-in page renamed to DPC (Digital Product Creation).'],
- ['v1.5','2026-10-27','車線依部位分組換色：鞋頭、鞋羽、眼片、後包、鞋舌、內裡；保留「車線（全部）」一次換色。','Stitching colored by part: vamp, quarter, eyestay, heel counter, tongue, lining; “Stitching · all” still recolors everything at once.'],
- ['v1.4','2026-10-27','新增鞋眼釘扣 Eyelet 換色：7 種電鍍金屬色（保留金屬光澤）＋20 色烤漆。','Added Eyelet colors: 7 plated metal finishes (keep metallic sheen) plus 20 painted colors.'],
- ['v1.3','2026-10-27','加入帳號密碼登入；模型與渲染圖改為加密檔，登入後才在瀏覽器解密。','Added account sign-in; models and renders are encrypted and only decrypted in the browser after sign-in.'],
- ['v1.2','2026-10-27','鞋面拆成部位分別換色：鞋頭、鞋羽、眼片、後包、鞋舌；保留「鞋面（全部）」一次換色。','Upper split into parts for coloring: vamp, quarter, eyestay, heel counter, tongue; “Upper · all” still recolors them together.'],
- ['v1.1','2026-10-27','加入版本號與版本紀錄；準備擴充多鞋款。','Added version number and changelog; prepared for multiple styles.'],
- ['v1.0','2026-10-26','改用 KeyShot 封裝檔原始貼圖（鞋面布紋、護片菱格、鞋帶、內裡、車線）；內裡換色；3D 區固定版面。','Switched to the original KeyShot package textures (upper canvas, toe-bumper knurl, laces, lining, stitching); lining colors; fixed 3D panel layout.'],
- ['v0.4','2026-10-26','鞋帶換色。','Lace colors.'],
- ['v0.3','2026-10-26','20 色色票＋自訂色盤；車線換色。','20-color palette plus custom picker; stitching colors.'],
- ['v0.2','2026-10-26','KeyShot 八視角渲染圖，點擊放大。','Eight KeyShot render views with click-to-zoom.'],
- ['v0.1','2026-10-26','首版 3D 檢視；GLB 由 82 MB 輕量化至 11 MB。','First 3D viewer; GLB reduced from 82 MB to 11 MB.']
-];
-const VERSION=CHANGELOG[0][0];
+let CHANGELOG=[];
+const CLOG={"iv": "9ypcVhizU/lvuOZE", "ct": "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"};
+const VERSION='v1.19';
 // ---- style catalogue: add one entry per style (assets live in <base>/ encrypted) ----
-const STYLES=[
-  {id:'laceup',name:'LACEUP',brand:'Carhartt',color:'Hamilton Brown',version:'2026 V1',desc:'綁帶休閒鞋 · 帆布鞋面 · 硫化大底',updated:'2026-10-27',
-   base:'secure15',files:["model_p0.txt", "model_p1.txt", "model_p2.txt", "model_p3.txt", "model_p4.txt", "model_p5.txt"],total:18290124,mb:13.7,
-   tags:['8 視角渲染','3D 旋轉','分部位配色'],
-   info:[['鞋面布紋','115874 · 2.4 cm/格'],['護片菱格','Knurl · ×11.7'],['鞋帶編織','109742 · ×12.5'],['內裡','6 oz Canvas'],['部件數','36'],['三角形','811,403'],['網頁 3D（壓縮後）','13.7 MB']],
-   note:'KeyShot 匯出的 GLB 貼圖只有 9–99 px，已改用 KeyShot 封裝檔（.ksp）內的原始貼圖，並套用原本的重複縮放。',
-   parts:['鞋頭','鞋頭裡','護片','眼片','鞋羽外','鞋羽內','鞋舌','鞋舌裡','後包','領口裡','後跟標','鞋帶 ×9','外沿條 FOX2 ×3','中底','大底','車線 ×9','鞋眼 ×2'],
-   en:{desc:'Lace-up casual · canvas upper · vulcanized sole',tags:['8 render views','3D view','Colorway by part'],
-     info:[['Upper canvas','115874 · 2.4 cm tile'],['Bumper knurl','Knurl · ×11.7'],['Lace weave','109742 · ×12.5'],['Lining','6 oz Canvas'],['Parts','36'],['Triangles','811,403'],['Web 3D (compressed)','13.7 MB']],
-     note:'The KeyShot GLB export carried textures of only 9–99 px; the original textures from the KeyShot package (.ksp) are used instead, with KeyShot’s tiling.',
-     parts:['Vamp','Vamp lining','Toe bumper','Eyestay','Quarter (lateral)','Quarter (medial)','Tongue','Tongue lining','Heel counter','Collar lining','Heel tab','Laces ×9','Outer foxing FOX2 ×3','Sockliner','Outsole','Stitching ×9','Eyelets ×2']}},
-  {id:'tcboat',name:'TC BOATSHOE',brand:'DT',color:'Autumn Brown',version:'2026 V1',desc:'船型鞋 · 麂皮鞋面 · 皮革穿繩 · 生膠大底',updated:'2026-10-27',
-   base:'tcboat110',files:["model_p0.txt", "model_p1.txt", "model_p2.txt", "model_p3.txt", "model_p4.txt", "model_p5.txt"],total:20017228,mb:15.0,
-   tags:['8 視角渲染','3D 旋轉','分部位配色'],
-   info:[['鞋面麂皮','108850 · 12 cm/格'],['穿繩','麂皮 108850 ＋ 荔枝紋 105803'],['鞋墊／內裡','帆布 113098'],['大底','生膠（依渲染圖取色）'],['部件數','27'],['三角形','792,109'],['網頁 3D（壓縮後）','15.0 MB']],
-   note:'貼圖取自 KeyShot 封裝檔（.ksp）原始檔；鞋面麂皮依實際尺寸統一紋理大小，生膠部件依渲染圖取色（網頁 3D 無法呈現 KeyShot 的半透明散射效果）。',
-   parts:['鞋頭','鞋羽外','鞋羽內','眼片','後包','鞋眼釘扣','鞋帶 ×3','中底','鞋羽裡 ×2','鞋頭裡','後套','領口裡','車線 ×6','前護片','外沿條 FOX2','內沿條 FOX1 ×2','大底','後跟標'],
-   en:{desc:'Boat shoe · suede upper · leather laces · gum sole',tags:['8 render views','3D view','Colorway by part'],
-     info:[['Upper suede','108850 · 12 cm tile'],['Laces','Suede 108850 + pebble 105803'],['Sockliner / lining','Canvas 113098'],['Outsole','Gum (color from renders)'],['Parts','27'],['Triangles','792,109'],['Web 3D (compressed)','15.0 MB']],
-     note:'Textures come from the KeyShot package (.ksp). Suede tiling is normalized to real size; gum rubber parts use colors sampled from the renders (web 3D cannot show KeyShot’s translucent subsurface look).',
-     parts:['Vamp','Quarter (lateral)','Quarter (medial)','Eyestay','Heel counter','Eyelets','Laces ×3','Sockliner','Quarter lining ×2','Vamp lining','Heel lining','Collar lining','Stitching ×6','Toe bumper','Outer foxing FOX2','Inner foxing FOX1 ×2','Outsole','Heel tab']}}
-];
-let S=STYLES[0];
+let STYLES=[];
+const CAT=[{"iv": "2ULsRjncP90GtlYu", "ct": "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"}, {"iv": "diy+S1m8haFPKgPu", "ct": "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"}];
+let S=null;
 const SV=(st,k)=>(LANG==='en'&&st.en&&st.en[k]!==undefined)?st.en[k]:st[k];
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function renderInfo(){
@@ -637,10 +594,10 @@ async function loadModel(){
 }
 
 // ---- login / decryption ----
-const AUTH={"salt": "F8HNap3/b5IBvwjbzaXdrQ==", "iter": 600000, "entries": [{"iv": "eJy/k+4g/UBQMEvS", "wk": "GQ6UOB+gLkVvLJbrQLDI1lLiZC2zVcdEvdOeyUoehd06M+joBqweLUfLks9nATRl"}]};
+const AUTH={"salt": "SBb4DLQbbD8rDo37stZvIw==", "iter": 600000, "entries": [{"iv": "oqajIkDGWn8/Ib5Z", "wk": "KFZyC3R/2c5juI+6UlqWRLwhgxqExaXRGn3Z4NIYWM+fE2vo0sPCppsJKnNGWOquVZs/BQRWCo3JhfWKaB8Lek1UKgYBZp87h5WO7eKQQCx9GQ87MbPyRJiv6lb0P//gWEXCWE87tUfVgQZwJ8sUOraXLcXgtYqtlvdqI+BvaWZi5edFRL0qgawiuk5NMyh8Cmlpq1NwC6I0sLyfjOEHbMnQ/S1WzsL8SWlTBCNC1ZhmpyMBc2P1uPquiFNfw9m0MZwE8g=="}, {"iv": "ox0glzUvlIds4/IA", "wk": "4yIy762BMJJ1eUVGTLTHmYPGHMaNiMY8ChpeV8O1yg1lB+7+kA8arO7JGA8ZmnMd/RWJauL5aF84l+jEXNK2l4Ha4ZQEWhPVkiYagh+ZIvy8X6FH0AJYjVQDwmJH"}]};
 const b64=s=>{const b=atob(s);const u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
 const u8b64=u=>{let s='';for(let i=0;i<u.length;i++)s+=String.fromCharCode(u[i]);return btoa(s)};
-const URLS={}; let KEY=null;
+const URLS={}; let KEY=null; let KEYS={}; let ROLE='';
 async function unwrapKey(user,pw){
   const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(user+':'+pw),'PBKDF2',false,['deriveKey']);
   const kek=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(AUTH.salt),iterations:AUTH.iter,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
@@ -649,14 +606,21 @@ async function unwrapKey(user,pw){
   }
   return null;
 }
-async function decryptBytes(u8){return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:u8.slice(0,12)},KEY,u8.slice(12)))}
-async function fetchDec(path){const r=await fetch(path);if(!r.ok)throw new Error(r.status);return decryptBytes(b64((await r.text()).trim()))}
+async function decryptBytes(u8,k){return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:u8.slice(0,12)},k||KEYS[S.kid],u8.slice(12)))}
+async function fetchDec(path,k){const r=await fetch(path);if(!r.ok)throw new Error(r.status);return decryptBytes(b64((await r.text()).trim()),k)}
 async function decImg(st,n){
   const key=st.id+'/'+n; if(URLS[key]) return URLS[key];
-  return URLS[key]=URL.createObjectURL(new Blob([await fetchDec(`${st.base}/renders/${n}.txt`)],{type:'image/jpeg'}));
+  return URLS[key]=URL.createObjectURL(new Blob([await fetchDec(`${st.base}/renders/${n}.txt`,KEYS[st.kid])],{type:'image/jpeg'}));
 }
 async function unlock(raw){
-  KEY=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);
+  const ring=JSON.parse(new TextDecoder().decode(raw)); KEYS={};
+  for(const [id,kb] of Object.entries(ring.k)) KEYS[id]=await crypto.subtle.importKey('raw',b64(kb),'AES-GCM',false,['decrypt']);
+  ROLE=ring.r||'customer'; STYLES=[];
+  const dj=async(o,k)=>JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(o.iv)},k,b64(o.ct))));
+  for(const c of CAT){for(const k of Object.values(KEYS)){try{STYLES.push(...await dj(c,k));break}catch(_){}}}
+  CHANGELOG=KEYS.a?await dj(CLOG,KEYS.a):[];
+  document.getElementById('logCard').hidden=ROLE!=='admin';
+  KEY=true; applyLang();
   await Promise.all(STYLES.map(st=>decImg(st,'front34')));
   renderCards();
   showPicker();
@@ -731,7 +695,7 @@ loginForm.addEventListener('submit',async e=>{
 });
 function doLogout(){
   try{sessionStorage.removeItem('lk')}catch(_){}
-  KEY=null; Object.values(URLS).forEach(u=>URL.revokeObjectURL(u));
+  KEY=null; KEYS={}; ROLE=''; STYLES=[]; CHANGELOG=[]; S=null; FILT.brand=FILT.name=FILT.color=''; document.getElementById('logCard').hidden=true; document.getElementById('cards').innerHTML=''; Object.values(URLS).forEach(u=>URL.revokeObjectURL(u));
   if(loadStarted){mv.removeAttribute('src');loadStarted=false;document.getElementById('loader').hidden=false;document.getElementById('bar').style.width='0';}
   setMode('render'); shot.removeAttribute('src'); strip.innerHTML='';
   for(const k in URLS) delete URLS[k];
