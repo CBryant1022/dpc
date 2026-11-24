@@ -110,6 +110,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
 .gate-c input[type=text],.gate-c input[type=password]{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);font:inherit}
 .gate-c .rem{display:flex;gap:6px;align-items:center;margin:12px 0 16px;font-size:13px;color:var(--text2)}
 .gate-c .btn{width:100%;justify-content:center;padding:10px}#gate-msg{min-height:20px;margin-top:10px;font-size:13px;color:var(--bad,#c0392b)}
+.prt3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 4px}.prt3>div{background:var(--surface);border:1px solid var(--line2);border-radius:8px;padding:6px 8px;line-height:1.3}.prt3 span{display:block;font-size:12px;color:var(--text2)}.prt3 b{font-size:18px}.prt3 small{display:block;font-size:11px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -376,7 +377,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
 
   /* ---------- 產出總表解析 ---------- */
   const OUT_DEFS = [
-    { line: '印刷圖稿', unit: '筆', sheet: /印刷圖稿|印刷图稿/, plan: ['计划完成日期', '计画完成日期', '需求日期'], actual: ['实际完成日期'], maker: ['制作人'], desc: ['斩刀编号', '部位'] },
+    { line: '印刷圖稿', unit: '筆', sheet: /印刷圖稿|印刷图稿/, plan: ['计划完成日期', '计画完成日期', '需求日期'], actual: ['实际完成日期'], maker: ['制作人'], desc: ['斩刀编号', '部位'], extra: { kn: ['斩刀编号'], sg: ['段别数量', '段数量'], cl: ['颜色数量', '颜色数'] } },
     { line: '位置版', unit: '筆', sheet: /位置版/, plan: ['需求日期', '计划完成日期'], actual: ['完成日期', '实际完成日期'], maker: ['制作人'], desc: ['斩刀编号', '部位'] },
     { line: '劃線模', unit: '單', sheet: /画线模|劃線模|划线模/, stages: ['3d打印', '3d建模', '3d扫描'], maker: ['制作人'], desc: ['斩刀编号', '基本码全套'] },
     { line: '3D建模', unit: '件', sheet: /3D建模/i, plan: ['计划完成日期'], actual: ['实际完成日期'], maker: ['制作人'], desc: ['斩刀编号', '号码'] },
@@ -402,6 +403,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     let st = null;
     if (def.stages) st = def.stages.map(sg => ({ p: names.findIndex(n => n === sg + '|计划完成日期'), a: names.findIndex(n => n === sg + '|实际完成日期') }));
     let pc = {};
+    const xc = def.extra ? { kn: find(def.extra.kn), sg: find(def.extra.sg), cl: find(def.extra.cl) } : null;
     if (def.print) pc = { u: find(['需求单位']), g: find(['实际耗材/g']), ml: find(['实际耗材/ml']), t1: find(['打印时间']), t2: find(['打印时间#2']), pr: find(['打印机']) };
     const start = hr + (hasSub ? 2 : 1);
     let n = 0, lastB = null, noTime = 0;
@@ -415,6 +417,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
       if (!o && !a) continue;
       const desc = ci.d.map(k => row[k]).filter(x => x != null && x !== '').join(' ').replace(/\s+/g, ' ').slice(0, 60);
       const rec = { part: ci.part >= 0 && row[ci.part] != null ? String(row[ci.part]).trim() : '', id: ci.id >= 0 && row[ci.id] != null ? String(row[ci.id]).trim() : '', pp, l: def.line, o, p, a, m: ci.m >= 0 && row[ci.m] != null ? String(row[ci.m]).trim() : '', q: ci.q >= 0 ? (toNum(row[ci.q]) || 1) : 1, k: desc };
+      if (xc) { const kv = xc.kn >= 0 && row[xc.kn] != null ? String(row[xc.kn]).trim() : ''; rec.x = [kv, xc.sg >= 0 ? toNum(row[xc.sg]) : null, xc.cl >= 0 ? toNum(row[xc.cl]) : null]; }
       if (def.print) {
         rec.g = toNum(row[pc.g]) || 0; rec.ml = toNum(row[pc.ml]) || 0; rec.ph = (toHours(row[pc.t1]) || 0) + (toHours(row[pc.t2]) || 0); rec.pr = row[pc.pr] != null ? String(row[pc.pr]).trim() : '';
         const u = pc.u >= 0 && row[pc.u] != null ? String(row[pc.u]).trim().toUpperCase() : ''; rec.u = /^(DTC|DTP|DJC)$/.test(u) ? u : (u && u !== '/' ? '其他' : '未填');
@@ -486,12 +489,12 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     Object.entries(unknown).sort((a, b) => b[1] - a[1]).forEach(([k, v]) => Q.push({ t: '產出人員不在工時日誌', s: '產出總表', d: `「${k}」${v} 筆（工時日誌姓名欄未列此人，分組統計時歸入「其他」）` }));
     return {
       tasks: tasks.map(t => [t.date, t.key, t.cat, t.sub, t.con, Math.round(t.h * 100) / 100]),
-      outputs: outputs.map(o => [o.l, o.o, o.p, o.a, o.m, o.q, o.k, o.g || 0, o.ml || 0, Math.round((o.ph || 0) * 100) / 100, o.pr || '', o.b || '', o.l === '3D打印' ? (o.hx ? o.u : 'x') : '']),
+      outputs: outputs.map(o => [o.l, o.o, o.p, o.a, o.m, o.q, o.k, o.g || 0, o.ml || 0, Math.round((o.ph || 0) * 100) / 100, o.pr || '', o.b || '', o.l === '3D打印' ? (o.hx ? o.u : 'x') : '', o.x || 0]),
       staff, quality: Q, sheets: sheetsUsed
     };
   }
 
-  G.DPC = { parseWorkbook, simp, splitMakers, catBucket, CAT_ORDER, OUT_DEFS: OUT_DEFS.map(d => ({ line: d.line, unit: d.unit, otd: true })), SCHEMA: 4 };
+  G.DPC = { parseWorkbook, simp, splitMakers, catBucket, CAT_ORDER, OUT_DEFS: OUT_DEFS.map(d => ({ line: d.line, unit: d.unit, otd: true })), SCHEMA: 5 };
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
 <script>/* ===== DPC 月報平台：介面與統計 ===== */
@@ -504,7 +507,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   const pct = (v, d = 1) => v == null || !isFinite(v) ? '—' : (v * 100).toFixed(d) + '%';
   const sum = a => a.reduce((x, y) => x + y, 0);
 
-  const CHANGELOG = [{"v": "v2.4", "t": "2026-11-24 14:40", "c": ["新增登入：開啟平台需輸入帳號密碼，初始資料改為加密檔（AES-256），沒有密碼無法讀取", "本月重點結論不再顯示「資料不足」的項目（交期頁仍保留覆蓋率提示）", "側欄新增「登出」"]}, {"v": "v2.3", "t": "2026-11-24 14:25", "c": ["劃線模卡片新增工序拆解：繪製建模／3D 打印／檢查修改／3D 掃描（依工作日誌作業分類與內容判定）", "3D 打印卡片改顯示人員操作工時（切片打印＋打磨後處理，含在劃線模工時內）與每只人員工時，另列機器運轉機時", "3D 掃描卡片改顯示人員掃描工時，並與標準工時（10 分鐘/尺碼）比較實際效率"]}, {"v": "v2.2", "t": "2026-11-24 09:50", "c": ["本月重點結論新增「補充結論」：可自行新增、編輯、刪除，並標示達標／接近／未達／資訊／待追蹤", "補充結論依月份保存，共享模式下所有檢視者都看得到；複製月報摘要與連續模式會一起帶出"]}, {"v": "v2.1", "t": "2026-11-24 09:40", "c": ["圖表點一下即可固定顯示數值，iPad／手機也能看；圖表可用鍵盤 Tab 逐月查看", "每張趨勢圖新增「表格檢視」，可直接看 12 個月數字", "總覽移除不同單位相加的「完成案件」，改為「主要產出」（印刷圖稿筆、劃線模支、3D建模件）", "OTD 新增計畫日覆蓋率；低於 80% 顯示「資料不足」，不再顯示綠色達標", "網址記住目前頁面、月份、組別，可直接傳連結；瀏覽器上一頁可回到前一個篩選", "手機版：選單改為頂部橫滑分頁列、圖表字級放大、KPI 標題不再被切掉", "說明文字加深、焦點框加粗、提示訊息可被螢幕閱讀器讀出"]}, {"v": "v2.0", "t": "2026-11-18 10:19", "c": ["交期達成新增 3D 打印（依单号對應画线模总表「3D打印 計畫完成日期」）", "劃線模改以支數呈現，柱狀圖依 DTC／DTP／DJC／未填 堆疊", "3D 打印分為「劃線模」與「其他模具」（依画线模总表部件名稱判定）", "交期清單隱藏離職人員姓名"]}, {"v": "v1.9", "t": "2026-11-18 10:09", "c": ["3D 掃描不列入設備稼動，改為獨立「作業量」卡片", "設備可用天數改用工作日誌實際上班日（漏填但有打印紀錄的日子自動補計）", "舊版共享資料自動補算 Form 4L 批次"]}, {"v": "v1.8", "t": "2026-11-18 09:53", "c": ["「連續報告模式」改名為「連續模式」", "3D 掃描以每尺碼 10 分鐘換算工時"]}, {"v": "v1.7", "t": "2026-11-18 09:21", "c": ["隱藏離職人員：韋雨桐、毛倩、黄俊滔（部門合計保留）", "設定頁新增「離職人員」欄位"]}, {"v": "v1.6", "t": "2026-11-18 09:19", "c": ["新增「直接作業分析」模塊：動作、部位、季節×系列、斬刀 Top 12、人員×作業分類熱度圖、明細搜尋"]}, {"v": "v1.5", "t": "2026-11-18 09:14", "c": ["Form 4L 批次打印：同機台同日下方空白列歸入同一批，不算缺時間"]}, {"v": "v1.4", "t": "2026-11-18 09:06", "c": ["設備稼動以每日 7 h 計算；週六不上班，週末加班日另計"]}, {"v": "v1.3", "t": "2026-11-18 08:42", "c": ["新增「設備稼動」模塊（Pro3 HS、Pro3 HS(B)、E3、Form 4L：稼動率、PPH、單只機時、耗材）", "產出量新增「月度投入工時曲線（依業務線）」"]}, {"v": "v1.2", "t": "2026-11-18 08:37", "c": ["平台改名為「DPC 項目管理平台」"]}, {"v": "v1.1", "t": "2026-11-18 08:32", "c": ["內建 11.17 版 Excel 初始資料，打開即顯示"]}, {"v": "v1.0", "t": "2026-11-18 08:19", "c": ["初版：月度總覽、產出量、工時結構、交期達成、人員與培訓、專項與改善", "每月匯入 Excel、共享資料、資料品質檢查、目標值設定"]}];
+  const CHANGELOG = [{"v": "v2.5", "t": "2026-11-24 14:50", "c": ["印刷圖稿新增三個計算口徑：總版號數（不重複斬刀編號）、實際圖稿數量（段別數量合計）、實際顏色數量（顏色數量合計）", "產出量新增「印刷圖稿｜版號・圖稿・顏色」近 12 個月表，含每版圖稿數與每張圖稿工時", "資料格式升級（schema 5）：之前匯入的 Excel 需重新匯入一次才會有版號／圖稿／顏色數"]}, {"v": "v2.4", "t": "2026-11-24 14:40", "c": ["新增登入：開啟平台需輸入帳號密碼，初始資料改為加密檔（AES-256），沒有密碼無法讀取", "本月重點結論不再顯示「資料不足」的項目（交期頁仍保留覆蓋率提示）", "側欄新增「登出」"]}, {"v": "v2.3", "t": "2026-11-24 14:25", "c": ["劃線模卡片新增工序拆解：繪製建模／3D 打印／檢查修改／3D 掃描（依工作日誌作業分類與內容判定）", "3D 打印卡片改顯示人員操作工時（切片打印＋打磨後處理，含在劃線模工時內）與每只人員工時，另列機器運轉機時", "3D 掃描卡片改顯示人員掃描工時，並與標準工時（10 分鐘/尺碼）比較實際效率"]}, {"v": "v2.2", "t": "2026-11-24 09:50", "c": ["本月重點結論新增「補充結論」：可自行新增、編輯、刪除，並標示達標／接近／未達／資訊／待追蹤", "補充結論依月份保存，共享模式下所有檢視者都看得到；複製月報摘要與連續模式會一起帶出"]}, {"v": "v2.1", "t": "2026-11-24 09:40", "c": ["圖表點一下即可固定顯示數值，iPad／手機也能看；圖表可用鍵盤 Tab 逐月查看", "每張趨勢圖新增「表格檢視」，可直接看 12 個月數字", "總覽移除不同單位相加的「完成案件」，改為「主要產出」（印刷圖稿筆、劃線模支、3D建模件）", "OTD 新增計畫日覆蓋率；低於 80% 顯示「資料不足」，不再顯示綠色達標", "網址記住目前頁面、月份、組別，可直接傳連結；瀏覽器上一頁可回到前一個篩選", "手機版：選單改為頂部橫滑分頁列、圖表字級放大、KPI 標題不再被切掉", "說明文字加深、焦點框加粗、提示訊息可被螢幕閱讀器讀出"]}, {"v": "v2.0", "t": "2026-11-18 10:19", "c": ["交期達成新增 3D 打印（依单号對應画线模总表「3D打印 計畫完成日期」）", "劃線模改以支數呈現，柱狀圖依 DTC／DTP／DJC／未填 堆疊", "3D 打印分為「劃線模」與「其他模具」（依画线模总表部件名稱判定）", "交期清單隱藏離職人員姓名"]}, {"v": "v1.9", "t": "2026-11-18 10:09", "c": ["3D 掃描不列入設備稼動，改為獨立「作業量」卡片", "設備可用天數改用工作日誌實際上班日（漏填但有打印紀錄的日子自動補計）", "舊版共享資料自動補算 Form 4L 批次"]}, {"v": "v1.8", "t": "2026-11-18 09:53", "c": ["「連續報告模式」改名為「連續模式」", "3D 掃描以每尺碼 10 分鐘換算工時"]}, {"v": "v1.7", "t": "2026-11-18 09:21", "c": ["隱藏離職人員：韋雨桐、毛倩、黄俊滔（部門合計保留）", "設定頁新增「離職人員」欄位"]}, {"v": "v1.6", "t": "2026-11-18 09:19", "c": ["新增「直接作業分析」模塊：動作、部位、季節×系列、斬刀 Top 12、人員×作業分類熱度圖、明細搜尋"]}, {"v": "v1.5", "t": "2026-11-18 09:14", "c": ["Form 4L 批次打印：同機台同日下方空白列歸入同一批，不算缺時間"]}, {"v": "v1.4", "t": "2026-11-18 09:06", "c": ["設備稼動以每日 7 h 計算；週六不上班，週末加班日另計"]}, {"v": "v1.3", "t": "2026-11-18 08:42", "c": ["新增「設備稼動」模塊（Pro3 HS、Pro3 HS(B)、E3、Form 4L：稼動率、PPH、單只機時、耗材）", "產出量新增「月度投入工時曲線（依業務線）」"]}, {"v": "v1.2", "t": "2026-11-18 08:37", "c": ["平台改名為「DPC 項目管理平台」"]}, {"v": "v1.1", "t": "2026-11-18 08:32", "c": ["內建 11.17 版 Excel 初始資料，打開即顯示"]}, {"v": "v1.0", "t": "2026-11-18 08:19", "c": ["初版：月度總覽、產出量、工時結構、交期達成、人員與培訓、專項與改善", "每月匯入 Excel、共享資料、資料品質檢查、目標值設定"]}];
   const VERSION = CHANGELOG[0].v;
   const LINES = ['印刷圖稿', '位置版', '劃線模', '3D建模', '3D掃描', '3D打印'];
   const UNIT = { '印刷圖稿': '筆', '位置版': '筆', '劃線模': '單', '3D建模': '件', '3D掃描': '件', '3D打印': '只' };
@@ -564,7 +567,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   function hydrate(raw) {
     const staff = raw.staff || {};
     const tasks = raw.tasks.map(([d, k, c, s, x, h]) => ({ d, m: d.slice(0, 7), k, c, b: DPC.catBucket(c), s, x, h: +h || 0 }));
-    const outputs = raw.outputs.map(([l, o, p, a, m, q, k, g, ml, ph, pr, b, u]) => ({ u: u || '', l, o, p, a, am: a ? a.slice(0, 7) : null, mk: m, makers: DPC.splitMakers(m).map(DPC.simp), q: +q || 1, k, g: +g || 0, ml: +ml || 0, ph: +ph || 0, pr, b }));
+    const outputs = raw.outputs.map(([l, o, p, a, m, q, k, g, ml, ph, pr, b, u, x]) => ({ x: Array.isArray(x) ? x : null, u: u || '', l, o, p, a, am: a ? a.slice(0, 7) : null, mk: m, makers: DPC.splitMakers(m).map(DPC.simp), q: +q || 1, k, g: +g || 0, ml: +ml || 0, ph: +ph || 0, pr, b }));
     /* 舊版資料沒有批次欄位：依同樣規則補算（有時間的列開一批，下方同機台同日、沒時間的列歸入同批） */
     let lastB = null, bi = 0;
     outputs.forEach(o => { if (o.l !== '3D打印' || o.b != null) { if (o.l === '3D打印') lastB = o.ph > 0 ? { pr: o.pr, a: o.a, id: o.b } : lastB; return; }
@@ -637,6 +640,15 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const n = normKw(sub), lm = S.settings.lineMap || DEFAULT_SETTINGS.lineMap; let r = '其他';
     for (const x of lm) if (x.kw.some(k => k && n.includes(normKw(k)))) { r = x.line; break; }
     lineCache.set(sub, r); return r;
+  }
+  /* 印刷圖稿：總版號數＝不重複斬刀編號；實際圖稿＝段別數量合計；實際顏色＝顏色數量合計 */
+  const prtCache = new Map();
+  function prt(m) {
+    const ck = m + '|' + S.group; if (prtCache.has(ck)) return prtCache.get(ck);
+    const r = { n: 0, kn: new Set(), sg: 0, cl: 0, clMiss: 0, knMiss: 0, has: false };
+    S.d.outputs.forEach(o => { if (o.l !== '印刷圖稿' || o.am !== m || !outOk(o)) return; r.n++; if (!o.x) return; r.has = true;
+      const [kn, sg, cl] = o.x; if (kn) r.kn.add(kn.toUpperCase().replace(/\s+/g, '')); else r.knMiss++; r.sg += sg > 0 ? sg : 1; if (cl > 0) r.cl += cl; else r.clMiss++; });
+    r.kv = r.kn.size; prtCache.set(ck, r); return r;
   }
   function hxSup(m) { let q = 0; S.d.outputs.forEach(x => { if (x.l === '3D打印' && x.am === m && x.u && x.u !== 'x' && outOk(x)) q += x.q; }); return q; }
   const kpiCache = new Map();
@@ -841,6 +853,10 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
       if (l === '劃線模') return `<div class="mini">投入工時 ${fmt(K.lineH[l], 1)} h${K.out[l] && K.lineH[l] >= 10 ? ` · 每單 ${fmt(K.lineH[l] / K.out[l], 1)} h` : ''}</div>${K.lineH[l] ? `<div class="mini">工序：${['繪製建模', '3D 打印', '檢查修改', '3D 掃描'].map(p => `${p.replace('3D ', '')} <b>${fmt(HX[p], 0)}</b>`).join(' · ')}${HX['其他'] ? ` · 其他 ${fmt(HX['其他'], 0)}` : ''} h</div>` : ''}`;
       if (l === '3D打印') { const ph = HX['3D 打印'], q = K.out[l]; return `<div class="mini">人員操作 <b>${fmt(ph, 1)}</b> h（含在劃線模工時內）${q && ph ? ` · 每只 ${fmt(ph / q, 2)} h` : ''}${K.lineH[l] ? ` · 另其他打印 ${fmt(K.lineH[l], 1)} h` : ''}</div>`; }
       if (l === '3D掃描') { const sh = HX['3D 掃描'] + K.lineH[l], q = K.out[l]; return `<div class="mini">人員掃描 <b>${fmt(sh, 1)}</b> h（含在劃線模工時內）${q ? ` · 標準 ${fmt(scanStd, 1)} h` : ''}</div>${q && sh ? `<div class="mini">實際 ÷ 標準 <b>${pct(sh / scanStd, 0)}</b> · 每尺碼 ${fmt(sh * 60 / q, 1)} 分鐘（標準 ${tg('scanMin')} 分鐘）</div>` : ''}`; }
+      if (l === '印刷圖稿') { const A = prt(m), B = prt(addM(m, -1)); const dv = (a, b) => b ? ` <span style="font-size:12px;color:var(--text2)">${a >= b ? '▲' : '▼'}${Math.abs((a - b) / b * 100).toFixed(0)}%</span>` : '';
+        const base = `<div class="mini">投入工時 ${fmt(K.lineH[l], 1)} h${K.out[l] && K.lineH[l] >= 10 ? ` · 每筆 ${fmt(K.lineH[l] / K.out[l], 2)} h` : ''}${A.sg && K.lineH[l] >= 10 ? ` · 每張圖稿 ${fmt(K.lineH[l] / A.sg, 2)} h` : ''}</div>`;
+        if (!A.n) return base; if (!A.has) return base + '<div class="mini muted">版號／圖稿／顏色數需重新匯入一次 Excel</div>';
+        return base + `<div class="prt3"><div><span>總版號數</span><b>${fmt(A.kv)}</b>${dv(A.kv, B.kv)}<small>斬刀編號</small></div><div><span>實際圖稿</span><b>${fmt(A.sg)}</b>${dv(A.sg, B.sg)}<small>段別數量</small></div><div><span>實際顏色</span><b>${fmt(A.cl)}</b>${dv(A.cl, B.cl)}<small>顏色數量${A.clMiss ? `・${A.clMiss} 筆未填` : ''}</small></div></div>`; }
       return `<div class="mini">投入工時 ${fmt(K.lineH[l], 1)} h${K.out[l] && K.lineH[l] >= 10 ? ` · 每${UNIT[l]} ${fmt(K.lineH[l] / K.out[l], 2)} h` : ''}</div>`;
     };
     const cards = LINES.map(l => {
@@ -857,7 +873,9 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     O_done(m).forEach(o => { const ks = o.makers.length ? o.makers : ['(未填)']; ks.forEach(k => { if (S.group !== '全部' && !inGroupKey(k)) return; credit[k] = credit[k] || {}; credit[k][o.l] = (credit[k][o.l] || 0) + o.q / ks.length; }); });
     const keys = Object.keys(credit).filter(isShown).sort((a, b) => sum(Object.values(credit[b])) - sum(Object.values(credit[a])));
     const rows = keys.map(k => [esc(pname(k)), ...LINES.map(l => credit[k][l] ? fmt(credit[k][l], credit[k][l] % 1 ? 1 : 0) : ''), '']);
-    return `${hourCard}<div class="g3">${cards}</div>${hxCard}${card('人員 × 業務線產出', '多人共同負責時平均分攤；3D 打印以只數計', table([{ h: '人員' }, ...LINES.map(l => ({ h: l + `<small>（${UNIT[l]}）</small>`, n: 1 })), { h: '' }], rows))}`;
+    const PR = M12.map(x => [x, prt(x)]);
+    const prtCard = PR.some(([, r]) => r.has) ? card('印刷圖稿｜版號・圖稿・顏色（近 12 個月）', '總版號數＝當月完成的不重複斬刀編號；實際圖稿＝段別數量合計；實際顏色＝顏色數量合計（未填不計）；每張工時＝印刷圖稿投入工時 ÷ 實際圖稿', table([{ h: '月份' }, { h: '筆數', n: 1 }, { h: '總版號數', n: 1 }, { h: '實際圖稿', n: 1 }, { h: '實際顏色', n: 1 }, { h: '每版圖稿', n: 1 }, { h: '每張工時 h', n: 1 }, { h: '顏色未填', n: 1 }], PR.slice().reverse().map(([x, r]) => { const h = kpi(x).lineH['印刷圖稿']; const row = [x === m ? `<b>${mLabel(x)}</b>` : mLabel(x), fmt(r.n), r.has ? `<b>${fmt(r.kv)}</b>` : '—', r.has ? `<b>${fmt(r.sg)}</b>` : '—', r.has ? fmt(r.cl) : '—', r.has && r.kv ? fmt(r.sg / r.kv, 1) : '—', r.has && r.sg && h >= 10 ? fmt(h / r.sg, 2) : '—', r.has ? (r.clMiss || '') : '—']; if (x === m) row._cls = 'tot'; return row; }))) : '';
+    return `${hourCard}<div class="g3">${cards}</div>${hxCard}${prtCard}${card('人員 × 業務線產出', '多人共同負責時平均分攤；3D 打印以只數計', table([{ h: '人員' }, ...LINES.map(l => ({ h: l + `<small>（${UNIT[l]}）</small>`, n: 1 })), { h: '' }], rows))}`;
   }
 
   function vTime(m) {
@@ -1164,13 +1182,13 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   };
 
   function setData(raw) {
-    S.raw = raw; S.d = hydrate(raw); kpiCache.clear(); eqCache.clear(); lineCache.clear();
+    S.raw = raw; S.d = hydrate(raw); kpiCache.clear(); prtCache.clear(); eqCache.clear(); lineCache.clear();
     if (!S.month || !S.d.months.includes(S.month)) { const prev = addM(CUR_M, -1); S.month = S.d.months.includes(prev) ? prev : S.d.months[S.d.months.length - 1]; }
     if (S.group !== '全部' && !S.d.groups.includes(S.group)) S.group = '全部';
     modeLine(); render();
   }
   async function saveSettings(ns) {
-    S.settings = ns; kpiCache.clear(); eqCache.clear(); lineCache.clear();
+    S.settings = ns; kpiCache.clear(); prtCache.clear(); eqCache.clear(); lineCache.clear();
     if (S.mode === 'shared' && DB.db && DB.canWrite !== false) { try { await DB.db.doc('settings/main').set(ns); } catch (e) { toast('設定未能同步到共享資料：' + esc(e && e.message || e)); } }
     await IDB.set('settings', ns); render();
   }
@@ -1256,7 +1274,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
         if ((meta.schema || 1) < DPC.SCHEMA && DB.canWrite === true && !S.seeding) { S.seeding = true; upgradeShared(meta); return; }
         clearTimeout(timer); loadShared(meta).catch(e => banner('讀取共享資料失敗：' + esc(e && e.message || e), 'warn'));
       }, err => { clearTimeout(timer); S.loading = false; banner('共享資料連線中斷，顯示本機資料。', 'warn'); render(); });
-      db.doc('settings/main').onSnapshot(s => { if (s.exists && s.data()) { const d = s.data(); if (d.targets && d.unitMap) { S.settings = clone(d); kpiCache.clear(); eqCache.clear(); lineCache.clear(); if (S.d) render(); } } }, () => { });
+      db.doc('settings/main').onSnapshot(s => { if (s.exists && s.data()) { const d = s.data(); if (d.targets && d.unitMap) { S.settings = clone(d); kpiCache.clear(); prtCache.clear(); eqCache.clear(); lineCache.clear(); if (S.d) render(); } } }, () => { });
       db.collection('concl').onSnapshot(qs => { const n = {}; qs.docs.forEach(d => { const x = d.data(); if (x && Array.isArray(x.items)) n[d.id] = x.items.filter(i => i && typeof i.t === 'string').map(i => ({ s: ST_TXT[i.s] || i.s === 'info' ? i.s : 'info', t: i.t.slice(0, 200) })); }); S.concl = n; if (S.d && (S.route === 'overview' || S.report) && !(document.activeElement && document.activeElement.closest && document.activeElement.closest('#concl-f'))) render(); }, () => { });
       db.collection('notes').onSnapshot(qs => { const n = {}; qs.docs.forEach(d => { const x = d.data(); if (x) n[d.id] = x.text || ''; }); S.notes = n; if (S.d && (S.route === 'projects' || S.report)) render(); }, () => { });
     } catch (_) { clearTimeout(timer); S.loading = false; render(); }
@@ -1304,7 +1322,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   async function logout() { storeDel('dpc-k'); try { await IDB.set('data', null); } catch (_) { } location.reload(); }
 
   async function loadSeed() {
-    try { const raw = await getSeed(); if (!raw) return; raw.seed = true; S.importId = 'seed'; S.raw = raw; S.d = hydrate(raw); kpiCache.clear(); eqCache.clear(); lineCache.clear(); const prev = addM(CUR_M, -1); S.month = S.d.months.includes(prev) ? prev : S.d.months[S.d.months.length - 1]; } catch (_) { }
+    try { const raw = await getSeed(); if (!raw) return; raw.seed = true; S.importId = 'seed'; S.raw = raw; S.d = hydrate(raw); kpiCache.clear(); prtCache.clear(); eqCache.clear(); lineCache.clear(); const prev = addM(CUR_M, -1); S.month = S.d.months.includes(prev) ? prev : S.d.months[S.d.months.length - 1]; } catch (_) { }
   }
   /* ---------- 啟動 ---------- */
   const gIdx = g => g === '全部' ? 0 : (S.d ? S.d.groups.indexOf(g) + 1 : 0);
@@ -1316,7 +1334,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     S.route = ROUTES.some(r => r.id === mm[1]) ? mm[1] : 'overview';
     if (S.d) {
       if (mm[2]) { const m = mm[2] + '-' + mm[3]; if (S.d.months.includes(m)) S.month = m; }
-      if (mm[1] && mm[1] !== 'data') { const gi = +(mm[4] || 0); S.group = gi > 0 && S.d.groups[gi - 1] ? S.d.groups[gi - 1] : '全部'; kpiCache.clear(); eqCache.clear(); lineCache.clear(); }
+      if (mm[1] && mm[1] !== 'data') { const gi = +(mm[4] || 0); S.group = gi > 0 && S.d.groups[gi - 1] ? S.d.groups[gi - 1] : '全部'; kpiCache.clear(); prtCache.clear(); eqCache.clear(); lineCache.clear(); }
     }
     render(); syncHash();
   }
@@ -1325,7 +1343,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const lo = $('#logout'); if (lo) { lo.hidden = !AUTH.key; lo.onclick = e => { e.preventDefault(); logout(); }; }
     $('#nav').innerHTML = ROUTES.map(r => `<a href="#${r.id}" data-r="${r.id}"${r.id === 'data' ? ' class="sep"' : ''}><span>${r.n || '⚙'}</span>${r.t}</a>`).join('');
     $('#msel').onchange = e => { S.month = e.target.value; render(); syncHash(); };
-    $('#gsel').onchange = e => { S.group = e.target.value; kpiCache.clear(); eqCache.clear(); lineCache.clear(); render(); syncHash(); };
+    $('#gsel').onchange = e => { S.group = e.target.value; kpiCache.clear(); prtCache.clear(); eqCache.clear(); lineCache.clear(); render(); syncHash(); };
     $('#rep').onclick = () => { S.report = !S.report; if (S.route === 'data') location.hash = 'overview'; render(); window.scrollTo(0, 0); };
     $('#fi').onchange = e => { if (e.target.files[0]) importFile(e.target.files[0]); e.target.value = ''; };
     window.addEventListener('hashchange', () => { if (skipHash) { skipHash = false; return; } S.report = false; route(); window.scrollTo(0, 0); });
