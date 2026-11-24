@@ -78,7 +78,7 @@ select{background:var(--card);border:1px solid var(--line);border-radius:8px;pad
 .tbl tbody tr:hover td{background:var(--surface)}
 .ctx{font-size:12px;color:var(--text2)}.ctv{margin-top:6px;font-size:12px}.ctv summary{cursor:pointer;color:var(--text2);display:inline-block;padding:4px 0}.ctv summary:hover{color:var(--text)}.ctv .tbl{font-size:12px}.ctv .tbl td,.ctv .tbl th{padding:4px 6px}.g2.inner{gap:18px;margin:0}.g2.inner h4{margin:0 0 8px;font-size:13px;color:var(--text2);font-weight:500}.heat td{text-align:right;border-bottom:1px solid var(--card);border-right:1px solid var(--card)}.srch{margin-top:6px;width:min(420px,100%);padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font:inherit}
 .good-t{color:var(--good-t);white-space:nowrap}.bad-t{color:var(--bad-t);white-space:nowrap}.muted{color:var(--muted)}
-.concl{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:9px}
+.manc{border-top:1px dashed var(--line);margin:12px 0;padding-top:12px}.manc-h{display:flex;gap:8px;align-items:baseline;margin-bottom:8px;font-size:13px}.manc-act{margin-left:auto;display:flex;gap:4px;flex:none}.lnk{background:none;border:0;color:var(--accent);cursor:pointer;font:inherit;font-size:12px;padding:2px 4px;border-radius:4px}.lnk:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}.concl li.editing{background:color-mix(in srgb,var(--accent) 7%,transparent);border-radius:6px}.manc-f{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.manc-f select{min-width:0;padding:6px 8px}.manc-f input{flex:1;min-width:200px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font:inherit;font-size:14px}.st-track b{background:var(--accent)}.st-track{color:var(--accent)}.concl{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:9px}
 .concl li{display:flex;gap:10px;align-items:flex-start;font-size:14px}.concl li .st{margin-top:2px}
 .ci{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--line);color:var(--text2);font:700 11px Georgia,serif;flex:none;margin-top:2px}
 .dz{display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;text-align:center;border:2px dashed var(--line);border-radius:12px;padding:24px;cursor:pointer;margin-bottom:14px;background:var(--surface)}
@@ -491,7 +491,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   const pct = (v, d = 1) => v == null || !isFinite(v) ? '—' : (v * 100).toFixed(d) + '%';
   const sum = a => a.reduce((x, y) => x + y, 0);
 
-  const CHANGELOG = [{"v": "v2.1", "t": "2026-11-24 09:40", "c": ["圖表點一下即可固定顯示數值，iPad／手機也能看；圖表可用鍵盤 Tab 逐月查看", "每張趨勢圖新增「表格檢視」，可直接看 12 個月數字", "總覽移除不同單位相加的「完成案件」，改為「主要產出」（印刷圖稿筆、劃線模支、3D建模件）", "OTD 新增計畫日覆蓋率；低於 80% 顯示「資料不足」，不再顯示綠色達標", "網址記住目前頁面、月份、組別，可直接傳連結；瀏覽器上一頁可回到前一個篩選", "手機版：選單改為頂部橫滑分頁列、圖表字級放大、KPI 標題不再被切掉", "說明文字加深、焦點框加粗、提示訊息可被螢幕閱讀器讀出"]}, {"v": "v2.0", "t": "2026-11-18 10:19", "c": ["交期達成新增 3D 打印（依单号對應画线模总表「3D打印 計畫完成日期」）", "劃線模改以支數呈現，柱狀圖依 DTC／DTP／DJC／未填 堆疊", "3D 打印分為「劃線模」與「其他模具」（依画线模总表部件名稱判定）", "交期清單隱藏離職人員姓名"]}, {"v": "v1.9", "t": "2026-11-18 10:09", "c": ["3D 掃描不列入設備稼動，改為獨立「作業量」卡片", "設備可用天數改用工作日誌實際上班日（漏填但有打印紀錄的日子自動補計）", "舊版共享資料自動補算 Form 4L 批次"]}, {"v": "v1.8", "t": "2026-11-18 09:53", "c": ["「連續報告模式」改名為「連續模式」", "3D 掃描以每尺碼 10 分鐘換算工時"]}, {"v": "v1.7", "t": "2026-11-18 09:21", "c": ["隱藏離職人員：韋雨桐、毛倩、黄俊滔（部門合計保留）", "設定頁新增「離職人員」欄位"]}, {"v": "v1.6", "t": "2026-11-18 09:19", "c": ["新增「直接作業分析」模塊：動作、部位、季節×系列、斬刀 Top 12、人員×作業分類熱度圖、明細搜尋"]}, {"v": "v1.5", "t": "2026-11-18 09:14", "c": ["Form 4L 批次打印：同機台同日下方空白列歸入同一批，不算缺時間"]}, {"v": "v1.4", "t": "2026-11-18 09:06", "c": ["設備稼動以每日 7 h 計算；週六不上班，週末加班日另計"]}, {"v": "v1.3", "t": "2026-11-18 08:42", "c": ["新增「設備稼動」模塊（Pro3 HS、Pro3 HS(B)、E3、Form 4L：稼動率、PPH、單只機時、耗材）", "產出量新增「月度投入工時曲線（依業務線）」"]}, {"v": "v1.2", "t": "2026-11-18 08:37", "c": ["平台改名為「DPC 項目管理平台」"]}, {"v": "v1.1", "t": "2026-11-18 08:32", "c": ["內建 11.17 版 Excel 初始資料，打開即顯示"]}, {"v": "v1.0", "t": "2026-11-18 08:19", "c": ["初版：月度總覽、產出量、工時結構、交期達成、人員與培訓、專項與改善", "每月匯入 Excel、共享資料、資料品質檢查、目標值設定"]}];
+  const CHANGELOG = [{"v": "v2.2", "t": "2026-11-24 09:50", "c": ["本月重點結論新增「補充結論」：可自行新增、編輯、刪除，並標示達標／接近／未達／資訊／待追蹤", "補充結論依月份保存，共享模式下所有檢視者都看得到；複製月報摘要與連續模式會一起帶出"]}, {"v": "v2.1", "t": "2026-11-24 09:40", "c": ["圖表點一下即可固定顯示數值，iPad／手機也能看；圖表可用鍵盤 Tab 逐月查看", "每張趨勢圖新增「表格檢視」，可直接看 12 個月數字", "總覽移除不同單位相加的「完成案件」，改為「主要產出」（印刷圖稿筆、劃線模支、3D建模件）", "OTD 新增計畫日覆蓋率；低於 80% 顯示「資料不足」，不再顯示綠色達標", "網址記住目前頁面、月份、組別，可直接傳連結；瀏覽器上一頁可回到前一個篩選", "手機版：選單改為頂部橫滑分頁列、圖表字級放大、KPI 標題不再被切掉", "說明文字加深、焦點框加粗、提示訊息可被螢幕閱讀器讀出"]}, {"v": "v2.0", "t": "2026-11-18 10:19", "c": ["交期達成新增 3D 打印（依单号對應画线模总表「3D打印 計畫完成日期」）", "劃線模改以支數呈現，柱狀圖依 DTC／DTP／DJC／未填 堆疊", "3D 打印分為「劃線模」與「其他模具」（依画线模总表部件名稱判定）", "交期清單隱藏離職人員姓名"]}, {"v": "v1.9", "t": "2026-11-18 10:09", "c": ["3D 掃描不列入設備稼動，改為獨立「作業量」卡片", "設備可用天數改用工作日誌實際上班日（漏填但有打印紀錄的日子自動補計）", "舊版共享資料自動補算 Form 4L 批次"]}, {"v": "v1.8", "t": "2026-11-18 09:53", "c": ["「連續報告模式」改名為「連續模式」", "3D 掃描以每尺碼 10 分鐘換算工時"]}, {"v": "v1.7", "t": "2026-11-18 09:21", "c": ["隱藏離職人員：韋雨桐、毛倩、黄俊滔（部門合計保留）", "設定頁新增「離職人員」欄位"]}, {"v": "v1.6", "t": "2026-11-18 09:19", "c": ["新增「直接作業分析」模塊：動作、部位、季節×系列、斬刀 Top 12、人員×作業分類熱度圖、明細搜尋"]}, {"v": "v1.5", "t": "2026-11-18 09:14", "c": ["Form 4L 批次打印：同機台同日下方空白列歸入同一批，不算缺時間"]}, {"v": "v1.4", "t": "2026-11-18 09:06", "c": ["設備稼動以每日 7 h 計算；週六不上班，週末加班日另計"]}, {"v": "v1.3", "t": "2026-11-18 08:42", "c": ["新增「設備稼動」模塊（Pro3 HS、Pro3 HS(B)、E3、Form 4L：稼動率、PPH、單只機時、耗材）", "產出量新增「月度投入工時曲線（依業務線）」"]}, {"v": "v1.2", "t": "2026-11-18 08:37", "c": ["平台改名為「DPC 項目管理平台」"]}, {"v": "v1.1", "t": "2026-11-18 08:32", "c": ["內建 11.17 版 Excel 初始資料，打開即顯示"]}, {"v": "v1.0", "t": "2026-11-18 08:19", "c": ["初版：月度總覽、產出量、工時結構、交期達成、人員與培訓、專項與改善", "每月匯入 Excel、共享資料、資料品質檢查、目標值設定"]}];
   const VERSION = CHANGELOG[0].v;
   const LINES = ['印刷圖稿', '位置版', '劃線模', '3D建模', '3D掃描', '3D打印'];
   const UNIT = { '印刷圖稿': '筆', '位置版': '筆', '劃線模': '單', '3D建模': '件', '3D掃描': '件', '3D打印': '只' };
@@ -531,7 +531,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     ]
   };
 
-  const S = { raw: null, d: null, month: null, group: '全部', route: 'overview', report: false, settings: clone(DEFAULT_SETTINGS), notes: {}, mode: 'local', importId: null, busy: false };
+  const S = { raw: null, d: null, month: null, group: '全部', route: 'overview', report: false, settings: clone(DEFAULT_SETTINGS), notes: {}, concl: {}, cedit: null, mode: 'local', importId: null, busy: false };
   const DB = { db: null, user: null, canWrite: null };
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
 
@@ -661,7 +661,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     if (higherBetter) return v >= t ? 'good' : v >= t - 0.05 ? 'warn' : 'bad';
     return v <= t ? 'good' : v <= t + 0.05 ? 'warn' : 'bad';
   }
-  const ST_TXT = { good: ['✓', '達標'], warn: ['!', '接近'], bad: ['✕', '未達'], data: ['?', '資料不足'] };
+  const ST_TXT = { good: ['✓', '達標'], warn: ['!', '接近'], bad: ['✕', '未達'], data: ['?', '資料不足'], track: ['→', '待追蹤'] };
   const covOk = c => c == null || c >= tg('otdCov') / 100;
   const otdSt = (rate, cov) => rate == null ? null : covOk(cov) ? status(rate, S.settings.targets.otd, true) : 'data';
   function chip(st) { if (!st) return ''; return `<span class="st st-${st}"><b>${ST_TXT[st][0]}</b>${ST_TXT[st][1]}</span>`; }
@@ -788,10 +788,18 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
       tile('培訓＋指導工時', fmt(K.training + K.coaching, 1), 'h', `${delta(K.training + K.coaching, P.training + P.coaching)}<br>培訓 ${fmt(K.training, 1)} · 指導 ${fmt(K.coaching, 1)}`)
     ].join('');
     const con = conclusions(m);
+    const canEditC = S.mode === 'local' || DB.canWrite !== false;
+    const man = S.concl[m] || [];
+    const CST = [['good', '達標'], ['warn', '接近'], ['bad', '未達'], ['track', '待追蹤'], ['info', '資訊']];
+    const badge = s => s === 'info' ? '<b class="ci">i</b>' : chip(s);
+    const ed = S.cedit != null && man[S.cedit] ? man[S.cedit] : null;
+    const manHtml = `<div class="manc"><div class="manc-h"><b>補充結論</b><span class="muted">${man.length ? `${man.length} 則` : '尚未填寫'}${canEditC ? '' : '（由部門管理者填寫）'}</span></div>
+      ${man.length ? `<ul class="concl">${man.map((x, i) => `<li class="c-${x.s}${S.cedit === i ? ' editing' : ''}">${badge(x.s)}<span>${esc(x.t)}</span>${canEditC ? `<span class="manc-act"><button class="lnk" data-act="concl-edit" data-i="${i}" aria-label="編輯第 ${i + 1} 則">編輯</button><button class="lnk" data-act="concl-del" data-i="${i}" aria-label="刪除第 ${i + 1} 則">刪除</button></span>` : ''}</li>`).join('')}</ul>` : ''}
+      ${canEditC ? `<form class="manc-f" id="concl-f"><select name="s" aria-label="狀態">${CST.map(([k, v]) => `<option value="${k}" ${(ed ? ed.s : 'track') === k ? 'selected' : ''}>${v}</option>`).join('')}</select><input name="t" maxlength="200" placeholder="例：Form 4L 稼動偏低，12 月起排夜間批次…" value="${ed ? esc(ed.t) : ''}" aria-label="補充結論內容" autocomplete="off"><button class="btn sm" type="submit">${ed ? '儲存修改' : '新增'}</button>${ed ? '<button class="btn ghost sm" type="button" data-act="concl-cancel">取消</button>' : ''}</form>` : ''}</div>`;
     const conHtml = con.length ? `<ul class="concl">${con.map(([s, x]) => `<li class="c-${s}">${s === 'info' ? '<b class="ci">i</b>' : chip(s)}<span>${esc(x)}</span></li>`).join('')}</ul>` : '<p class="muted">本月資料不足，無法產生結論。</p>';
     const outRows = LINES.map(l => [`<i class="dot" style="background:${LINE_COLOR[l]}"></i>${l}`, fmt(K.out[l]), fmt(P.out[l]), P.out[l] ? (K.out[l] === P.out[l] ? '持平' : `${K.out[l] > P.out[l] ? '▲' : '▼'} ${Math.abs((K.out[l] - P.out[l]) / P.out[l] * 100).toFixed(0)}%`) : '—', UNIT[l]]);
     return `<div class="tiles">${tiles}</div>
-      <div class="g2">${card('本月重點結論', '依目標值自動判定，可在「資料匯入與設定」調整目標', conHtml + `<button class="btn ghost sm" data-act="copy-summary">複製月報摘要</button>`)}
+      <div class="g2">${card('本月重點結論', '上方依目標值自動判定；下方「補充結論」可自行填寫，依月份保存', conHtml + manHtml + `<button class="btn ghost sm" data-act="copy-summary">複製月報摘要</button>`)}
       ${card('產出摘要', '本月 vs 上月（依實際完成日期）', table([{ h: '業務線' }, { h: '本月', n: 1 }, { h: '上月', n: 1 }, { h: '變化', n: 1 }, { h: '單位' }], outRows))}</div>
       <div class="g2">${card('近 12 個月總投入工時', '單位：h', barTrend(M12, M12.map(x => kpi(x).hours), { hi: 11, unit: 'h', color: 'var(--s1)' }))}
       ${card('近 12 個月工時結構趨勢', '佔有效工時比例（不含休假）', legend([['直接作業', CAT_COLOR['直接作業']], ['問題解決', CAT_COLOR['問題解決']]]) + lineChart(M12, [{ name: '直接作業', color: CAT_COLOR['直接作業'], values: M12.map(x => kpi(x).direct) }, { name: '問題解決', color: CAT_COLOR['問題解決'], values: M12.map(x => kpi(x).problem) }], { yMax: 1, fmt: v => (v * 100).toFixed(0) + '%', hi: 11, endLabels: true }))}</div>`;
@@ -1053,6 +1061,13 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const fi = $('#fi2'); if (fi) fi.onchange = e => { if (e.target.files[0]) importFile(e.target.files[0]); e.target.value = ''; };
     const wp = $('#wp'); if (wp) wp.onchange = e => { S.wp = e.target.value; render(); };
     const wq = $('#wq'); if (wq) { wq.oninput = fillWorkDetail; } fillWorkDetail();
+    const cf = $('#concl-f');
+    if (cf) cf.onsubmit = async e => {
+      e.preventDefault(); const fd = new FormData(cf); const t = String(fd.get('t') || '').trim(); if (!t) { cf.querySelector('input').focus(); toast('請先輸入結論內容'); return; }
+      const arr = (S.concl[S.month] || []).slice(), it = { s: String(fd.get('s') || 'info'), t };
+      if (S.cedit != null && arr[S.cedit]) arr[S.cedit] = it; else arr.push(it);
+      S.cedit = null; await saveConcl(S.month, arr); render(); const inp = $('#concl-f input'); if (inp) inp.focus(); toast('已儲存補充結論');
+    };
     const f = $('#setf');
     if (f) f.onsubmit = async e => {
       e.preventDefault(); const fd = new FormData(f);
@@ -1068,9 +1083,13 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const act = a.dataset.act;
     if (act === 'copy-summary') {
       const m = S.month, K = kpi(m), txt = [`【DPC ${mLabel(m)} 月報摘要｜${S.group === '全部' ? '全部門' : S.group}】`, `總投入工時 ${fmt(K.hours, 0)} h（${K.people} 人）；直接作業 ${pct(K.direct)}；問題解決 ${pct(K.problem)}；OTD ${pct(K.otdAll)}`, `產出：` + LINES.map(l => `${l} ${fmt(K.out[l])}${UNIT[l]}`).join('、'), '重點：', ...conclusions(m).map((c, i) => `${i + 1}. ${c[1]}`)];
+      const mc = S.concl[m] || []; if (mc.length) { const base = conclusions(m).length; txt.push(...mc.map((c, i) => `${base + i + 1}. ${c.t}（${ST_TXT[c.s] ? ST_TXT[c.s][1] : '資訊'}）`)); }
       if (S.notes[m]) txt.push('下月目標：', S.notes[m]);
       try { await navigator.clipboard.writeText(txt.join('\n')); toast('已複製月報摘要，可直接貼到郵件或 PPT'); } catch (_) { toast('瀏覽器不允許複製，請手動選取文字'); }
     }
+    if (act === 'concl-del') { const i = +a.dataset.i, arr = (S.concl[S.month] || []).slice(); arr.splice(i, 1); S.cedit = null; await saveConcl(S.month, arr); render(); toast('已刪除補充結論'); }
+    if (act === 'concl-edit') { S.cedit = +a.dataset.i; render(); const inp = $('#concl-f input'); if (inp) { inp.focus(); inp.select(); } }
+    if (act === 'concl-cancel') { S.cedit = null; render(); }
     if (act === 'save-note') { const v = $('#note').value; await saveNote(S.month, v); $('#note-st').textContent = '已儲存 ✓'; }
     if (act === 'reset-set') { await saveSettings(clone(DEFAULT_SETTINGS)); render(); toast('已恢復預設設定'); }
   });
@@ -1129,6 +1148,11 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     S.settings = ns; kpiCache.clear(); eqCache.clear(); lineCache.clear();
     if (S.mode === 'shared' && DB.db && DB.canWrite !== false) { try { await DB.db.doc('settings/main').set(ns); } catch (e) { toast('設定未能同步到共享資料：' + esc(e && e.message || e)); } }
     await IDB.set('settings', ns); render();
+  }
+  async function saveConcl(m, items) {
+    S.concl[m] = items;
+    if (S.mode === 'shared' && DB.db && DB.canWrite !== false) { try { await DB.db.doc('concl/' + m).set({ items, updatedAt: new Date().toISOString() }); } catch (e) { toast('補充結論未能同步到共享資料'); } }
+    await IDB.set('concl', S.concl);
   }
   async function saveNote(m, text) {
     S.notes[m] = text;
@@ -1208,6 +1232,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
         clearTimeout(timer); loadShared(meta).catch(e => banner('讀取共享資料失敗：' + esc(e && e.message || e), 'warn'));
       }, err => { clearTimeout(timer); S.loading = false; banner('共享資料連線中斷，顯示本機資料。', 'warn'); render(); });
       db.doc('settings/main').onSnapshot(s => { if (s.exists && s.data()) { const d = s.data(); if (d.targets && d.unitMap) { S.settings = clone(d); kpiCache.clear(); eqCache.clear(); lineCache.clear(); if (S.d) render(); } } }, () => { });
+      db.collection('concl').onSnapshot(qs => { const n = {}; qs.docs.forEach(d => { const x = d.data(); if (x && Array.isArray(x.items)) n[d.id] = x.items.filter(i => i && typeof i.t === 'string').map(i => ({ s: ST_TXT[i.s] || i.s === 'info' ? i.s : 'info', t: i.t.slice(0, 200) })); }); S.concl = n; if (S.d && (S.route === 'overview' || S.report) && !(document.activeElement && document.activeElement.closest && document.activeElement.closest('#concl-f'))) render(); }, () => { });
       db.collection('notes').onSnapshot(qs => { const n = {}; qs.docs.forEach(d => { const x = d.data(); if (x) n[d.id] = x.text || ''; }); S.notes = n; if (S.d && (S.route === 'projects' || S.report)) render(); }, () => { });
     } catch (_) { clearTimeout(timer); S.loading = false; render(); }
   }
@@ -1236,7 +1261,8 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     $('#rep').onclick = () => { S.report = !S.report; if (S.route === 'data') location.hash = 'overview'; render(); window.scrollTo(0, 0); };
     $('#fi').onchange = e => { if (e.target.files[0]) importFile(e.target.files[0]); e.target.value = ''; };
     window.addEventListener('hashchange', () => { if (skipHash) { skipHash = false; return; } S.report = false; route(); window.scrollTo(0, 0); });
-    const [d, st, nt] = await Promise.all([IDB.get('data'), IDB.get('settings'), IDB.get('notes')]);
+    const [d, st, nt, cc] = await Promise.all([IDB.get('data'), IDB.get('settings'), IDB.get('notes'), IDB.get('concl')]);
+    if (cc) S.concl = cc;
     if (st && st.targets) S.settings = st; if (nt) S.notes = nt;
     if (d && d.tasks) { S.importId = 'cache'; S.raw = d; S.d = hydrate(d); const prev = addM(CUR_M, -1); S.month = S.d.months.includes(prev) ? prev : S.d.months[S.d.months.length - 1]; }
     if (!S.raw) await loadSeed();
