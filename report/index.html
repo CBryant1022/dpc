@@ -9,13 +9,13 @@
 <style>
 :root{color-scheme:light;
   --bg:#f3f2ef;--surface:#fcfcfb;--card:#ffffff;--line:#e4e2dc;--line2:#efede8;
-  --text:#0b0b0b;--text2:#52514e;--muted:#8a8984;--side:#1d2430;--side2:#2a3342;--sidet:#c9d1dc;
+  --text:#0b0b0b;--text2:#4a4946;--muted:#6b6a65;--side:#1d2430;--side2:#2a3342;--sidet:#c9d1dc;
   --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#6250d6;--s8:#e34948;--neutral:#c4c2bb;
-  --good:#0ca30c;--good-t:#006300;--warn:#fab219;--warn-t:#8a5a00;--bad:#d03b3b;--bad-t:#b42828;--accent:#2a78d6}
+  --good:#0ca30c;--good-t:#006300;--data-t:#7a5b00;--warn:#fab219;--warn-t:#8a5a00;--bad:#d03b3b;--bad-t:#b42828;--accent:#2a78d6}
 @media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){color-scheme:dark;
-  --bg:#121211;--surface:#1a1a19;--card:#1f1f1e;--line:#34332f;--line2:#2a2a28;--text:#f0efec;--text2:#c3c2b7;--muted:#8f8e88;--side:#0e1218;--side2:#1a212c;
+  --bg:#121211;--surface:#1a1a19;--card:#1f1f1e;--line:#34332f;--line2:#2a2a28;--text:#f0efec;--text2:#c9c8be;--muted:#a3a29b;--side:#0e1218;--side2:#1a212c;
   --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#0ca30c;--s7:#9085e9;--s8:#e66767;--neutral:#5c5b57;--good-t:#3fc43f;--warn-t:#fab219;--bad-t:#ff7a7a;--accent:#3987e5}}
-*{box-sizing:border-box}[hidden]{display:none!important}
+*{box-sizing:border-box}:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}.chart .hit:focus-visible{outline:none}.chart .hit:focus-visible rect:first-child,.chart .hit.pinned rect:first-child{fill:color-mix(in srgb,var(--accent) 10%,transparent)}.chart .hit{cursor:pointer}@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}[hidden]{display:none!important}
 body{margin:0;font:14px/1.55 "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 .app{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
 .side{background:var(--side);color:var(--sidet);padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:18px}
@@ -42,11 +42,11 @@ select{background:var(--card);border:1px solid var(--line);border-radius:8px;pad
 .tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;position:relative}
 .tile-l{font-size:13px;color:var(--text2)}.tile-v{font-size:30px;font-weight:700;line-height:1.2;margin:4px 0 2px;font-variant-numeric:tabular-nums}
 .tile-v small{font-size:13px;font-weight:500;color:var(--text2);margin-left:4px}.tile-x{font-size:12px;color:var(--muted)}
-.tile-st{position:absolute;top:12px;right:12px}
+.tile-h{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;flex-wrap:wrap;min-height:22px}.tile-list{list-style:none;margin:6px 0 4px;padding:0;display:flex;flex-direction:column;gap:3px}.tile-list li{display:flex;gap:5px;align-items:baseline;font-size:12px}.tile-list span{white-space:nowrap;min-width:4.2em;color:var(--text2)}.tile-list em{margin-left:auto;white-space:nowrap}.tile-list b{font-size:18px;font-variant-numeric:tabular-nums}.tile-list small{color:var(--text2)}.tile-list em{font-style:normal;color:var(--text2);font-size:12px;text-align:right}
 .dl{color:var(--text2)}
 .st{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:500;padding:1px 8px 1px 2px;border-radius:999px;border:1px solid var(--line);white-space:nowrap;background:var(--card)}
 .st b{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;color:#fff;font-size:10px}
-.st-good b{background:var(--good)}.st-good{color:var(--good-t)}.st-warn b{background:var(--warn);color:#3a2a00}.st-warn{color:var(--warn-t)}.st-bad b{background:var(--bad)}.st-bad{color:var(--bad-t)}
+.st-data b{background:var(--neutral);color:var(--text)}.st-data{color:var(--text2);border-style:dashed}.warn-t{color:var(--warn-t);font-weight:600}.st-good b{background:var(--good)}.st-good{color:var(--good-t)}.st-warn b{background:var(--warn);color:#3a2a00}.st-warn{color:var(--warn-t)}.st-bad b{background:var(--bad)}.st-bad{color:var(--bad-t)}
 .g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:14px;margin-bottom:14px}
 .g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-bottom:14px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px;min-width:0}
@@ -76,7 +76,7 @@ select{background:var(--card);border:1px solid var(--line);border-radius:8px;pad
 .tbl td{padding:7px 8px;border-bottom:1px solid var(--line2);vertical-align:top}#wtb td:nth-child(-n+4){white-space:nowrap}.tbl .n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .tbl tr.tot td{border-top:1px solid var(--line);font-weight:500}.tbl .empty{text-align:center;color:var(--muted);padding:18px}
 .tbl tbody tr:hover td{background:var(--surface)}
-.ctx{font-size:12px;color:var(--text2)}.g2.inner{gap:18px;margin:0}.g2.inner h4{margin:0 0 8px;font-size:13px;color:var(--text2);font-weight:500}.heat td{text-align:right;border-bottom:1px solid var(--card);border-right:1px solid var(--card)}.srch{margin-top:6px;width:min(420px,100%);padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font:inherit}
+.ctx{font-size:12px;color:var(--text2)}.ctv{margin-top:6px;font-size:12px}.ctv summary{cursor:pointer;color:var(--text2);display:inline-block;padding:4px 0}.ctv summary:hover{color:var(--text)}.ctv .tbl{font-size:12px}.ctv .tbl td,.ctv .tbl th{padding:4px 6px}.g2.inner{gap:18px;margin:0}.g2.inner h4{margin:0 0 8px;font-size:13px;color:var(--text2);font-weight:500}.heat td{text-align:right;border-bottom:1px solid var(--card);border-right:1px solid var(--card)}.srch{margin-top:6px;width:min(420px,100%);padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font:inherit}
 .good-t{color:var(--good-t);white-space:nowrap}.bad-t{color:var(--bad-t);white-space:nowrap}.muted{color:var(--muted)}
 .concl{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:9px}
 .concl li{display:flex;gap:10px;align-items:flex-start;font-size:14px}.concl li .st{margin-top:2px}
@@ -98,9 +98,9 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
 .ph span{font:700 13px ui-monospace,Menlo,monospace;background:var(--text);color:var(--card);padding:3px 8px;border-radius:6px}.ph h2{margin:0;font-size:19px}.ph h2 small{font-size:12px;font-weight:400;color:var(--text2);margin-left:8px}
 .tip{position:fixed;left:0;top:0;pointer-events:none;background:var(--text);color:var(--card);padding:7px 10px;border-radius:8px;font-size:12px;line-height:1.5;opacity:0;transition:opacity .08s;z-index:50;max-width:280px}
 .tip i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
-.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);background:var(--text);color:var(--card);padding:10px 16px;border-radius:10px;font-size:13px;opacity:0;transition:.2s;z-index:60;max-width:90vw;pointer-events:none}.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);background:var(--text);color:var(--card);padding:10px 16px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .2s,transform .2s;z-index:60;max-width:90vw;pointer-events:none}.toast.on{opacity:1;transform:translate(-50%,0)}
 .busy{position:fixed;inset:0;background:#0006;display:grid;place-items:center;z-index:70}.busy div{background:var(--card);padding:18px 26px;border-radius:12px;font-weight:500}
-@media (max-width:860px){.app{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:12px}.nav{flex-direction:row;flex-wrap:wrap}.nav a.sep{margin:0;border:0;padding-top:9px}.side .foot{display:none}main{padding:16px}.ctl{margin-left:0}}
+@media (max-width:860px){.app{grid-template-columns:minmax(0,1fr)}main{min-width:0}.side{min-width:0;position:sticky;top:0;z-index:30;height:auto;flex-direction:column;gap:6px;padding:10px 0 6px}.brand{padding:0 14px}.brand span{display:none}.nav{flex-direction:row;flex-wrap:nowrap;overflow-x:auto;gap:4px;padding:0 10px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.nav::-webkit-scrollbar{display:none}.nav a{white-space:nowrap;padding:8px 12px;flex:none}.nav a span{display:none}.nav a.sep{margin:0;border:0;padding-top:8px;border-radius:8px}.side .foot{display:none}main{padding:14px}.top{gap:10px}.ctl{margin-left:0;width:100%}#ctl{display:flex;gap:8px;width:100%}#ctl[hidden]{display:none}#ctl select{flex:1;min-width:0}.chart .ax{font-size:17px}.chart .xo:not(.axhi){display:none}.chart .vl{font-size:18px}.chart .el{font-size:16px}.tile-v{font-size:26px}.stk-r{grid-template-columns:72px 1fr 52px}.hb-r{grid-template-columns:minmax(70px,34%) 1fr 46px}}
 @media (forced-colors:active){.stk-b span,.hb-t span{border:1px solid CanvasText}}
 </style>
 </head>
@@ -109,7 +109,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   <aside class="side">
     <div class="brand"><b>DPC 項目管理平台</b><span>Digital Product Creation · 大田鞋業</span></div>
     <nav class="nav" id="nav"></nav>
-    <div class="foot"><span id="mode"></span><span id="last"></span></div>
+    <div class="foot"><a href="#data" id="ver" style="color:inherit;text-decoration:none" title="查看版本紀錄"></a><span id="mode"></span><span id="last"></span></div>
   </aside>
   <main>
     <div class="top">
@@ -127,15 +127,15 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     <div id="view"></div>
   </main>
 </div>
-<div id="tip" class="tip"></div>
-<div id="toast" class="toast"></div>
+<div id="tip" class="tip" role="tooltip"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 <div id="busy" class="busy" hidden><div id="busy-t">處理中…</div></div>
 <script>/* ===== DPC 月報平台：Excel 解析核心（瀏覽器 / Node 共用） ===== */
 (function (G) {
   'use strict';
 
   /* ---------- 簡繁正規化（人名、欄位名比對用） ---------- */
-  const T2S_PAIRS = '斬斩編编錄录續续劉刘謙谦飛飞韋韦黃黄陳陈楊杨計计畫划劃划實实際际單单號号掃扫碼码數数時时間间請请線线製制圖图業业類类項项內内組组進进學学習习導导專专題题決决議议會会達达頁页條条錄录區区機机設设備备動动層层輔辅說说視视訊讯細细點点種种與与為为開开發发轉转應应後后頭头舊旧樣样紙纸據据總总師师葉叶豐丰鄭郑趙赵錢钱孫孙吳吴張张蘭兰雲云鍾钟蕭萧羅罗盧卢樂乐麗丽偉伟軍军強强華华謝谢馮冯鄧邓歐欧衛卫勝胜龍龙鳳凤瑋玮濤涛靜静潔洁穎颖寧宁鳴鸣馬马劍剑嶽岳鵬鹏輝辉紅红紀纪純纯貴贵艷艳蓮莲鳥鸟鵝鹅貝贝費费錦锦劑剂廣广門门們们傑杰鑫鑫倫伦國国慶庆財财寶宝嬌娇維维賢贤顏颜選选擇择級级階阶標标準准參参則则據据個个體体戶户產产質质檢检驗验號号碼码';
+  const T2S_PAIRS = '稱称斬斩編编錄录續续劉刘謙谦飛飞韋韦黃黄陳陈楊杨計计畫划劃划實实際际單单號号掃扫碼码數数時时間间請请線线製制圖图業业類类項项內内組组進进學学習习導导專专題题決决議议會会達达頁页條条錄录區区機机設设備备動动層层輔辅說说視视訊讯細细點点種种與与為为開开發发轉转應应後后頭头舊旧樣样紙纸據据總总師师葉叶豐丰鄭郑趙赵錢钱孫孙吳吴張张蘭兰雲云鍾钟蕭萧羅罗盧卢樂乐麗丽偉伟軍军強强華华謝谢馮冯鄧邓歐欧衛卫勝胜龍龙鳳凤瑋玮濤涛靜静潔洁穎颖寧宁鳴鸣馬马劍剑嶽岳鵬鹏輝辉紅红紀纪純纯貴贵艷艳蓮莲鳥鸟鵝鹅貝贝費费錦锦劑剂廣广門门們们傑杰鑫鑫倫伦國国慶庆財财寶宝嬌娇維维賢贤顏颜選选擇择級级階阶標标準准參参則则據据個个體体戶户產产質质檢检驗验號号碼码';
   const T2S = {};
   for (let i = 0; i + 1 < T2S_PAIRS.length; i += 2) T2S[T2S_PAIRS[i]] = T2S_PAIRS[i + 1];
   function simp(s) { s = String(s == null ? '' : s); let o = ''; for (const ch of s) o += T2S[ch] || ch; return o; }
@@ -385,23 +385,26 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
       seen[n] = (seen[n] || 0) + 1; names[c] = seen[n] > 1 ? n + '#' + seen[n] : n;
     }
     const find = (cands) => { for (const cd of cands || []) { const k = names.findIndex(n => n === norm(cd)); if (k >= 0) return k; } return -1; };
-    const ci = { o: find(['接单日期']), p: find(def.plan), a: find(def.actual), m: find(def.maker), q: find(def.qty), d: (def.desc || []).map(x => find([x])).filter(x => x >= 0) };
+    const ci = { part: find(['部件名称']), id: find(['单号']), o: find(['接单日期']), p: find(def.plan), a: find(def.actual), m: find(def.maker), q: find(def.qty), d: (def.desc || []).map(x => find([x])).filter(x => x >= 0) };
     let st = null;
     if (def.stages) st = def.stages.map(sg => ({ p: names.findIndex(n => n === sg + '|计划完成日期'), a: names.findIndex(n => n === sg + '|实际完成日期') }));
     let pc = {};
-    if (def.print) pc = { g: find(['实际耗材/g']), ml: find(['实际耗材/ml']), t1: find(['打印时间']), t2: find(['打印时间#2']), pr: find(['打印机']) };
+    if (def.print) pc = { u: find(['需求单位']), g: find(['实际耗材/g']), ml: find(['实际耗材/ml']), t1: find(['打印时间']), t2: find(['打印时间#2']), pr: find(['打印机']) };
     const start = hr + (hasSub ? 2 : 1);
     let n = 0, lastB = null, noTime = 0;
     for (let r = start; r < rows.length; r++) {
       const row = rows[r] || []; if (!row.length) continue;
       const o = toDate(row[ci.o]);
       let p = ci.p >= 0 ? toDate(row[ci.p]) : null, a = ci.a >= 0 ? toDate(row[ci.a]) : null;
+      let pp = null;
+      if (st && st[0] && st[0].p >= 0) pp = toDate(row[st[0].p]);
       if (st) { for (const s of st) { const sp = s.p >= 0 ? toDate(row[s.p]) : null, sa = s.a >= 0 ? toDate(row[s.a]) : null; if (sp || sa) { p = sp; a = sa; break; } } }
       if (!o && !a) continue;
       const desc = ci.d.map(k => row[k]).filter(x => x != null && x !== '').join(' ').replace(/\s+/g, ' ').slice(0, 60);
-      const rec = { l: def.line, o, p, a, m: ci.m >= 0 && row[ci.m] != null ? String(row[ci.m]).trim() : '', q: ci.q >= 0 ? (toNum(row[ci.q]) || 1) : 1, k: desc };
+      const rec = { part: ci.part >= 0 && row[ci.part] != null ? String(row[ci.part]).trim() : '', id: ci.id >= 0 && row[ci.id] != null ? String(row[ci.id]).trim() : '', pp, l: def.line, o, p, a, m: ci.m >= 0 && row[ci.m] != null ? String(row[ci.m]).trim() : '', q: ci.q >= 0 ? (toNum(row[ci.q]) || 1) : 1, k: desc };
       if (def.print) {
         rec.g = toNum(row[pc.g]) || 0; rec.ml = toNum(row[pc.ml]) || 0; rec.ph = (toHours(row[pc.t1]) || 0) + (toHours(row[pc.t2]) || 0); rec.pr = row[pc.pr] != null ? String(row[pc.pr]).trim() : '';
+        const u = pc.u >= 0 && row[pc.u] != null ? String(row[pc.u]).trim().toUpperCase() : ''; rec.u = /^(DTC|DTP|DJC)$/.test(u) ? u : (u && u !== '/' ? '其他' : '未填');
         /* 同一批次（如 Form 4L 一次打多只）：時間只填在第一列，下方空白列屬於同一批 */
         if (rec.ph > 0) { rec.b = 'r' + r; lastB = { pr: rec.pr, a, id: rec.b }; }
         else if (lastB && lastB.pr === rec.pr && lastB.a === a) rec.b = lastB.id;
@@ -437,6 +440,12 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
       const before = raw.length;
       if (parseLogSheet(nm, rows, nowYear, Q, raw) && raw.length > before) sheetsUsed.push({ name: nm, kind: '工時日誌', rows: raw.length - before });
     }
+    /* 3D 打印計畫日：用单号對回画线模总表的「3D打印 計畫完成日期」 */
+    const ppMap = {}, hxIds = new Set(); outputs.forEach(o => { if (o.l === '劃線模' && o.id) { if (/鞋头|后包|鞋垫|鞋頭|後包|鞋墊/.test(o.part)) hxIds.add(o.id); if (o.pp) ppMap[o.id] = o.pp; } });
+    outputs.forEach(o => { if (o.l === '3D打印') o.hx = !!(o.id && hxIds.has(o.id)); });
+    let linked = 0, printRows = 0;
+    outputs.forEach(o => { if (o.l === '3D打印') { printRows++; if (o.id && ppMap[o.id]) { o.p = ppMap[o.id]; linked++; } } });
+    if (printRows) Q.push({ t: '3D打印計畫日對應', s: '3D打印總表', d: `${linked}/${printRows} 筆可依单号對到画线模总表的「3D打印 計畫完成日期」；其餘因画线模总表未填打印計畫日，不列入 3D 打印 OTD` });
     /* 同一人同一天若出現在多個來源（重複週區塊 / 週表與總表），保留工時較多的來源 */
     const bySrc = new Map();
     raw.forEach(t => { const k = t.key + '|' + t.date; if (!bySrc.has(k)) bySrc.set(k, new Map()); const m = bySrc.get(k); m.set(t.src, (m.get(t.src) || 0) + t.h); });
@@ -464,12 +473,12 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     Object.entries(unknown).sort((a, b) => b[1] - a[1]).forEach(([k, v]) => Q.push({ t: '產出人員不在工時日誌', s: '產出總表', d: `「${k}」${v} 筆（工時日誌姓名欄未列此人，分組統計時歸入「其他」）` }));
     return {
       tasks: tasks.map(t => [t.date, t.key, t.cat, t.sub, t.con, Math.round(t.h * 100) / 100]),
-      outputs: outputs.map(o => [o.l, o.o, o.p, o.a, o.m, o.q, o.k, o.g || 0, o.ml || 0, Math.round((o.ph || 0) * 100) / 100, o.pr || '', o.b || '']),
+      outputs: outputs.map(o => [o.l, o.o, o.p, o.a, o.m, o.q, o.k, o.g || 0, o.ml || 0, Math.round((o.ph || 0) * 100) / 100, o.pr || '', o.b || '', o.l === '3D打印' ? (o.hx ? o.u : 'x') : '']),
       staff, quality: Q, sheets: sheetsUsed
     };
   }
 
-  G.DPC = { parseWorkbook, simp, splitMakers, catBucket, CAT_ORDER, OUT_DEFS: OUT_DEFS.map(d => ({ line: d.line, unit: d.unit, otd: !d.print })) };
+  G.DPC = { parseWorkbook, simp, splitMakers, catBucket, CAT_ORDER, OUT_DEFS: OUT_DEFS.map(d => ({ line: d.line, unit: d.unit, otd: true })), SCHEMA: 4 };
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
 <script>/* ===== DPC 月報平台：介面與統計 ===== */
@@ -482,9 +491,11 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   const pct = (v, d = 1) => v == null || !isFinite(v) ? '—' : (v * 100).toFixed(d) + '%';
   const sum = a => a.reduce((x, y) => x + y, 0);
 
+  const CHANGELOG = [{"v": "v2.1", "t": "2026-11-24 09:40", "c": ["圖表點一下即可固定顯示數值，iPad／手機也能看；圖表可用鍵盤 Tab 逐月查看", "每張趨勢圖新增「表格檢視」，可直接看 12 個月數字", "總覽移除不同單位相加的「完成案件」，改為「主要產出」（印刷圖稿筆、劃線模支、3D建模件）", "OTD 新增計畫日覆蓋率；低於 80% 顯示「資料不足」，不再顯示綠色達標", "網址記住目前頁面、月份、組別，可直接傳連結；瀏覽器上一頁可回到前一個篩選", "手機版：選單改為頂部橫滑分頁列、圖表字級放大、KPI 標題不再被切掉", "說明文字加深、焦點框加粗、提示訊息可被螢幕閱讀器讀出"]}, {"v": "v2.0", "t": "2026-11-18 10:19", "c": ["交期達成新增 3D 打印（依单号對應画线模总表「3D打印 計畫完成日期」）", "劃線模改以支數呈現，柱狀圖依 DTC／DTP／DJC／未填 堆疊", "3D 打印分為「劃線模」與「其他模具」（依画线模总表部件名稱判定）", "交期清單隱藏離職人員姓名"]}, {"v": "v1.9", "t": "2026-11-18 10:09", "c": ["3D 掃描不列入設備稼動，改為獨立「作業量」卡片", "設備可用天數改用工作日誌實際上班日（漏填但有打印紀錄的日子自動補計）", "舊版共享資料自動補算 Form 4L 批次"]}, {"v": "v1.8", "t": "2026-11-18 09:53", "c": ["「連續報告模式」改名為「連續模式」", "3D 掃描以每尺碼 10 分鐘換算工時"]}, {"v": "v1.7", "t": "2026-11-18 09:21", "c": ["隱藏離職人員：韋雨桐、毛倩、黄俊滔（部門合計保留）", "設定頁新增「離職人員」欄位"]}, {"v": "v1.6", "t": "2026-11-18 09:19", "c": ["新增「直接作業分析」模塊：動作、部位、季節×系列、斬刀 Top 12、人員×作業分類熱度圖、明細搜尋"]}, {"v": "v1.5", "t": "2026-11-18 09:14", "c": ["Form 4L 批次打印：同機台同日下方空白列歸入同一批，不算缺時間"]}, {"v": "v1.4", "t": "2026-11-18 09:06", "c": ["設備稼動以每日 7 h 計算；週六不上班，週末加班日另計"]}, {"v": "v1.3", "t": "2026-11-18 08:42", "c": ["新增「設備稼動」模塊（Pro3 HS、Pro3 HS(B)、E3、Form 4L：稼動率、PPH、單只機時、耗材）", "產出量新增「月度投入工時曲線（依業務線）」"]}, {"v": "v1.2", "t": "2026-11-18 08:37", "c": ["平台改名為「DPC 項目管理平台」"]}, {"v": "v1.1", "t": "2026-11-18 08:32", "c": ["內建 11.17 版 Excel 初始資料，打開即顯示"]}, {"v": "v1.0", "t": "2026-11-18 08:19", "c": ["初版：月度總覽、產出量、工時結構、交期達成、人員與培訓、專項與改善", "每月匯入 Excel、共享資料、資料品質檢查、目標值設定"]}];
+  const VERSION = CHANGELOG[0].v;
   const LINES = ['印刷圖稿', '位置版', '劃線模', '3D建模', '3D掃描', '3D打印'];
   const UNIT = { '印刷圖稿': '筆', '位置版': '筆', '劃線模': '單', '3D建模': '件', '3D掃描': '件', '3D打印': '只' };
-  const OTD_LINES = LINES.filter(l => l !== '3D打印');
+  const OTD_LINES = LINES.slice();
   const LINE_COLOR = { '印刷圖稿': 'var(--s1)', '位置版': 'var(--s2)', '劃線模': 'var(--s3)', '3D建模': 'var(--s4)', '3D掃描': 'var(--s5)', '3D打印': 'var(--s6)' };
   const CATS = DPC.CAT_ORDER;
   const CAT_COLOR = { '直接作業': 'var(--s1)', '問題解決': 'var(--s2)', '專項工作': 'var(--s3)', '培訓練習': 'var(--s4)', '指導教學': 'var(--s5)', '管理/會議': 'var(--s7)', '休假': 'var(--neutral)' };
@@ -504,7 +515,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
 
   const DEFAULT_SETTINGS = {
     leftStaff: ['韋雨桐', '毛倩', '黄俊滔'],
-    targets: { direct: 60, problem: 20, otd: 95, dayH: 8, equipH: 7, equipU: 60, equipBase: 'mon-fri-ot', scanMin: 10 },
+    targets: { direct: 60, problem: 20, otd: 95, dayH: 8, equipH: 7, equipU: 60, equipBase: 'log', scanMin: 10, otdCov: 80 },
     lineMap: [
       { line: '位置版', kw: ['位置版'] },
       { line: '印刷圖稿', kw: ['ai 圖稿', 'ai圖稿', '菲林', 'ai 製圖'] },
@@ -540,7 +551,12 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   function hydrate(raw) {
     const staff = raw.staff || {};
     const tasks = raw.tasks.map(([d, k, c, s, x, h]) => ({ d, m: d.slice(0, 7), k, c, b: DPC.catBucket(c), s, x, h: +h || 0 }));
-    const outputs = raw.outputs.map(([l, o, p, a, m, q, k, g, ml, ph, pr, b]) => ({ l, o, p, a, am: a ? a.slice(0, 7) : null, mk: m, makers: DPC.splitMakers(m).map(DPC.simp), q: +q || 1, k, g: +g || 0, ml: +ml || 0, ph: +ph || 0, pr, b: b == null ? (+ph ? 'x' + Math.random() : '') : b }));
+    const outputs = raw.outputs.map(([l, o, p, a, m, q, k, g, ml, ph, pr, b, u]) => ({ u: u || '', l, o, p, a, am: a ? a.slice(0, 7) : null, mk: m, makers: DPC.splitMakers(m).map(DPC.simp), q: +q || 1, k, g: +g || 0, ml: +ml || 0, ph: +ph || 0, pr, b }));
+    /* 舊版資料沒有批次欄位：依同樣規則補算（有時間的列開一批，下方同機台同日、沒時間的列歸入同批） */
+    let lastB = null, bi = 0;
+    outputs.forEach(o => { if (o.l !== '3D打印' || o.b != null) { if (o.l === '3D打印') lastB = o.ph > 0 ? { pr: o.pr, a: o.a, id: o.b } : lastB; return; }
+      if (o.ph > 0) { o.b = 'h' + (bi++); lastB = { pr: (o.pr || '').trim(), a: o.a, id: o.b }; }
+      else if (lastB && lastB.pr === (o.pr || '').trim() && lastB.a === o.a) o.b = lastB.id; else o.b = ''; });
     const tm = new Set(tasks.map(t => t.m)); const minM = [...tm].sort()[0] || CUR_M;
     const months = [...new Set([...tm, ...outputs.map(o => o.am).filter(Boolean)])].filter(m => m >= minM && m <= CUR_M).sort();
     const groups = [...new Set(Object.values(staff).map(s => s.group))];
@@ -569,9 +585,15 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   function machines() { const set = [...new Set(S.d.outputs.filter(o => o.l === '3D打印' && o.pr).map(o => o.pr.trim()))]; set.sort((a, b) => (MACH_ORDER.indexOf(a) + 1 || 99) - (MACH_ORDER.indexOf(b) + 1 || 99) || (a < b ? -1 : 1)); return set; }
   const machColor = (mc, list) => MACH_SLOT[list.indexOf(mc) % MACH_SLOT.length];
   const tg = k => { const t = S.settings.targets; return t[k] != null ? t[k] : DEFAULT_SETTINGS.targets[k]; };
-  const BASE_TXT = { 'mon-fri-ot': '週一～週五＋加班日', 'mon-sat': '工作日（週一～週六）', 'mon-fri': '工作日（週一～週五）', 'calendar': '日曆天' };
+  const BASE_TXT = { 'log': '工作日誌實際上班日', 'mon-fri-ot': '週一～週五＋加班日', 'mon-sat': '工作日（週一～週六）', 'mon-fri': '工作日（週一～週五）', 'calendar': '日曆天' };
+  function logDays(m) {
+    const L = new Set(S.d.tasks.filter(t => t.m === m && t.h > 0 && t.b !== '休假').map(t => t.d));
+    const extra = [...new Set(S.d.outputs.filter(o => o.l === '3D打印' && o.am === m).map(o => o.a))].filter(d => !L.has(d)).sort();
+    return { log: L.size, extra };
+  }
   function workdays(m) {
-    const base = tg('equipBase'); const [y, mo] = m.split('-').map(Number); let n = 0;
+    const base = tg('equipBase');
+    if (base === 'log') { const x = logDays(m); return x.log + x.extra.length; } const [y, mo] = m.split('-').map(Number); let n = 0;
     const last = m === CUR_M ? +TODAY.slice(8) : new Date(Date.UTC(y, mo, 0)).getUTCDate();
     for (let d = 1; d <= last; d++) { const w = new Date(Date.UTC(y, mo - 1, d)).getUTCDay(); if (base === 'calendar' || ((base === 'mon-fri' || base === 'mon-fri-ot') ? w >= 1 && w <= 5 : w !== 0)) n++; }
     if (base === 'mon-fri-ot') n += otDays(m).length;
@@ -603,6 +625,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     for (const x of lm) if (x.kw.some(k => k && n.includes(normKw(k)))) { r = x.line; break; }
     lineCache.set(sub, r); return r;
   }
+  function hxSup(m) { let q = 0; S.d.outputs.forEach(x => { if (x.l === '3D打印' && x.am === m && x.u && x.u !== 'x' && outOk(x)) q += x.q; }); return q; }
   const kpiCache = new Map();
   function kpi(m) {
     const ck = m + '|' + S.group + '|' + S.importId + '|' + JSON.stringify(S.settings.unitMap) + JSON.stringify(S.settings.lineMap || '');
@@ -613,11 +636,11 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     T.forEach(t => { by[t.b] += t.h; hours += t.h; if (t.b !== '休假') lineH[lineOf(t.s)] += t.h; });
     const eff = hours - by['休假'];
     const out = {}; LINES.forEach(l => out[l] = 0); O.forEach(o => out[o.l] += o.q);
-    const otd = {}; let on = 0, n = 0;
+    const otd = {}; let on = 0, n = 0, doneAll = 0;
     OTD_LINES.forEach(l => {
-      const rows = O.filter(o => o.l === l && o.p);
-      const late = rows.filter(o => o.a > o.p);
-      otd[l] = { n: rows.length, on: rows.length - late.length, late: late.length, avgLate: late.length ? sum(late.map(o => ddiff(o.a, o.p))) / late.length : 0, rate: rows.length ? (rows.length - late.length) / rows.length : null };
+      const rows = O.filter(o => o.l === l && o.p), done = O.filter(o => o.l === l).length;
+      const late = rows.filter(o => o.a > o.p); doneAll += done;
+      otd[l] = { done, cov: done ? rows.length / done : null, n: rows.length, on: rows.length - late.length, late: late.length, avgLate: late.length ? sum(late.map(o => ddiff(o.a, o.p))) / late.length : 0, rate: rows.length ? (rows.length - late.length) / rows.length : null };
       on += rows.length - late.length; n += rows.length;
     });
     const unit = S.settings.unitMap.map((r, i) => { const h = sum(T.filter(t => ruleOf(t.s) === i).map(t => t.h)); const u = out[r.line] || 0; return { name: r.name, line: r.line, h, u, hpu: u ? h / u : null }; });
@@ -625,7 +648,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const res = {
       m, hours, eff, by, lineH, people: new Set(T.map(t => t.k)).size, days: new Set(T.map(t => t.d)).size,
       direct: eff ? by['直接作業'] / eff : null, problem: eff ? by['問題解決'] / eff : null, training: by['培訓練習'], coaching: by['指導教學'], special: by['專項工作'],
-      out, cases: sum(OTD_LINES.map(l => out[l])), otd, otdAll: n ? on / n : null, otdN: n, unit,
+      out, cases: sum(OTD_LINES.map(l => out[l])), otd, otdAll: n ? on / n : null, otdN: n, otdCov: doneAll ? n / doneAll : null, otdDone: doneAll, unit,
       print: { g: sum(pr.map(o => o.g)), ml: sum(pr.map(o => o.ml)), h: sum(pr.map(o => o.ph)), jobs: pr.length }
     };
     kpiCache.set(ck, res); return res;
@@ -638,7 +661,9 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     if (higherBetter) return v >= t ? 'good' : v >= t - 0.05 ? 'warn' : 'bad';
     return v <= t ? 'good' : v <= t + 0.05 ? 'warn' : 'bad';
   }
-  const ST_TXT = { good: ['✓', '達標'], warn: ['!', '接近'], bad: ['✕', '未達'] };
+  const ST_TXT = { good: ['✓', '達標'], warn: ['!', '接近'], bad: ['✕', '未達'], data: ['?', '資料不足'] };
+  const covOk = c => c == null || c >= tg('otdCov') / 100;
+  const otdSt = (rate, cov) => rate == null ? null : covOk(cov) ? status(rate, S.settings.targets.otd, true) : 'data';
   function chip(st) { if (!st) return ''; return `<span class="st st-${st}"><b>${ST_TXT[st][0]}</b>${ST_TXT[st][1]}</span>`; }
   function delta(cur, prev, mode) {
     if (cur == null || prev == null) return '<span class="dl">上月無資料</span>';
@@ -650,6 +675,11 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   /* ---------- 圖表 ---------- */
   function niceMax(v) { if (!v || v <= 0) return 1; const p = Math.pow(10, Math.floor(Math.log10(v))); const n = v / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * p; }
   function topRect(x, y, w, h, r) { if (h <= 0) return ''; r = Math.min(r, w / 2, h); return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`; }
+  const strip = h => String(h).replace(/<br\s*\/?>/g, '，').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&');
+  const hitAttr = html => `data-tip="${esc(html)}" tabindex="0" role="img" aria-label="${esc(strip(html))}"`;
+  function chartTable(labels, series, f, unit) {
+    return `<details class="ctv"><summary>表格檢視</summary><div class="tw"><table class="tbl"><thead><tr><th></th>${labels.map(l => `<th class="n">${mShort(l)}</th>`).join('')}</tr></thead><tbody>${series.map(s => `<tr><td style="white-space:nowrap"><i class="dot" style="background:${s.color}"></i>${esc(s.name)}</td>${s.values.map(v => `<td class="n">${v == null ? '—' : f(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${unit ? `<small class="muted">單位：${esc(unit)}</small>` : ''}</details>`;
+  }
   function barTrend(labels, values, o) {
     o = o || {}; const W = 560, H = o.h || 160, pl = 40, pr = 8, pt = 18, pb = 24, n = labels.length;
     const mx = niceMax(Math.max(...values.map(v => v || 0)) * 1.05); const iw = W - pl - pr, ih = H - pt - pb, bw = iw / n;
@@ -657,12 +687,26 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     for (let i = 0; i <= 2; i++) { const y = pt + ih - ih * i / 2; g += `<line x1="${pl}" x2="${W - pr}" y1="${y}" y2="${y}" class="grid"/><text x="${pl - 6}" y="${y + 4}" class="ax" text-anchor="end">${f(mx * i / 2)}</text>`; }
     labels.forEach((l, i) => {
       const v = values[i] || 0, h = ih * v / mx, x = pl + i * bw + bw * 0.2, w = bw * 0.6, y = pt + ih - h, hi = i === o.hi;
-      g += `<g class="hit" data-tip="${esc(`<b>${mLabel(l)}</b><br>${f(v)} ${o.unit || ''}`)}"><rect x="${pl + i * bw}" y="${pt}" width="${bw}" height="${ih}" fill="transparent"/>`;
+      g += `<g class="hit" ${hitAttr(`<b>${mLabel(l)}</b><br>${f(v)} ${o.unit || ''}`)}><rect x="${pl + i * bw}" y="${pt}" width="${bw}" height="${ih}" fill="transparent"/>`;
       g += `<path d="${topRect(x, y, w, h, 3)}" fill="${o.color || 'var(--s1)'}" opacity="${hi || o.hi == null ? 1 : 0.42}"/>`;
       if (hi) g += `<text x="${x + w / 2}" y="${y - 5}" class="vl" text-anchor="middle">${f(v)}</text>`;
-      g += `</g><text x="${pl + i * bw + bw / 2}" y="${H - 7}" class="ax${hi ? ' axhi' : ''}" text-anchor="middle">${mShort(l)}</text>`;
+      g += `</g><text x="${pl + i * bw + bw / 2}" y="${H - 7}" class="ax${hi ? ' axhi' : ''}${(labels.length - 1 - i) % 2 ? ' xo' : ''}" text-anchor="middle">${mShort(l)}</text>`;
     });
-    return `<svg viewBox="0 0 ${W} ${H}" class="chart" role="img">${g}</svg>`;
+    return `<svg viewBox="0 0 ${W} ${H}" class="chart" role="group" aria-label="${esc(o.label || '12 個月趨勢柱狀圖')}">${g}</svg>` + (o.noTable ? '' : chartTable(labels, [{ name: o.name || '數值', color: o.color || 'var(--s1)', values }], f, o.unit));
+  }
+  function barStack(labels, series, o) {
+    o = o || {}; const W = 560, H = o.h || 160, pl = 40, pr = 8, pt = 18, pb = 24, n = labels.length;
+    const tot = labels.map((_, i) => sum(series.map(s => s.values[i] || 0)));
+    const mx = niceMax(Math.max(...tot) * 1.05); const iw = W - pl - pr, ih = H - pt - pb, bw = iw / n, f = o.fmt || (v => fmt(v)); let g = '';
+    for (let i = 0; i <= 2; i++) { const y = pt + ih - ih * i / 2; g += `<line x1="${pl}" x2="${W - pr}" y1="${y}" y2="${y}" class="grid"/><text x="${pl - 6}" y="${y + 4}" class="ax" text-anchor="end">${f(mx * i / 2)}</text>`; }
+    labels.forEach((l, i) => {
+      const x = pl + i * bw + bw * 0.2, w = bw * 0.6, hi = i === o.hi; let y0 = pt + ih; const segs = series.filter(s => s.values[i] > 0);
+      g += `<g class="hit" ${hitAttr(`<b>${mLabel(l)}</b>` + series.map(s => `<br><i style="background:${s.color}"></i>${esc(s.name)}：${f(s.values[i] || 0)} ${o.unit || ''}`).join('') + `<br>合計 ${f(tot[i])} ${o.unit || ''}`)}><rect x="${pl + i * bw}" y="${pt}" width="${bw}" height="${ih}" fill="transparent"/>`;
+      segs.forEach((s, j) => { const h = ih * s.values[i] / mx, top = j === segs.length - 1; y0 -= h; g += top ? `<path d="${topRect(x, y0, w, h, 3)}" fill="${s.color}" opacity="${hi || o.hi == null ? 1 : 0.45}"/>` : `<rect x="${x}" y="${y0}" width="${w}" height="${Math.max(0, h - 1)}" fill="${s.color}" opacity="${hi || o.hi == null ? 1 : 0.45}"/>`; });
+      if (hi && tot[i]) g += `<text x="${x + w / 2}" y="${y0 - 5}" class="vl" text-anchor="middle">${f(tot[i])}</text>`;
+      g += `</g><text x="${pl + i * bw + bw / 2}" y="${H - 7}" class="ax${hi ? ' axhi' : ''}${(labels.length - 1 - i) % 2 ? ' xo' : ''}" text-anchor="middle">${mShort(l)}</text>`;
+    });
+    return `<svg viewBox="0 0 ${W} ${H}" class="chart" role="group" aria-label="${esc(o.label || '12 個月堆疊柱狀圖')}">${g}</svg>` + (o.noTable ? '' : chartTable(labels, series.concat([{ name: '合計', color: 'var(--text)', values: tot }]), f, o.unit));
   }
   function lineChart(labels, series, o) {
     o = o || {}; const W = o.w || 560, H = o.h || 200, pl = 44, pr = o.endLabels ? 70 : 12, pt = 14, pb = 24, n = labels.length;
@@ -672,7 +716,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const f = o.fmt || (v => fmt(v)); let g = '';
     const tk = o.ticks || 4; for (let i = 0; i <= tk; i++) { const v = mn + (mx - mn) * i / tk, y = Y(v); g += `<line x1="${pl}" x2="${W - pr}" y1="${y}" y2="${y}" class="grid"/><text x="${pl - 6}" y="${y + 4}" class="ax" text-anchor="end">${f(v)}</text>`; }
     if (o.target != null) g += `<line x1="${pl}" x2="${W - pr}" y1="${Y(o.target)}" y2="${Y(o.target)}" class="tgt"/><text x="${pl + 6}" y="${Y(o.target) + 14}" class="ax">目標 ${f(o.target)}</text>`;
-    labels.forEach((l, i) => { if (n <= 12 || i % 2 === 0) g += `<text x="${X(i)}" y="${H - 7}" class="ax${i === o.hi ? ' axhi' : ''}" text-anchor="middle">${mShort(l)}</text>`; });
+    labels.forEach((l, i) => { if (n <= 12 || i % 2 === 0) g += `<text x="${X(i)}" y="${H - 7}" class="ax${i === o.hi ? ' axhi' : ''}${(n - 1 - i) % 2 ? ' xo' : ''}" text-anchor="middle">${mShort(l)}</text>`; });
     const ends = [];
     series.forEach(s => {
       let d = '', pen = false;
@@ -686,9 +730,9 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     labels.forEach((l, i) => {
       const w = n === 1 ? iw : iw / (n - 1);
       const tip = `<b>${mLabel(l)}</b>` + series.map(s => `<br><i style="background:${s.color}"></i>${esc(s.name)}：${s.values[i] == null ? '—' : f(s.values[i])}`).join('');
-      g += `<g class="hit xh" data-tip="${esc(tip)}"><rect x="${X(i) - w / 2}" y="${pt}" width="${w}" height="${ih}" fill="transparent"/><line x1="${X(i)}" x2="${X(i)}" y1="${pt}" y2="${pt + ih}" class="cross"/></g>`;
+      g += `<g class="hit xh" ${hitAttr(tip)}><rect x="${X(i) - w / 2}" y="${pt}" width="${w}" height="${ih}" fill="transparent"/><line x1="${X(i)}" x2="${X(i)}" y1="${pt}" y2="${pt + ih}" class="cross"/></g>`;
     });
-    return `<svg viewBox="0 0 ${W} ${H}" class="chart" role="img">${g}</svg>`;
+    return `<svg viewBox="0 0 ${W} ${H}" class="chart" role="group" aria-label="${esc(o.label || '12 個月趨勢折線圖')}">${g}</svg>` + (o.noTable ? '' : chartTable(labels, series, f, o.unit));
   }
   function legend(items) { return `<div class="legend">${items.map(([n, c]) => `<span><i style="background:${c}"></i>${esc(n)}</span>`).join('')}</div>`; }
   function stack100(rows, cats, colors) {
@@ -707,7 +751,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     return `<div class="tw"><table class="tbl"><thead><tr>${cols.map(c => `<th class="${c.n ? 'n' : ''}">${c.h}</th>`).join('')}</tr></thead><tbody>${rows.length ? rows.map(r => `<tr class="${r._cls || ''}">${cols.map((c, i) => `<td class="${c.n ? 'n' : ''}">${r[i] == null ? '—' : r[i]}</td>`).join('')}</tr>`).join('') : `<tr><td colspan="${cols.length}" class="empty">${o.empty || '本月無資料'}</td></tr>`}</tbody></table></div>`;
   }
   const card = (title, sub, body, cls) => `<section class="card ${cls || ''}"><header><h3>${title}</h3>${sub ? `<p>${sub}</p>` : ''}</header>${body}</section>`;
-  function tile(label, value, unit, extra, st) { return `<div class="tile">${st ? `<div class="tile-st">${chip(st)}</div>` : ''}<div class="tile-l">${label}</div><div class="tile-v">${value}<small>${unit || ''}</small></div><div class="tile-x">${extra || ''}</div></div>`; }
+  function tile(label, value, unit, extra, st) { return `<div class="tile"><div class="tile-h"><span class="tile-l">${label}</span>${st ? chip(st) : ''}</div><div class="tile-v">${value}<small>${unit || ''}</small></div><div class="tile-x">${extra || ''}</div></div>`; }
 
   /* ---------- 結論產生 ---------- */
   function conclusions(m) {
@@ -716,7 +760,9 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     if (sd) list.push([sd, `直接作業佔比 ${pct(K.direct)}，${sd === 'good' ? '達到' : '低於'}目標 ${t.direct}%${P.direct != null ? `（上月 ${pct(P.direct)}）` : ''}。`]);
     const sp = status(K.problem, t.problem, false);
     if (sp) list.push([sp, `問題解決（檢查／修改）佔 ${pct(K.problem)}，${sp === 'good' ? '控制在' : '超過'}上限 ${t.problem}% ${sp === 'good' ? '內' : '，一次做對率需改善'}。`]);
-    const so = status(K.otdAll, t.otd, true);
+    const so = otdSt(K.otdAll, K.otdCov);
+    const lowCov = OTD_LINES.filter(l => K.otd[l].done >= 5 && !covOk(K.otd[l].cov));
+    if (lowCov.length) list.push(['data', `計畫日覆蓋率不足 ${tg('otdCov')}%：${lowCov.map(l => `${l} ${pct(K.otd[l].cov, 0)}（${K.otd[l].n}/${K.otd[l].done}）`).join('、')}，這些業務線的 OTD 僅供參考，請補填計畫完成日。`]);
     if (so) {
       const worst = OTD_LINES.filter(l => K.otd[l].n >= 3).sort((a, b) => K.otd[a].rate - K.otd[b].rate)[0];
       list.push([so, `交期達成率 OTD ${pct(K.otdAll)}（${K.otdN} 筆有計畫日）${worst && K.otd[worst].late ? `；最弱為 ${worst} ${pct(K.otd[worst].rate)}，逾期 ${K.otd[worst].late} 筆` : '，無逾期'}。`]);
@@ -736,8 +782,9 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
       tile('總投入工時', fmt(K.hours, 0), 'h', `${delta(K.hours, P.hours)}<br>${K.people} 人 · ${K.days} 個工作日`),
       tile('直接作業佔比', pct(K.direct), '', `${delta(K.direct, P.direct, 'pt')}<br>目標 ≥ ${t.direct}%`, status(K.direct, t.direct, true)),
       tile('問題解決佔比', pct(K.problem), '', `${delta(K.problem, P.problem, 'pt')}<br>上限 ≤ ${t.problem}%`, status(K.problem, t.problem, false)),
-      tile('交期達成率 OTD', pct(K.otdAll), '', `${delta(K.otdAll, P.otdAll, 'pt')}<br>目標 ≥ ${t.otd}%`, status(K.otdAll, t.otd, true)),
-      tile('完成案件', fmt(K.cases), '筆/件', `${delta(K.cases, P.cases)}<br>另 3D 打印 ${fmt(K.out['3D打印'])} 只`),
+      tile('交期達成率 OTD', pct(K.otdAll), '', `${delta(K.otdAll, P.otdAll, 'pt')}<br>目標 ≥ ${t.otd}% · 計畫日覆蓋 ${pct(K.otdCov, 0)}`, otdSt(K.otdAll, K.otdCov)),
+      (() => { const hs = hxSup(m), hp = hxSup(addM(m, -1)); const li = [['印刷圖稿', K.out['印刷圖稿'], P.out['印刷圖稿'], '筆'], ['劃線模', hs, hp, '支'], ['3D建模', K.out['3D建模'], P.out['3D建模'], '件']];
+        return `<div class="tile"><div class="tile-h"><span class="tile-l">主要產出</span></div><ul class="tile-list">${li.map(([n, v, p, u]) => `<li><span>${n}</span><b>${fmt(v)}</b><small>${u}</small><em>${p ? (v === p ? '持平' : `${v > p ? '▲' : '▼'} ${Math.abs((v - p) / p * 100).toFixed(0)}%`) : '—'}</em></li>`).join('')}</ul><div class="tile-x">其他業務線見「產出量」</div></div>`; })(),
       tile('培訓＋指導工時', fmt(K.training + K.coaching, 1), 'h', `${delta(K.training + K.coaching, P.training + P.coaching)}<br>培訓 ${fmt(K.training, 1)} · 指導 ${fmt(K.coaching, 1)}`)
     ].join('');
     const con = conclusions(m);
@@ -756,18 +803,28 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const hRows = LINES.concat('其他').map(l => [`<i class="dot" style="background:${LINE_COLOR[l] || 'var(--neutral)'}"></i>${l}`, fmt(K.lineH[l], 1), fmt(P.lineH[l], 1), K.eff ? pct(K.lineH[l] / K.eff) : '—']);
     const hourCard = `<div class="g2 wide">${card('月度投入工時曲線（依業務線）', `近 12 個月有效工時（不含休假）；本月合計 ${fmt(K.eff, 1)} h；工時依作業分類歸入業務線（劃線模的掃描／建模／打印工時多記在「3D FDM- 劃線模」，所以歸在劃線模），對應規則可在設定調整`, legend(hSer.map(x => [x.name, x.color])) + lineChart(M12, hSer, { hi: 11, h: 240, w: 760, fmt: v => fmt(v, 0) }))}
       ${card('本月投入工時', '', table([{ h: '業務線' }, { h: '本月 h', n: 1 }, { h: '上月 h', n: 1 }, { h: '佔比', n: 1 }], hRows))}</div>`;
+    const UNITS = ['DTC', 'DTP', 'DJC', '其他', '未填'], UCOL = { DTC: 'var(--s1)', DTP: 'var(--s2)', DJC: 'var(--s3)', '其他': 'var(--s7)', '未填': 'var(--neutral)' };
+    const hxU = mm => { const o = {}; UNITS.forEach(u => o[u] = { q: 0, n: 0 }); S.d.outputs.forEach(x => { if (x.l === '3D打印' && x.am === mm && x.u && x.u !== 'x' && outOk(x)) { const k = o[x.u] ? x.u : '其他'; o[k].q += x.q; o[k].n++; } }); return o; };
+    const HU = hxU(m), HP = hxU(addM(m, -1)), hTot = sum(UNITS.map(u => HU[u].q));
+    const hasU = M12.some(x => sum(UNITS.map(u => hxU(x)[u].q)) > 0);
+    const hxCard = hTot || sum(UNITS.map(u => HP[u].q)) ? card('劃線模支數｜依需求單位', `依 3D 打印總表「需求單位」與只數統計（只計单号對應到画线模总表、部件為鞋頭／後包片／鞋墊的打印）；「未填」= 需求單位空白或填「/」`, table([{ h: '需求單位' }, { h: '本月支數', n: 1 }, { h: '打印筆數', n: 1 }, { h: '佔比', n: 1 }, { h: '上月支數', n: 1 }, { h: '變化', n: 1 }], UNITS.filter(u => HU[u].q || HP[u].q).map(u => [`<i class="dot" style="background:${UCOL[u]}"></i><b>${u}</b>`, `<b>${fmt(HU[u].q)}</b>`, fmt(HU[u].n), hTot ? pct(HU[u].q / hTot, 0) : '—', fmt(HP[u].q), HP[u].q ? `${HU[u].q >= HP[u].q ? '▲' : '▼'} ${Math.abs((HU[u].q - HP[u].q) / HP[u].q * 100).toFixed(0)}%` : '—']).concat([Object.assign(['<b>合計</b>', `<b>${fmt(hTot)}</b>`, fmt(sum(UNITS.map(u => HU[u].n))), '', fmt(sum(UNITS.map(u => HP[u].q))), ''], { _cls: 'tot' })]))) : '';
+    const prSplit = mm => { const r = { hx: 0, other: 0 }; S.d.outputs.forEach(x => { if (x.l === '3D打印' && x.am === mm && outOk(x)) { if (x.u && x.u !== 'x') r.hx += x.q; else r.other += x.q; } }); return r; };
+    const PS = prSplit(m);
     const cards = LINES.map(l => {
       let extra = '';
-      if (l === '3D打印') extra = `<div class="mini">耗材 ${fmt(K.print.g, 0)} g · 光固化 ${fmt(K.print.ml, 0)} mL · 機時 ${fmt(K.print.h, 1)} h</div>`;
+      if (l === '劃線模' && hTot) extra = `<div class="mini">${['DTC', 'DTP', 'DJC'].map(u => `${u} <b>${fmt(HU[u].q)}</b>`).join(' · ')}${HU['其他'].q + HU['未填'].q ? ` · 未填 ${fmt(HU['其他'].q + HU['未填'].q)}` : ''} 支</div>`;
+      if (l === '3D打印') extra = `<div class="mini">劃線模 <b>${fmt(PS.hx)}</b> 只 · 其他模具 <b>${fmt(PS.other)}</b> 只</div><div class="mini">耗材 ${fmt(K.print.g, 0)} g · 光固化 ${fmt(K.print.ml, 0)} mL · 機時 ${fmt(K.print.h, 1)} h</div>`;
       return `<section class="card oc"><header><h3><i class="dot" style="background:${LINE_COLOR[l]}"></i>${l}</h3></header>
-        <div class="oc-v">${fmt(K.out[l])}<small>${UNIT[l]}</small></div><div class="oc-d">${delta(K.out[l], P.out[l])}</div><div class="mini">投入工時 ${fmt(K.lineH[l], 1)} h${K.out[l] && K.lineH[l] >= 10 ? ` · 每${UNIT[l]} ${fmt(K.lineH[l] / K.out[l], 2)} h` : ''}</div>${extra}
-        ${barTrend(M12, M12.map(x => kpi(x).out[l]), { hi: 11, unit: UNIT[l], color: LINE_COLOR[l], h: 130 })}</section>`;
+        ${l === '劃線模' ? `<div class="oc-v">${fmt(hTot)}<small>支</small></div><div class="oc-d">${delta(hTot, sum(UNITS.map(u => HP[u].q)))} · 完成 ${fmt(K.out[l])} 單</div>` : `<div class="oc-v">${fmt(K.out[l])}<small>${UNIT[l]}</small></div><div class="oc-d">${delta(K.out[l], P.out[l])}</div>`}<div class="mini">投入工時 ${fmt(K.lineH[l], 1)} h${K.out[l] && K.lineH[l] >= 10 ? ` · 每${UNIT[l]} ${fmt(K.lineH[l] / K.out[l], 2)} h` : ''}</div>${extra}
+        ${l === '劃線模' ? legend(UNITS.filter(u => M12.some(x => hxU(x)[u].q)).map(u => [u, UCOL[u]])) + barStack(M12, UNITS.filter(u => M12.some(x => hxU(x)[u].q)).map(u => ({ name: u, color: UCOL[u], values: M12.map(x => hxU(x)[u].q) })), { hi: 11, unit: '支', h: 140 })
+          : l === '3D打印' ? legend([['劃線模', 'var(--s3)'], ['其他模具', 'var(--s7)']]) + barStack(M12, [{ name: '劃線模', color: 'var(--s3)', values: M12.map(x => prSplit(x).hx) }, { name: '其他模具', color: 'var(--s7)', values: M12.map(x => prSplit(x).other) }], { hi: 11, unit: '只', h: 140 })
+          : barTrend(M12, M12.map(x => kpi(x).out[l]), { hi: 11, unit: UNIT[l], color: LINE_COLOR[l], h: 130 })}</section>`;
     }).join('');
     const credit = {};
     O_done(m).forEach(o => { const ks = o.makers.length ? o.makers : ['(未填)']; ks.forEach(k => { if (S.group !== '全部' && !inGroupKey(k)) return; credit[k] = credit[k] || {}; credit[k][o.l] = (credit[k][o.l] || 0) + o.q / ks.length; }); });
     const keys = Object.keys(credit).filter(isShown).sort((a, b) => sum(Object.values(credit[b])) - sum(Object.values(credit[a])));
     const rows = keys.map(k => [esc(pname(k)), ...LINES.map(l => credit[k][l] ? fmt(credit[k][l], credit[k][l] % 1 ? 1 : 0) : ''), '']);
-    return `${hourCard}<div class="g3">${cards}</div>${card('人員 × 業務線產出', '多人共同負責時平均分攤；3D 打印以只數計', table([{ h: '人員' }, ...LINES.map(l => ({ h: l + `<small>（${UNIT[l]}）</small>`, n: 1 })), { h: '' }], rows))}`;
+    return `${hourCard}<div class="g3">${cards}</div>${hxCard}${card('人員 × 業務線產出', '多人共同負責時平均分攤；3D 打印以只數計', table([{ h: '人員' }, ...LINES.map(l => ({ h: l + `<small>（${UNIT[l]}）</small>`, n: 1 })), { h: '' }], rows))}`;
   }
 
   function vTime(m) {
@@ -787,15 +844,16 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
 
   function vOtd(m) {
     const K = kpi(m), t = S.settings.targets, M12 = back(m, 12);
-    const rows = OTD_LINES.map(l => { const o = K.otd[l]; return [`<i class="dot" style="background:${LINE_COLOR[l]}"></i>${l}`, fmt(o.n), fmt(o.on), fmt(o.late), `<b>${pct(o.rate)}</b>`, o.late ? fmt(o.avgLate, 1) : '—', chip(status(o.rate, t.otd, true))]; });
-    rows.push(['<b>合計</b>', fmt(K.otdN), fmt(sum(OTD_LINES.map(l => K.otd[l].on))), fmt(sum(OTD_LINES.map(l => K.otd[l].late))), `<b>${pct(K.otdAll)}</b>`, '', chip(status(K.otdAll, t.otd, true))]);
+    const covCell = (c, n, d) => `<span class="${covOk(c) ? '' : 'warn-t'}">${pct(c, 0)}</span><small class="muted"> ${fmt(n)}/${fmt(d)}</small>`;
+    const rows = OTD_LINES.map(l => { const o = K.otd[l]; return [`<i class="dot" style="background:${LINE_COLOR[l]}"></i>${l}`, o.done ? covCell(o.cov, o.n, o.done) : '—', fmt(o.on), fmt(o.late), `<b>${pct(o.rate)}</b>`, o.late ? fmt(o.avgLate, 1) : '—', chip(otdSt(o.rate, o.cov))]; });
+    rows.push(['<b>合計</b>', K.otdDone ? covCell(K.otdCov, K.otdN, K.otdDone) : '—', fmt(sum(OTD_LINES.map(l => K.otd[l].on))), fmt(sum(OTD_LINES.map(l => K.otd[l].late))), `<b>${pct(K.otdAll)}</b>`, '', chip(otdSt(K.otdAll, K.otdCov))]);
     rows[rows.length - 1]._cls = 'tot';
     const late = O_done(m).filter(o => o.p && o.a > o.p).map(o => ({ o, d: ddiff(o.a, o.p) })).sort((a, b) => b.d - a.d).slice(0, 15);
     const asOf = m === CUR_M ? TODAY : mEnd(m) < TODAY ? mEnd(m) : TODAY;
     const from = addDays(m + '-01', -60);
     const open = S.d.outputs.filter(o => o.p && !o.a && o.p <= asOf && o.p >= from && outOk(o)).map(o => ({ o, d: ddiff(asOf, o.p) })).sort((a, b) => b.d - a.d);
-    const r = x => [`<i class="dot" style="background:${LINE_COLOR[x.o.l]}"></i>${x.o.l}`, esc(x.o.k), esc(x.o.mk), x.o.o || '—', x.o.p, x.o.a || '未完成', `<b class="bad-t">${x.d}</b>`];
-    return `<div class="g2">${card('各業務線交期達成', '依實際完成日 ≤ 計畫完成日判定（3D 打印無計畫日不列入）', table([{ h: '業務線' }, { h: '完成', n: 1 }, { h: '準時', n: 1 }, { h: '逾期', n: 1 }, { h: 'OTD', n: 1 }, { h: '平均逾期天', n: 1 }, { h: '狀態' }], rows))}
+    const r = x => [`<i class="dot" style="background:${LINE_COLOR[x.o.l]}"></i>${x.o.l}`, esc(x.o.k), esc(x.o.makers.filter(isShown).map(pname).join('/') || '—'), x.o.o || '—', x.o.p, x.o.a || '未完成', `<b class="bad-t">${x.d}</b>`];
+    return `<div class="g2">${card('各業務線交期達成', `依實際完成日 ≤ 計畫完成日判定；3D 打印的計畫日依单号對應画线模总表「3D打印 計畫完成日期」，本月 ${fmt(O_done(m).filter(o => o.l === '3D打印').length)} 筆中有 ${fmt(K.otd['3D打印'].n)} 筆有計畫日`, table([{ h: '業務線' }, { h: '計畫日覆蓋', n: 1 }, { h: '準時', n: 1 }, { h: '逾期', n: 1 }, { h: 'OTD', n: 1 }, { h: '平均逾期天', n: 1 }, { h: '狀態' }], rows) + `<p class="muted" style="font-size:12px;margin:8px 0 0">計畫日覆蓋 = 有計畫完成日的完成筆數 ÷ 全部完成筆數；低於 ${tg('otdCov')}% 顯示「資料不足」</p>`)}
       ${card('近 12 個月 OTD 趨勢', '', legend(OTD_LINES.map(l => [l, LINE_COLOR[l]])) + lineChart(M12, OTD_LINES.map(l => ({ name: l, color: LINE_COLOR[l], values: M12.map(x => kpi(x).otd[l].rate) })), { yMin: 0, yMax: 1, fmt: v => (v * 100).toFixed(0) + '%', target: t.otd / 100, hi: 11 }))}</div>
       ${card(`逾期完成清單 Top 15`, `本月共 ${fmt(sum(OTD_LINES.map(l => K.otd[l].late)))} 筆逾期完成`, table([{ h: '業務線' }, { h: '項目' }, { h: '負責人' }, { h: '接單' }, { h: '計畫完成' }, { h: '實際完成' }, { h: '逾期天', n: 1 }], late.map(r), { empty: '本月無逾期完成 ✓' }))}
       ${card(`到期未完成（截至 ${asOf}）`, `計畫日在 ${from} 之後且尚未填實際完成日，共 ${open.length} 筆；請確認是否已完成但未登記`, table([{ h: '業務線' }, { h: '項目' }, { h: '負責人' }, { h: '接單' }, { h: '計畫完成' }, { h: '狀態' }, { h: '已逾期天', n: 1 }], open.slice(0, 30).map(r), { empty: '無到期未完成項目 ✓' }))}`;
@@ -812,11 +870,11 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const pser = list.filter(k => k !== SCAN).map(k => ({ name: k, color: machColor(k, list), values: M12.map(x => { const r = equip(x).res[k]; return r ? r.pph : null; }) }));
     const noT = sum(act.map(k => E.res[k].noT));
     return `${act.length ? `<div class="tiles">${tiles}</div>` : '<p class="muted">本月無 3D 打印紀錄</p>'}
-      ${card('設備月度稼動表', `可用時數 = 本月${BASE_TXT[tg('equipBase')] || ''} ${E.wd} 天${tg('equipBase') === 'mon-fri-ot' && otDays(m).length ? `（含加班日 ${otDays(m).map(d => d.slice(5).replace('-', '/')).join('、')}）` : ''}${m === CUR_M ? '（截至今天）' : ''} × 每日 ${H} h = ${fmt(E.avail)} h；稼動率目標 ≥ ${tU}%（可在設定調整）${noT ? `；<span class="bad-t">有 ${noT} 筆未填打印時間（且不屬於同日同機台的批次），稼動率會偏低</span>` : ''}`, table([{ h: '設備' }, { h: '批次', n: 1 }, { h: '只數／尺碼', n: 1 }, { h: '開機天', n: 1 }, { h: '機時 h', n: 1 }, { h: '可用 h', n: 1 }, { h: '稼動率', n: 1 }, { h: 'PPH 只/h', n: 1 }, { h: '單只機時 h', n: 1 }, { h: '單只耗材', n: 1 }, { h: '缺時間', n: 1 }], rows))}
+      ${card('設備月度稼動表', `可用時數 = 本月${BASE_TXT[tg('equipBase')] || ''} ${E.wd} 天${tg('equipBase') === 'log' ? (() => { const x = logDays(m); return `（工作日誌有上班紀錄 ${x.log} 天${x.extra.length ? `＋日誌漏填但設備有打印 ${x.extra.length} 天：${x.extra.map(d => d.slice(5).replace('-', '/')).join('、')}` : ''}）`; })() : ''}${tg('equipBase') === 'mon-fri-ot' && otDays(m).length ? `（含加班日 ${otDays(m).map(d => d.slice(5).replace('-', '/')).join('、')}）` : ''}${m === CUR_M ? '（截至今天）' : ''} × 每日 ${H} h = ${fmt(E.avail)} h；稼動率目標 ≥ ${tU}%（可在設定調整）${noT ? `；<span class="bad-t">有 ${noT} 筆未填打印時間（且不屬於同日同機台的批次），稼動率會偏低</span>` : ''}`, table([{ h: '設備' }, { h: '批次', n: 1 }, { h: '只數', n: 1 }, { h: '開機天', n: 1 }, { h: '機時 h', n: 1 }, { h: '可用 h', n: 1 }, { h: '稼動率', n: 1 }, { h: 'PPH 只/h', n: 1 }, { h: '單只機時 h', n: 1 }, { h: '單只耗材', n: 1 }, { h: '缺時間', n: 1 }], rows))}
       ${E.scan ? card('3D 掃描作業量（不列入稼動率）', `以標準工時 ${tg('scanMin')} 分鐘/尺碼換算，僅供參考`, `<dl class="kv"><dt>掃描尺碼</dt><dd>${fmt(E.scan.q)} 個${P.scan ? `（上月 ${fmt(P.scan.q)}）` : ''}</dd><dt>換算工時</dt><dd>${fmt(E.scan.h, 1)} h</dd><dt>掃描天數</dt><dd>${fmt(E.scan.days)} 天</dd><dt>掃描人員</dt><dd>${esc(E.scan.people.join('、') || '—')}</dd></dl>`) : ''}
       <div class="g2">${card('近 12 個月稼動率', '實際打印時數 ÷ 可用時數', legend(list.map(k => [k, machColor(k, list)])) + lineChart(M12, ser, { yMin: 0, yMax: Math.max(1, Math.ceil(Math.max(0, ...ser.flatMap(s => s.values.filter(v => v != null))) * 2) / 2), ticks: Math.max(4, Math.ceil(Math.max(0, ...ser.flatMap(s => s.values.filter(v => v != null))) * 2) * 2 / 2), fmt: v => (v * 100).toFixed(0) + '%', target: tU / 100, hi: 11 }))}
-      ${card('近 12 個月 PPH（只 / 機時）', '3D 打印機；越高代表每小時產出越多，受模型大小、層高、填充率影響（掃描儀為固定標準工時不列入）', legend(list.filter(k => k !== SCAN).map(k => [k, machColor(k, list)])) + lineChart(M12, pser, { fmt: v => fmt(v, 1), hi: 11, yMax: Math.ceil(Math.max(1, ...pser.flatMap(s => s.values.filter(v => v != null))) * 1.1), ticks: Math.min(6, Math.ceil(Math.max(1, ...pser.flatMap(s => s.values.filter(v => v != null))) * 1.1)) }))}</div>
-      ${card('指標定義', '', `<ul class="def"><li><b>稼動率</b> = 實際打印時數（3D打印總表「打印時間」加總）÷ 可用時數；可用時數 = 當月可用天數 × 每日可用時數（預設（週一～週五＋加班日）× 每日 7 h；加班日 = 週六日有人員工時紀錄或有打印完成紀錄的日子；若改為夜間無人值守打印，可在設定改成 24 h）。</li><li><b>PPH</b>（Pieces Per Hour）= 只數 ÷ 機時；<b>單只機時</b> = 機時 ÷ 只數。</li><li><b>3D 掃描</b>：不列入設備稼動率；另以「尺碼數 × 標準工時（預設 10 分鐘/尺碼，可在設定調整）」顯示作業量。</li><li><b>打印批次</b>：有打印時間的那一列算一批；同機台、同完成日、緊接在下方且沒填時間的列（如 Form 4L 一次打多只）歸入同一批，不算缺時間。</li><li><b>開機天</b>：當月有打印完成紀錄的天數。設備指標不受組別篩選影響。</li><li>此為時間稼動率（Availability 面向）；若要完整 OEE，還需記錄打印失敗／重印（良率）與標準打印時間（性能效率）。</li></ul>`)}`;
+      ${card('近 12 個月 PPH（只 / 機時）', '3D 打印機；越高代表每小時產出越多，受模型大小、層高、填充率影響', legend(list.filter(k => k !== SCAN).map(k => [k, machColor(k, list)])) + lineChart(M12, pser, { fmt: v => fmt(v, 1), hi: 11, yMax: Math.ceil(Math.max(1, ...pser.flatMap(s => s.values.filter(v => v != null))) * 1.1), ticks: Math.min(6, Math.ceil(Math.max(1, ...pser.flatMap(s => s.values.filter(v => v != null))) * 1.1)) }))}</div>
+      ${card('指標定義', '', `<ul class="def"><li><b>稼動率</b> = 實際打印時數（3D打印總表「打印時間」加總）÷ 可用時數；可用時數 = 當月可用天數 × 每日可用時數（預設 = 工作日誌實際上班日 × 每日 7 h；上班日 = 工作日誌有人填工時（不含休假）的日子，自動排除國定假日、包含加班日；若某天日誌漏填但設備有打印完成紀錄，也補計為上班日；若改為夜間無人值守打印，可在設定改成 24 h）。</li><li><b>PPH</b>（Pieces Per Hour）= 只數 ÷ 機時；<b>單只機時</b> = 機時 ÷ 只數。</li><li><b>3D 掃描</b>：不列入設備稼動率；另以「尺碼數 × 標準工時（預設 10 分鐘/尺碼，可在設定調整）」顯示作業量。</li><li><b>打印批次</b>：有打印時間的那一列算一批；同機台、同完成日、緊接在下方且沒填時間的列（如 Form 4L 一次打多只）歸入同一批，不算缺時間。</li><li><b>開機天</b>：當月有打印完成紀錄的天數。設備指標不受組別篩選影響。</li><li>此為時間稼動率（Availability 面向）；若要完整 OEE，還需記錄打印失敗／重印（良率）與標準打印時間（性能效率）。</li></ul>`)}`;
   }
 
   /* ---------- 直接作業內容解析 ---------- */
@@ -860,7 +918,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const cell = {}; let mx = 0;
     all.forEach(t => { const s = subs.includes(t.s || '(未分類)') ? (t.s || '(未分類)') : '其他'; const k = t.k + '|' + s; cell[k] = (cell[k] || 0) + t.h; mx = Math.max(mx, cell[k]); });
     const cols = subs.concat(Object.keys(subTot).length > 8 ? ['其他'] : []);
-    const heat = `<div class="tw"><table class="tbl heat"><thead><tr><th>人員</th>${cols.map(c => `<th class="n">${esc(c)}</th>`).join('')}<th class="n">合計</th></tr></thead><tbody>${people.map(k => { const rowT = sum(cols.map(c => cell[k + '|' + c] || 0)); return `<tr><td><b>${esc(pname(k))}</b></td>${cols.map(c => { const v = cell[k + '|' + c] || 0, p = mx ? v / mx : 0; return `<td class="n" style="background:${v ? `color-mix(in srgb, var(--s1) ${Math.round(12 + p * 78)}%, var(--card))` : 'transparent'};color:${p > 0.55 ? '#fff' : 'inherit'}" data-tip="${esc(`<b>${esc(pname(k))}</b><br>${esc(c)}：${fmt(v, 1)} h（佔本人 ${pct(rowT ? v / rowT : 0)}）`)}">${v ? fmt(v, 1) : ''}</td>`; }).join('')}<td class="n"><b>${fmt(rowT, 1)}</b></td></tr>`; }).join('')}</tbody></table></div>`;
+    const heat = `<div class="tw"><table class="tbl heat"><thead><tr><th>人員</th>${cols.map(c => `<th class="n">${esc(c)}</th>`).join('')}<th class="n">合計</th></tr></thead><tbody>${people.map(k => { const rowT = sum(cols.map(c => cell[k + '|' + c] || 0)); return `<tr><td><b>${esc(pname(k))}</b></td>${cols.map(c => { const v = cell[k + '|' + c] || 0, p = mx ? v / mx : 0; return `<td class="n" style="background:${v ? `color-mix(in srgb, var(--s1) ${Math.round(12 + p * 78)}%, var(--card))` : 'transparent'};color:${p > 0.42 ? '#fff' : 'var(--text)'}" data-tip="${esc(`<b>${esc(pname(k))}</b><br>${esc(c)}：${fmt(v, 1)} h（佔本人 ${pct(rowT ? v / rowT : 0)}）`)}">${v ? fmt(v, 1) : ''}</td>`; }).join('')}<td class="n"><b>${fmt(rowT, 1)}</b></td></tr>`; }).join('')}</tbody></table></div>`;
     /* 人員摘要 */
     const psum = people.filter(k => !S.wp || k === S.wp).map(k => { const R = all.filter(t => t.k === k), h = sum(R.map(t => t.h)); const cs = new Set(); const pa = {}, ac = {}; R.forEach(t => { const c = parseCont(t); c.cutters.forEach(x => cs.add(x)); c.parts.forEach(p => pa[p] = (pa[p] || 0) + t.h / c.parts.length); ac[c.action] = (ac[c.action] || 0) + t.h; });
       const top = o => Object.entries(o).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([n, v]) => `${n === '圖稿／位置版製作' ? '圖稿製作' : tcPart(n)} ${pct(v / h, 0)}`).join('、') || '—';
@@ -926,10 +984,11 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
       ${card('目標值與計算規則｜Parameters', canEdit ? '修改後按儲存，所有模塊立即重算' : '由部門管理者設定', `<form id="setf" class="setf">
         <label>直接作業佔比目標 ≥ <input type="number" name="direct" value="${tg.direct}" min="0" max="100" ${canEdit ? '' : 'disabled'}> %</label>
         <label>問題解決佔比上限 ≤ <input type="number" name="problem" value="${tg.problem}" min="0" max="100" ${canEdit ? '' : 'disabled'}> %</label>
+        <label>OTD 計畫日覆蓋率門檻 ≥ <input type="number" name="otdCov" value="${tg.otdCov != null ? tg.otdCov : 80}" min="0" max="100" ${canEdit ? '' : 'disabled'}> %</label>
         <label>交期達成率目標 ≥ <input type="number" name="otd" value="${tg.otd}" min="0" max="100" ${canEdit ? '' : 'disabled'}> %</label>
         <label>標準日工時 <input type="number" name="dayH" value="${tg.dayH}" min="1" max="24" step="0.5" ${canEdit ? '' : 'disabled'}> h</label>
         <label>設備每日可用時數 <input type="number" name="equipH" value="${tg.equipH != null ? tg.equipH : 7}" min="1" max="24" step="0.5" ${canEdit ? '' : 'disabled'}> h</label>
-        <label>設備可用天數 <select name="equipBase" ${canEdit ? '' : 'disabled'}>${Object.entries(BASE_TXT).map(([k, v]) => `<option value="${k}" ${(tg.equipBase || 'mon-fri-ot') === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
+        <label>設備可用天數 <select name="equipBase" ${canEdit ? '' : 'disabled'}>${Object.entries(BASE_TXT).map(([k, v]) => `<option value="${k}" ${(tg.equipBase || 'log') === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
         <label>3D 掃描標準工時 <input type="number" name="scanMin" value="${tg.scanMin != null ? tg.scanMin : 10}" min="1" max="120" ${canEdit ? '' : 'disabled'}> 分鐘/尺碼</label>
         <label>設備稼動率目標 ≥ <input type="number" name="equipU" value="${tg.equipU != null ? tg.equipU : 60}" min="0" max="100" ${canEdit ? '' : 'disabled'}> %</label>
         <label class="full">離職人員（不在人員相關圖表顯示；部門合計工時仍保留；多人用逗號分隔）<input type="text" name="leftStaff" value="${esc((st.leftStaff || DEFAULT_SETTINGS.leftStaff).join('、'))}" style="width:100%" ${canEdit ? '' : 'disabled'}></label>
@@ -937,6 +996,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
         <label class="full">單件工時對應規則（每行：名稱 | 作業分類關鍵字（逗號分隔） | 產出業務線；由上往下第一個符合者生效）<textarea name="unitMap" rows="4" ${canEdit ? '' : 'disabled'}>${esc(um)}</textarea><small class="muted">產出業務線可填：${LINES.join('、')}</small></label>
         ${canEdit ? '<div class="row full"><button class="btn sm" type="submit">儲存設定</button><button class="btn ghost sm" type="button" data-act="reset-set">恢復預設</button><span id="set-st" class="muted"></span></div>' : ''}
       </form>`)}
+      ${card(`版本紀錄｜目前 ${VERSION}`, '每次修改平台功能或計算方式都會在這裡記錄', `<div class="tw" style="max-height:340px"><table class="tbl"><thead><tr><th>版本</th><th>時間</th><th>更改內容</th></tr></thead><tbody>${CHANGELOG.map(r => `<tr><td><b>${r.v}</b></td><td style="white-space:nowrap">${r.t}</td><td>${r.c.map(x => `<div>• ${esc(x)}</div>`).join('')}</td></tr>`).join('')}</tbody></table></div>`)}
       ${card('計算口徑說明', '', `<ul class="def">
         <li><b>工時</b>：取「項目工時(hr)」；同一人同一天出現在多個日期欄時只保留一份。有效工時 = 總工時 − 休假。</li>
         <li><b>作業類別歸類</b>：直接作業／問題解決／專項工作／培訓練習／指導教學／休假；會議、進度管理、協助、公司事宜等歸為「管理/會議」。</li>
@@ -956,7 +1016,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   }
   function render() {
     const r = ROUTES.find(x => x.id === S.route) || ROUTES[0];
-    $$('.nav a').forEach(a => a.classList.toggle('on', !S.report && a.dataset.r === S.route));
+    $$('.nav a').forEach(a => { a.classList.toggle('on', !S.report && a.dataset.r === S.route); a.setAttribute('href', '#' + hashFor(a.dataset.r)); if (!S.report && a.dataset.r === S.route) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     $('#rep').classList.toggle('on', S.report);
     const has = S.d && S.d.months.length;
     $('#ctl').hidden = !has;
@@ -975,6 +1035,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
       html = r.id === 'data' ? vData() : VIEWS[r.id](S.month);
     }
     $('#view').innerHTML = html;
+    document.title = (has && r.id !== 'data' ? `${r.t}｜${mLabel(S.month)}${S.group === '全部' ? '' : '・' + S.group}｜` : '') + 'DPC 項目管理平台';
     bindView();
   }
   function banner(msg, kind) { const b = $('#banner'); if (!msg) { b.hidden = true; return; } b.hidden = false; b.className = 'banner ' + (kind || ''); b.innerHTML = msg; }
@@ -983,6 +1044,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const el = $('#mode');
     if (S.mode === 'shared') el.innerHTML = `<i class="dot" style="background:var(--good)"></i>共享資料${DB.canWrite === false ? '（唯讀）' : ''}`;
     else el.innerHTML = '<i class="dot" style="background:var(--muted)"></i>本機模式';
+    $('#ver').textContent = VERSION + '（' + CHANGELOG[0].t.slice(0, 10) + '）';
     const R = S.raw; $('#last').textContent = R && R.importedAt ? '最後更新 ' + new Date(R.importedAt).toLocaleDateString('zh-TW') : '';
   }
 
@@ -997,7 +1059,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
       const um = String(fd.get('unitMap') || '').split('\n').map(l => l.split('|').map(s => s.trim())).filter(a => a.length >= 3 && a[0]).map(a => ({ name: a[0], kw: a[1].split(/[,，]/).map(s => s.trim()).filter(Boolean), line: LINES.includes(a[2]) ? a[2] : '印刷圖稿' }));
       const lm = String(fd.get('lineMap') || '').split('\n').map(l => l.split('|').map(s => s.trim())).filter(a => a.length >= 2 && LINES.includes(a[0])).map(a => ({ line: a[0], kw: a[1].split(/[,，]/).map(s => s.trim()).filter(Boolean) }));
       const left = String(fd.get('leftStaff') || '').split(/[,，、\s]+/).map(s => s.trim()).filter(Boolean);
-      const ns = { leftStaff: left, lineMap: lm.length ? lm : clone(DEFAULT_SETTINGS.lineMap), targets: { direct: +fd.get('direct') || 60, problem: +fd.get('problem') || 20, otd: +fd.get('otd') || 95, dayH: +fd.get('dayH') || 8, equipH: +fd.get('equipH') || 7, equipU: +fd.get('equipU') || 60, equipBase: String(fd.get('equipBase') || 'mon-fri-ot'), scanMin: +fd.get('scanMin') || 10 }, unitMap: um.length ? um : clone(DEFAULT_SETTINGS.unitMap) };
+      const ns = { leftStaff: left, lineMap: lm.length ? lm : clone(DEFAULT_SETTINGS.lineMap), targets: { direct: +fd.get('direct') || 60, problem: +fd.get('problem') || 20, otd: +fd.get('otd') || 95, dayH: +fd.get('dayH') || 8, equipH: +fd.get('equipH') || 7, equipU: +fd.get('equipU') || 60, equipBase: String(fd.get('equipBase') || 'log'), scanMin: +fd.get('scanMin') || 10, otdCov: fd.get('otdCov') === '' ? 80 : +fd.get('otdCov') }, unitMap: um.length ? um : clone(DEFAULT_SETTINGS.unitMap) };
       await saveSettings(ns); $('#set-st') && ($('#set-st').textContent = '已儲存 ✓');
     };
   }
@@ -1018,7 +1080,28 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
   document.addEventListener('drop', onDrop);
 
   const tip = () => $('#tip');
+  let pinned = null;
+  function tipAt(el, cx, cy) {
+    const t = tip(); t.innerHTML = el.getAttribute('data-tip'); t.style.opacity = 1;
+    $$('.xh.on').forEach(x => x !== el && x.classList.remove('on')); if (el.classList.contains('xh')) el.classList.add('on');
+    if (cx == null) { const r = el.getBoundingClientRect(); cx = r.left + r.width / 2; cy = r.top; }
+    const w = t.offsetWidth, h = t.offsetHeight; let x = cx + 14, y = cy + 14;
+    if (x + w > innerWidth - 8) x = cx - w - 14; if (y + h > innerHeight - 8) y = cy - h - 14; if (y < 8) y = 8; if (x < 8) x = 8;
+    t.style.transform = `translate(${x}px,${y}px)`;
+  }
+  function tipHide() { tip().style.opacity = 0; $$('.xh.on').forEach(x => x.classList.remove('on')); $$('.pinned').forEach(x => x.classList.remove('pinned')); }
+  document.addEventListener('click', e => {
+    const el = e.target.closest && e.target.closest('[data-tip]');
+    if (el && el !== pinned) { tipHide(); pinned = el; pinY = scrollY; el.classList.add('pinned'); tipAt(el, e.clientX || null, e.clientY || null); }
+    else if (pinned) { pinned = null; tipHide(); }
+  });
+  document.addEventListener('focusin', e => { const el = e.target.closest && e.target.closest('[data-tip]'); if (el) tipAt(el); });
+  document.addEventListener('focusout', e => { if (!pinned) tipHide(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && (pinned || tip().style.opacity === '1')) { pinned = null; tipHide(); } });
+  let pinY = 0;
+  addEventListener('scroll', () => { if (pinned && Math.abs(scrollY - pinY) > 80) { pinned = null; tipHide(); } }, { passive: true });
   document.addEventListener('mousemove', e => {
+    if (pinned) return;
     const el = e.target.closest && e.target.closest('[data-tip]'); const t = tip();
     if (!el) { t.style.opacity = 0; $$('.xh.on').forEach(x => x.classList.remove('on')); return; }
     $$('.xh.on').forEach(x => x !== el && x.classList.remove('on')); if (el.classList.contains('xh')) el.classList.add('on');
@@ -1084,11 +1167,19 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     const ct = chunk(raw.tasks, 150000), co = chunk(raw.outputs, 150000), total = ct.length + co.length; let i = 0;
     for (const [kind, arr] of [['t', ct], ['o', co]]) for (let p = 0; p < arr.length; p++) { busy(`同步共享資料 ${++i}/${total}…`); await retry(() => db.doc(`chunks/${id}-${kind}-${p}`).set({ importId: id, kind, part: p, blob: arr[p] })); }
     busy('更新索引…');
-    const meta = { importId: id, parts: { t: ct.length, o: co.length }, fileName: raw.fileName, importedAt: raw.importedAt, staff: raw.staff, sheets: raw.sheets, quality: raw.quality.slice(0, 400), qualityCounts: raw.qualityCounts };
+    const meta = { schema: DPC.SCHEMA, importId: id, parts: { t: ct.length, o: co.length }, fileName: raw.fileName, importedAt: raw.importedAt, staff: raw.staff, sheets: raw.sheets, quality: raw.quality.slice(0, 400), qualityCounts: raw.qualityCounts };
     await retry(() => db.doc('meta/current').set(meta));
     S.importId = id;
     busy('清理舊版本…');
     try { const all = await db.collection('chunks').get(); for (const d of all.docs) { const x = d.data(); if (x && x.importId !== id) await retry(() => db.doc('chunks/' + d.id).delete()); } } catch (_) { }
+  }
+  async function upgradeShared(meta) {
+    /* 共享資料是舊版格式：若頁面內建的初始資料是同一份或更新的檔案，直接用新格式重新寫入 */
+    try {
+      const r = await fetch('init-data.json', { cache: 'no-cache' }); const seed = r.ok ? await r.json() : null;
+      if (seed && (!meta.importedAt || seed.importedAt >= meta.importedAt || meta.fileName === seed.fileName)) { seed.seed = true; S.importId = 'seed'; setData(seed); await publishShared(seed); busy(null); toast('共享資料已更新為新版格式'); return; }
+    } catch (_) { busy(null); }
+    S.seeding = false; banner('共享資料是舊版格式，部分新指標（如 3D 打印 OTD）需要重新匯入一次 Excel 才會完整。', 'warn'); loadShared(meta);
   }
   async function loadShared(meta, attempt) {
     const qs = await DB.db.collection('chunks').where('importId', '==', meta.importId).get();
@@ -1113,6 +1204,7 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
         if (!snap.metadata.fromCache) { clearTimeout(timer); }
         if (!snap.exists) { if (!snap.metadata.fromCache) { S.loading = false; if (S.raw && S.raw.seed && DB.canWrite === true && !S.seeding) { S.seeding = true; publishShared(S.raw).then(() => { busy(null); toast('已將初始資料（11.17 版）寫入共享資料庫'); modeLine(); }).catch(() => busy(null)); return; } if (S.d && DB.canWrite !== false && S.raw && S.raw.fileName && !S.raw.seed) banner('共享資料庫目前是空的，這裡顯示的是本機資料。重新匯入一次 Excel 即可讓所有人看到。', 'warn'); render(); } return; }
         const meta = snap.data(); if (!meta || meta.importId === S.importId) { S.loading = false; return; }
+        if ((meta.schema || 1) < DPC.SCHEMA && DB.canWrite === true && !S.seeding) { S.seeding = true; upgradeShared(meta); return; }
         clearTimeout(timer); loadShared(meta).catch(e => banner('讀取共享資料失敗：' + esc(e && e.message || e), 'warn'));
       }, err => { clearTimeout(timer); S.loading = false; banner('共享資料連線中斷，顯示本機資料。', 'warn'); render(); });
       db.doc('settings/main').onSnapshot(s => { if (s.exists && s.data()) { const d = s.data(); if (d.targets && d.unitMap) { S.settings = clone(d); kpiCache.clear(); eqCache.clear(); lineCache.clear(); if (S.d) render(); } } }, () => { });
@@ -1124,14 +1216,26 @@ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;
     try { const r = await fetch('init-data.json', { cache: 'no-cache' }); if (!r.ok) return; const raw = await r.json(); raw.seed = true; S.importId = 'seed'; S.raw = raw; S.d = hydrate(raw); kpiCache.clear(); eqCache.clear(); lineCache.clear(); const prev = addM(CUR_M, -1); S.month = S.d.months.includes(prev) ? prev : S.d.months[S.d.months.length - 1]; } catch (_) { }
   }
   /* ---------- 啟動 ---------- */
-  function route() { const h = (location.hash || '').slice(1); S.route = ROUTES.some(r => r.id === h) ? h : 'overview'; render(); }
+  const gIdx = g => g === '全部' ? 0 : (S.d ? S.d.groups.indexOf(g) + 1 : 0);
+  function hashFor(r) { if (!S.d || !S.month || r === 'data') return r; const gi = gIdx(S.group); return r + '-' + S.month.replace('-', '') + (gi > 0 ? '-g' + gi : ''); }
+  let skipHash = false;
+  function syncHash() { const h = hashFor(S.route); if (location.hash.slice(1) !== h) { skipHash = true; location.hash = h; } }
+  function route() {
+    const h = (location.hash || '').slice(1); const mm = /^([a-z]+)(?:-(\d{4})(\d{2}))?(?:-g(\d+))?$/.exec(h) || [];
+    S.route = ROUTES.some(r => r.id === mm[1]) ? mm[1] : 'overview';
+    if (S.d) {
+      if (mm[2]) { const m = mm[2] + '-' + mm[3]; if (S.d.months.includes(m)) S.month = m; }
+      if (mm[1] && mm[1] !== 'data') { const gi = +(mm[4] || 0); S.group = gi > 0 && S.d.groups[gi - 1] ? S.d.groups[gi - 1] : '全部'; kpiCache.clear(); eqCache.clear(); lineCache.clear(); }
+    }
+    render(); syncHash();
+  }
   async function boot() {
     $('#nav').innerHTML = ROUTES.map(r => `<a href="#${r.id}" data-r="${r.id}"${r.id === 'data' ? ' class="sep"' : ''}><span>${r.n || '⚙'}</span>${r.t}</a>`).join('');
-    $('#msel').onchange = e => { S.month = e.target.value; render(); };
-    $('#gsel').onchange = e => { S.group = e.target.value; kpiCache.clear(); eqCache.clear(); lineCache.clear(); render(); };
+    $('#msel').onchange = e => { S.month = e.target.value; render(); syncHash(); };
+    $('#gsel').onchange = e => { S.group = e.target.value; kpiCache.clear(); eqCache.clear(); lineCache.clear(); render(); syncHash(); };
     $('#rep').onclick = () => { S.report = !S.report; if (S.route === 'data') location.hash = 'overview'; render(); window.scrollTo(0, 0); };
     $('#fi').onchange = e => { if (e.target.files[0]) importFile(e.target.files[0]); e.target.value = ''; };
-    window.addEventListener('hashchange', () => { S.report = false; route(); window.scrollTo(0, 0); });
+    window.addEventListener('hashchange', () => { if (skipHash) { skipHash = false; return; } S.report = false; route(); window.scrollTo(0, 0); });
     const [d, st, nt] = await Promise.all([IDB.get('data'), IDB.get('settings'), IDB.get('notes')]);
     if (st && st.targets) S.settings = st; if (nt) S.notes = nt;
     if (d && d.tasks) { S.importId = 'cache'; S.raw = d; S.d = hydrate(d); const prev = addM(CUR_M, -1); S.month = S.d.months.includes(prev) ? prev : S.d.months[S.d.months.length - 1]; }
