@@ -3,6 +3,10 @@
 線上版：https://claude.ai/artifact/LdrkGBCvMpawY5237hdM4H
 GitHub 版：https://cbryant1022.github.io/dpc/report/
 
+## v3.1（2026-11-24 16:55）
+- 新增「投影模式」：整體放大（筆電 1.2 倍、1080p 投影 1.4 倍）、KPI 一行 3 張、圖表與結論改為單欄，適合會議投影（會記住開關）
+- 一般模式在中等寬度螢幕（筆電、1080p 以下）KPI 卡片改為一行 3 張，不再擠成一排
+
 ## v3.0（2026-11-24 16:45）
 - 平台更名為「Digital Product Creation」，左上角加上公司 logo，移除「DPC 項目管理平台」與「大田鞋業」文字
 - 登入畫面同步加上 logo 與新名稱
