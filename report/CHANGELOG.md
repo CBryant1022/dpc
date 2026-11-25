@@ -3,6 +3,11 @@
 線上版：https://claude.ai/artifact/LdrkGBCvMpawY5237hdM4H
 GitHub 版：https://cbryant1022.github.io/dpc/report/
 
+## v3.5（2026-11-25 10:05）
+- 月份選單移到左側欄（Digital Product Creation 下方）；logo 旁加上「DPC」
+- 設備稼動新增 EPSON T5 菲林：產出＝當月出菲林版號數，稼動率＝版號數 ÷ 月標準 50（日均標準 2 版號），含卡片、近 12 個月表與稼動率趨勢線
+- 設定頁可調整 EPSON 月標準、日均標準與導入時間
+
 ## v3.4（2026-11-25 09:45）
 - 設備稼動：機台名稱旁標注導入時間（Pro3 HS 2025/02、E3 2025/12、Pro3 HS(B) 2026/09、Form 4L(SLA) 2026/09）
 - 卡片、明細表、趨勢圖依導入時間排序；機台顏色固定不變
