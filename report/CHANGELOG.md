@@ -3,6 +3,10 @@
 線上版：https://claude.ai/artifact/LdrkGBCvMpawY5237hdM4H
 GitHub 版：https://cbryant1022.github.io/dpc/report/
 
+## v3.8（2026-11-25 11:50）
+- 新增 EN／繁中語言切換（右上角按鈕，會記住選擇）：介面、圖表、提示、結論、月報摘要都可切換英文
+- 人名、部位以外的 Excel 原始資料內容維持原文；設定欄位不翻譯，避免改動規則
+
 ## v3.7（2026-11-25 10:15）
 - EPSON T5 菲林卡片：版號數旁邊加上菲林張數（pcs），月均也列出菲林張數
 
