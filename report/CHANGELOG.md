@@ -3,6 +3,10 @@
 線上版：https://claude.ai/artifact/LdrkGBCvMpawY5237hdM4H
 GitHub 版：https://cbryant1022.github.io/dpc/report/
 
+## v3.6（2026-11-25 10:15）
+- 總覽「主要產出」每項加上月均值（近 12 個月有資料的月份平均）
+- EPSON T5 菲林：月目標 25 版號（≥ 25 達標），稼動率仍以月產能 50 計；近 12 個月表底部新增「月均」一行；卡片顯示月均
+
 ## v3.5（2026-11-25 10:05）
 - 月份選單移到左側欄（Digital Product Creation 下方）；logo 旁加上「DPC」
 - 設備稼動新增 EPSON T5 菲林：產出＝當月出菲林版號數，稼動率＝版號數 ÷ 月標準 50（日均標準 2 版號），含卡片、近 12 個月表與稼動率趨勢線
