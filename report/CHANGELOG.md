@@ -3,6 +3,9 @@
 線上版：https://claude.ai/artifact/LdrkGBCvMpawY5237hdM4H
 GitHub 版：https://cbryant1022.github.io/dpc/report/
 
+## v3.7（2026-11-25 10:15）
+- EPSON T5 菲林卡片：版號數旁邊加上菲林張數（pcs），月均也列出菲林張數
+
 ## v3.6（2026-11-25 10:15）
 - 總覽「主要產出」每項加上月均值（近 12 個月有資料的月份平均）
 - EPSON T5 菲林：月目標 25 版號（≥ 25 達標），稼動率仍以月產能 50 計；近 12 個月表底部新增「月均」一行；卡片顯示月均
