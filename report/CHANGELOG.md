@@ -3,6 +3,11 @@
 線上版：https://claude.ai/artifact/LdrkGBCvMpawY5237hdM4H
 GitHub 版：https://cbryant1022.github.io/dpc/report/
 
+## v3.4（2026-11-25 09:45）
+- 設備稼動：機台名稱旁標注導入時間（Pro3 HS 2025/02、E3 2025/12、Pro3 HS(B) 2026/09、Form 4L(SLA) 2026/09）
+- 卡片、明細表、趨勢圖依導入時間排序；機台顏色固定不變
+- 設定頁可修改各設備導入時間
+
 ## v3.3（2026-11-24 17:10）
 - 設備稼動卡片新增「打印支數」與上月比較，並顯示批次數；PPH 單位改為支/h
 
