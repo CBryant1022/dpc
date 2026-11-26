@@ -1,0 +1,33 @@
+{
+  "tdir": "/home/claude/ksp2/x",
+  "drop": ["Insole Light"],
+  "parts": {
+    "鞋頭":   {"rename": "upper__vamp",            "n": "108850_NRM.png", "b": "108850_BASE.png", "cm": [12, 12], "rot": 90},
+    "鞋羽外": {"rename": "upper__quarter_lateral", "n": "108850_NRM.png", "b": "108850_BASE.png", "cm": [12, 12], "rot": 90},
+    "鞋羽內": {"rename": "upper__quarter_medial",  "n": "108850_NRM.png", "b": "108850_BASE.png", "cm": [12, 12], "rot": 90},
+    "後包":   {"rename": "upper__heel_counter",    "n": "108850_NRM.png", "b": "108850_BASE.png", "cm": [12, 12], "rot": 90},
+    "領口":   {"rename": "upper__collar",          "n": "108850_NRM.png", "b": "108850_BASE.png", "cm": [12, 12], "rot": 90},
+    "鞋帶2":  {"rename": "upper__laces_2",         "n": "108850_NRM.png", "b": "108850_BASE.png", "cm": [12, 12], "rot": 90},
+    "鞋帶3":  {"rename": "upper__laces_3",         "n": "108850_NRM.png", "b": "108850_BASE.png", "cm": [12, 12], "rot": 90},
+    "鞋帶1":  {"rename": "upper__laces_1",         "n": "105803_NRM.png", "r": "105803_ROUGH.png", "rep": [1.6393, 1.7337]},
+    "中底":     {"rename": "inside__sockliner",              "n": "113098_NRM.png", "b": "113098_BASE.png", "r": "113098_ROUGH.png", "cm": [4.9, 4.9]},
+    "鞋羽裡外": {"rename": "inside__quarter_lining_lateral", "n": "113098_NRM.png", "b": "113098_BASE.png", "r": "113098_ROUGH.png", "cm": [4.9, 4.9]},
+    "鞋羽裡內": {"rename": "inside__quarter_lining_medial",  "n": "113098_NRM.png", "b": "113098_BASE.png", "r": "113098_ROUGH.png", "cm": [4.9, 4.9]},
+    "鞋頭裡":   {"rename": "inside__vamp_lining",            "n": "113098_NRM.png", "b": "113098_BASE.png", "r": "113098_ROUGH.png", "cm": [4.9, 4.9]},
+    "後套":     {"rename": "inside__heel_lining",   "n": "33151_NRM.png", "r": "33151_ROUGH.png", "rep": [1.9231, 2.0636]},
+    "領口裡":   {"rename": "inside__collar_lining", "n": "33151_NRM.png", "r": "33151_ROUGH.png", "rep": [1.9231, 2.0636]},
+    "後包車線":   {"rename": "stitch__heel_counter",  "n": "Stitch_NRM.png", "b": "Stitch_BASE.png", "r": "Stitch_ROUGH.png", "rep": [1, 1], "rot": -30.24},
+    "後套車線":   {"rename": "stitch__lining_heel",   "n": "Stitch_NRM.png", "b": "Stitch_BASE.png", "r": "Stitch_ROUGH.png", "rep": [1, 1], "rot": -30.24},
+    "領口裡車線": {"rename": "stitch__lining_collar", "n": "Stitch_NRM.png", "b": "Stitch_BASE.png", "r": "Stitch_ROUGH.png", "rep": [1, 1], "rot": -30.24},
+    "鞋頭車線":   {"rename": "stitch__vamp",          "n": "Stitch_NRM.png", "b": "Stitch_BASE.png", "r": "Stitch_ROUGH.png", "rep": [1, 1], "rot": -30.24},
+    "鞋頭裡車線": {"rename": "stitch__lining_vamp",   "n": "Stitch_NRM.png", "b": "Stitch_BASE.png", "r": "Stitch_ROUGH.png", "rep": [1, 1], "rot": -30.24},
+    "領口車線":   {"rename": "stitch__collar",        "n": "Stitch_NRM.png", "b": "Stitch_BASE.png", "r": "Stitch_ROUGH.png", "rep": [1, 1], "rot": -30.24},
+    "前護片":   {"rename": "bumper",       "n": "Knurl_NRM.png", "rep": [11.6822, 11.6822]},
+    "沿條":     {"rename": "沿條"},
+    "沿條飾條": {"rename": "trim__foxing"},
+    "飾條":     {"rename": "trim__sole"},
+    "大底":     {"rename": "大底"},
+    "後跟標":   {"rename": "後跟標"},
+    "鞋眼":     {"rename": "eyelet"}
+  }
+}

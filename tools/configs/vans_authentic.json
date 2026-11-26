@@ -1,0 +1,334 @@
+{
+ "tdir": "$WORK/ksp",
+ "drop": [
+  "Insole Light"
+ ],
+ "maxpx": 1024,
+ "parts": {
+  "upper__vamp": {
+   "rename": "upper__vamp",
+   "color": [
+    215,
+    218,
+    200
+   ],
+   "b": "$WORK/td_base.png",
+   "n": "BY251121_4WEE_NRM.png",
+   "r": "BY251121_4WEE_ROUGH.png",
+   "rep": [
+    1,
+    1
+   ],
+   "no_tint": true
+  },
+  "upper__quarter_lateral": {
+   "rename": "upper__quarter_lateral",
+   "color": [
+    215,
+    218,
+    200
+   ],
+   "b": "$WORK/td_base.png",
+   "n": "BY251121_4WEE_NRM.png",
+   "r": "BY251121_4WEE_ROUGH.png",
+   "rep": [
+    1,
+    1
+   ],
+   "no_tint": true
+  },
+  "upper__quarter_medial": {
+   "rename": "upper__quarter_medial",
+   "color": [
+    215,
+    218,
+    200
+   ],
+   "b": "$WORK/td_base.png",
+   "n": "BY251121_4WEE_NRM.png",
+   "r": "BY251121_4WEE_ROUGH.png",
+   "rep": [
+    1,
+    1
+   ],
+   "no_tint": true
+  },
+  "upper__tongue": {
+   "rename": "upper__tongue",
+   "color": [
+    215,
+    218,
+    200
+   ],
+   "b": "$WORK/td_base.png",
+   "n": "BY251121_4WEE_NRM.png",
+   "r": "BY251121_4WEE_ROUGH.png",
+   "rep": [
+    1,
+    1
+   ],
+   "no_tint": true
+  },
+  "upper__laces": {
+   "rename": "upper__laces",
+   "b": "77654_BASE.png",
+   "n": "77654_NRM.png",
+   "r": "77654_ROUGH.png",
+   "rep": [
+    6.72,
+    6.72
+   ],
+   "rot": 90
+  },
+  "upper__quarter_binding": {
+   "rename": "upper__binding_quarter",
+   "n": "JM_0288_NRM.png",
+   "r": "JM_0288_ROUGH.png",
+   "cm": [
+    1.5,
+    1.5
+   ]
+  },
+  "upper__tongue_binding": {
+   "rename": "upper__binding_tongue",
+   "n": "JM_0288_NRM.png",
+   "r": "JM_0288_ROUGH.png",
+   "cm": [
+    1.5,
+    1.5
+   ]
+  },
+  "upper__eyelets_lateral": {
+   "rename": "eyelet_lateral"
+  },
+  "upper__eyelets_medial": {
+   "rename": "eyelet_medial"
+  },
+  "upper__vamp_lateral_woven_label": {
+   "rename": "label__vamp",
+   "img": "$WORK/label_woven.png",
+   "drop_n": true,
+   "rough": 0.7
+  },
+  "upper__vamp_stitch": {
+   "rename": "stitch__vamp",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "upper__tongue_binding_stitch": {
+   "rename": "stitch__tongue",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "upper__quarter_binding_stitch": {
+   "rename": "stitch__quarter",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "upper__heel_back_stitch": {
+   "rename": "stitch__heel_counter",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "upper__counter_tape_binding_stitich": {
+   "rename": "stitch__quarter_tape",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "inside__tongue_binding_stitch": {
+   "rename": "stitch__lining_tongue",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "inside__quarter_binding_stitch": {
+   "rename": "stitch__lining_quarter",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "inside__counter_tape_binding_stitch": {
+   "rename": "stitch__lining_counter_tape",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "inside__back_seam_tape_stitch": {
+   "rename": "stitch__lining_back_seam",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "inside__quarter_lining_stitch_medial": {
+   "rename": "stitch__lining_quarter_medial"
+  },
+  "inside__quarter_lining_stitch_lateral": {
+   "rename": "stitch__lining_quarter_lateral"
+  },
+  "inside__tongue_lining": {
+   "rename": "inside__tongue_lining",
+   "b": "80934_BASE.png",
+   "n": "80934_NRM.png",
+   "r": "80934_ROUGH.png",
+   "cm": [
+    2,
+    2
+   ],
+   "no_trans": true
+  },
+  "inside__counter_topcloth": {
+   "rename": "inside__counter_topcloth",
+   "b": "80934_BASE.png",
+   "n": "80934_NRM.png",
+   "r": "80934_ROUGH.png",
+   "cm": [
+    2,
+    2
+   ],
+   "no_trans": true
+  },
+  "inside__counter_tape_binding": {
+   "rename": "inside__counter_tape_binding",
+   "b": "80934_BASE.png",
+   "n": "80934_NRM.png",
+   "r": "80934_ROUGH.png",
+   "cm": [
+    2,
+    2
+   ],
+   "no_trans": true
+  },
+  "inside__back_seam_tape": {
+   "rename": "inside__back_seam_tape",
+   "b": "80934_BASE.png",
+   "n": "80934_NRM.png",
+   "r": "80934_ROUGH.png",
+   "cm": [
+    2,
+    2
+   ],
+   "no_trans": true
+  },
+  "inside__quarter_lining_lateral": {
+   "rename": "inside__quarter_lining_lateral",
+   "b": "80934_BASE.png",
+   "n": "80934_NRM.png",
+   "r": "80934_ROUGH.png",
+   "cm": [
+    2,
+    2
+   ],
+   "no_trans": true
+  },
+  "inside__quarter_lining_medial": {
+   "rename": "inside__quarter_lining_medial",
+   "b": "80934_BASE.png",
+   "n": "80934_NRM.png",
+   "r": "80934_ROUGH.png",
+   "cm": [
+    2,
+    2
+   ],
+   "no_trans": true
+  },
+  "inside__vamp_lining": {
+   "rename": "inside__vamp_lining",
+   "b": "80934_BASE.png",
+   "n": "80934_NRM.png",
+   "r": "80934_ROUGH.png",
+   "cm": [
+    2,
+    2
+   ],
+   "no_trans": true
+  },
+  "inside__sockliner_topcloth": {
+   "rename": "inside__sockliner",
+   "img": "$WORK/sockliner.png",
+   "n": "80934_NRM.png",
+   "cm": [
+    2,
+    2
+   ],
+   "no_trans": true,
+   "rough": 0.9
+  },
+  "outsole__bottom": {
+   "rename": "大底",
+   "color": [
+    153,
+    104,
+    77
+   ],
+   "drop_base": true,
+   "no_trans": true,
+   "n": "rubber_scratch_normal_1.png",
+   "cm": [
+    10,
+    10
+   ],
+   "rough": 0.85
+  },
+  "outsole__toe_bumper": {
+   "rename": "bumper",
+   "n": "Knurl_NRM.png",
+   "cm": [
+    0.5,
+    0.5
+   ]
+  },
+  "outsole__friction_tape_medial": {
+   "rename": "沿條_friction_medial",
+   "n": "106463_NRM.png",
+   "cm": [
+    3,
+    3
+   ]
+  },
+  "outsole__friction_tape_lateral": {
+   "rename": "沿條_friction_lateral",
+   "n": "106463_NRM.png",
+   "cm": [
+    3,
+    3
+   ]
+  },
+  "outsole__foxing_stripe_top_medial": {
+   "rename": "沿條_top_medial"
+  },
+  "outsole__foxing_stripe_top_lateral": {
+   "rename": "沿條_top_lateral"
+  },
+  "outsole__foxing_stripe_bottom_medial": {
+   "rename": "沿條_bottom_medial"
+  },
+  "outsole__foxing_stripe_bottom_lateral": {
+   "rename": "沿條_bottom_lateral"
+  },
+  "outsole__foxing_stripe_medial": {
+   "rename": "trim__stripe_medial"
+  },
+  "outsole__foxing_stripe_lateral": {
+   "rename": "trim__stripe_lateral"
+  },
+  "outsole__foxing_heel_logo": {
+   "rename": "後跟標",
+   "img": "$WORK/label_heel.png",
+   "rough": 0.6
+  }
+ }
+}
