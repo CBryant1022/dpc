@@ -1,0 +1,321 @@
+{
+ "tdir": "$WORK/ksp",
+ "drop": [
+  "Insole Light"
+ ],
+ "maxpx": 1024,
+ "parts": {
+  "upper__vamp": {
+   "rename": "upper__vamp",
+   "b": "124187_BASE.png",
+   "n": "124187_NRM.png",
+   "r": "124187_ROUGH.png",
+   "cm": [
+    4,
+    4
+   ],
+   "color": [
+    200,
+    200,
+    200
+   ]
+  },
+  "upper__quarter_lateral": {
+   "rename": "upper__quarter_lateral",
+   "b": "124187_BASE.png",
+   "n": "124187_NRM.png",
+   "r": "124187_ROUGH.png",
+   "cm": [
+    4,
+    4
+   ],
+   "color": [
+    200,
+    200,
+    200
+   ]
+  },
+  "upper__quarter_medial": {
+   "rename": "upper__quarter_medial",
+   "b": "124187_BASE.png",
+   "n": "124187_NRM.png",
+   "r": "124187_ROUGH.png",
+   "cm": [
+    4,
+    4
+   ],
+   "color": [
+    200,
+    200,
+    200
+   ]
+  },
+  "upper__heel_counter": {
+   "rename": "upper__heel_counter",
+   "b": "124187_BASE.png",
+   "n": "124187_NRM.png",
+   "r": "124187_ROUGH.png",
+   "cm": [
+    4,
+    4
+   ],
+   "color": [
+    200,
+    200,
+    200
+   ]
+  },
+  "upper__vamp_binding": {
+   "rename": "upper__binding_quarter",
+   "b": "124187_BASE.png",
+   "n": "124187_NRM.png",
+   "r": "124187_ROUGH.png",
+   "cm": [
+    4,
+    4
+   ],
+   "color": [
+    200,
+    200,
+    200
+   ]
+  },
+  "upper__gore_lateral": {
+   "rename": "upper__gore_lateral",
+   "b": "6 oz Canvas_Uncolored_BASE.jpg",
+   "n": "6 oz Canvas_Uncolored_NRM.jpg",
+   "r": "6 oz Canvas_Uncolored_ROUGH.jpg",
+   "cm": [
+    3,
+    3
+   ]
+  },
+  "upper__gore_medial": {
+   "rename": "upper__gore_medial",
+   "b": "6 oz Canvas_Uncolored_BASE.jpg",
+   "n": "6 oz Canvas_Uncolored_NRM.jpg",
+   "r": "6 oz Canvas_Uncolored_ROUGH.jpg",
+   "cm": [
+    3,
+    3
+   ]
+  },
+  "upper__quarter_stitch_lateral": {
+   "rename": "stitch__quarter_lateral",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "upper__quarter_stitch_medial": {
+   "rename": "stitch__quarter_medial",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "upper__vamp_binding_stitch": {
+   "rename": "stitch__binding",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "upper__vamp_stitch": {
+   "rename": "stitch__vamp",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "upper__heel_counter_stitch": {
+   "rename": "stitch__heel_counter",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "inside__collar_lining_stitch": {
+   "rename": "stitch__lining_collar",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "inside__gore_stitch_bottom_medial": {
+   "rename": "stitch__lining_gore_bottom_medial",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "inside__gore_stitch_medial": {
+   "rename": "stitch__lining_gore_medial",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "inside__counter_tape_binding_stitch": {
+   "rename": "stitch__lining_counter_tape",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "inside__vamp_binding_stitch": {
+   "rename": "stitch__lining_binding",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "inside__vamp_lining_stitch": {
+   "rename": "stitch__lining_vamp",
+   "mean_color": true,
+   "drop_base": true,
+   "drop_n": true,
+   "rough": 0.8
+  },
+  "inside__gore_stitch_bottom_lateral": {
+   "rename": "stitch__lining_gore_bottom_lateral"
+  },
+  "inside__gore_stitch_lateral": {
+   "rename": "stitch__lining_gore_lateral"
+  },
+  "inside__counter_tape_binding": {
+   "rename": "inside__counter_tape_binding",
+   "b": "6 oz Canvas_Uncolored_BASE.jpg",
+   "n": "6 oz Canvas_Uncolored_NRM.jpg",
+   "r": "6 oz Canvas_Uncolored_ROUGH.jpg",
+   "cm": [
+    3,
+    3
+   ],
+   "no_trans": true
+  },
+  "inside__counter_topcloth": {
+   "rename": "inside__counter_topcloth",
+   "b": "6 oz Canvas_Uncolored_BASE.jpg",
+   "n": "6 oz Canvas_Uncolored_NRM.jpg",
+   "r": "6 oz Canvas_Uncolored_ROUGH.jpg",
+   "cm": [
+    3,
+    3
+   ],
+   "no_trans": true
+  },
+  "inside__vamp_lining": {
+   "rename": "inside__vamp_lining",
+   "b": "6 oz Canvas_Uncolored_BASE.jpg",
+   "n": "6 oz Canvas_Uncolored_NRM.jpg",
+   "r": "6 oz Canvas_Uncolored_ROUGH.jpg",
+   "cm": [
+    3,
+    3
+   ],
+   "no_trans": true
+  },
+  "inside__quarter_lining_lateral": {
+   "rename": "inside__quarter_lining_lateral",
+   "b": "6 oz Canvas_Uncolored_BASE.jpg",
+   "n": "6 oz Canvas_Uncolored_NRM.jpg",
+   "r": "6 oz Canvas_Uncolored_ROUGH.jpg",
+   "cm": [
+    3,
+    3
+   ],
+   "no_trans": true
+  },
+  "inside__quarter_lining_medial": {
+   "rename": "inside__quarter_lining_medial",
+   "b": "6 oz Canvas_Uncolored_BASE.jpg",
+   "n": "6 oz Canvas_Uncolored_NRM.jpg",
+   "r": "6 oz Canvas_Uncolored_ROUGH.jpg",
+   "cm": [
+    3,
+    3
+   ],
+   "no_trans": true
+  },
+  "inside__collar_lining": {
+   "rename": "inside__collar_lining",
+   "n": "33151_NRM.png",
+   "r": "33151_ROUGH.png",
+   "cm": [
+    2,
+    2
+   ]
+  },
+  "inside__sockliner_topcloth": {
+   "rename": "inside__sockliner",
+   "img": "$WORK/sockliner.png",
+   "n": "113098_NRM.png",
+   "cm": [
+    2,
+    2
+   ],
+   "no_trans": true,
+   "rough": 0.9
+  },
+  "upper__vamp_lateral_woven_label": {
+   "rename": "label__vamp",
+   "img": "$WORK/label_woven.png",
+   "drop_n": true,
+   "rough": 0.7
+  },
+  "outsole__foxing_heel_logo": {
+   "rename": "後跟標",
+   "img": "$WORK/label_heel.png",
+   "rough": 0.6
+  },
+  "outsole__bottom": {
+   "rename": "大底",
+   "drop_base": true,
+   "no_trans": true,
+   "n": "rubber_scratch_normal_1.png",
+   "cm": [
+    10,
+    10
+   ],
+   "rough": 0.85,
+   "color": [
+    176,
+    112,
+    74
+   ]
+  },
+  "outsole__toe_bumper": {
+   "rename": "bumper",
+   "n": "Knurl_NRM.png",
+   "cm": [
+    0.5,
+    0.5
+   ]
+  },
+  "outsole__friction_tape_lateral": {
+   "rename": "沿條_friction_lateral"
+  },
+  "outsole__friction_tape_medial": {
+   "rename": "沿條_friction_medial"
+  },
+  "outsole__foxing_stripe_top_medial": {
+   "rename": "沿條_top_medial"
+  },
+  "outsole__foxing_stripe_top_lateral": {
+   "rename": "沿條_top_lateral"
+  },
+  "outsole__foxing_stripe_bottom_medial": {
+   "rename": "沿條_bottom_medial"
+  },
+  "outsole__foxing_stripe_bottom_lateral": {
+   "rename": "沿條_bottom_lateral"
+  },
+  "outsole__foxing_stripe_medial": {
+   "rename": "trim__stripe_medial"
+  },
+  "outsole__foxing_stripe_lateral": {
+   "rename": "trim__stripe_lateral"
+  }
+ }
+}
