@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>glb render</title>
+<style>html,body{margin:0;background:#383838}canvas{display:block}</style></head>
+<body><canvas id="c"></canvas>
+<script>
+/* Minimal glTF 2.0 (GLB) renderer for preview stills: PBR-ish shading, base/MR/normal textures,
+   KHR_texture_transform, KHR_mesh_quantization (normalized ints), soft ground shadow. */
+const W=2500,H=2000;
+const cv=document.getElementById('c');cv.width=W;cv.height=H;
+const gl=cv.getContext('webgl2',{antialias:true,preserveDrawingBuffer:true});
+const CT={5120:gl.BYTE,5121:gl.UNSIGNED_BYTE,5122:gl.SHORT,5123:gl.UNSIGNED_SHORT,5125:gl.UNSIGNED_INT,5126:gl.FLOAT};
+const NC={SCALAR:1,VEC2:2,VEC3:3,VEC4:4};
+const m4={
+ mul(a,b){const o=new Float32Array(16);for(let i=0;i<4;i++)for(let j=0;j<4;j++){let s=0;for(let k=0;k<4;k++)s+=a[k*4+j]*b[i*4+k];o[i*4+j]=s}return o},
+ ident(){const o=new Float32Array(16);o[0]=o[5]=o[10]=o[15]=1;return o},
+ trs(n){if(n.matrix)return new Float32Array(n.matrix);const [x,y,z,w]=n.rotation||[0,0,0,1],[sx,sy,sz]=n.scale||[1,1,1],[tx,ty,tz]=n.translation||[0,0,0];
+  return new Float32Array([(1-2*(y*y+z*z))*sx,(2*(x*y+z*w))*sx,(2*(x*z-y*w))*sx,0,(2*(x*y-z*w))*sy,(1-2*(x*x+z*z))*sy,(2*(y*z+x*w))*sy,0,(2*(x*z+y*w))*sz,(2*(y*z-x*w))*sz,(1-2*(x*x+y*y))*sz,0,tx,ty,tz,1])},
+ inv(m){const a=m,o=new Float32Array(16);const b00=a[0]*a[5]-a[1]*a[4],b01=a[0]*a[6]-a[2]*a[4],b02=a[0]*a[7]-a[3]*a[4],b03=a[1]*a[6]-a[2]*a[5],b04=a[1]*a[7]-a[3]*a[5],b05=a[2]*a[7]-a[3]*a[6],b06=a[8]*a[13]-a[9]*a[12],b07=a[8]*a[14]-a[10]*a[12],b08=a[8]*a[15]-a[11]*a[12],b09=a[9]*a[14]-a[10]*a[13],b10=a[9]*a[15]-a[11]*a[13],b11=a[10]*a[15]-a[11]*a[14];let d=1/(b00*b11-b01*b10+b02*b09+b03*b08-b04*b07+b05*b06);
+  o[0]=(a[5]*b11-a[6]*b10+a[7]*b09)*d;o[1]=(a[2]*b10-a[1]*b11-a[3]*b09)*d;o[2]=(a[13]*b05-a[14]*b04+a[15]*b03)*d;o[3]=(a[10]*b04-a[9]*b05-a[11]*b03)*d;o[4]=(a[6]*b08-a[4]*b11-a[7]*b07)*d;o[5]=(a[0]*b11-a[2]*b08+a[3]*b07)*d;o[6]=(a[14]*b02-a[12]*b05-a[15]*b01)*d;o[7]=(a[8]*b05-a[10]*b02+a[11]*b01)*d;o[8]=(a[4]*b10-a[5]*b08+a[7]*b06)*d;o[9]=(a[1]*b08-a[0]*b10-a[3]*b06)*d;o[10]=(a[12]*b04-a[13]*b02+a[15]*b00)*d;o[11]=(a[9]*b02-a[8]*b04-a[11]*b00)*d;o[12]=(a[5]*b07-a[4]*b09-a[6]*b06)*d;o[13]=(a[0]*b09-a[1]*b07+a[2]*b06)*d;o[14]=(a[13]*b01-a[12]*b03-a[14]*b00)*d;o[15]=(a[8]*b03-a[9]*b01+a[10]*b00)*d;return o},
+ persp(fy,asp,n,f){const t=1/Math.tan(fy/2),o=new Float32Array(16);o[0]=t/asp;o[5]=t;o[10]=(f+n)/(n-f);o[11]=-1;o[14]=2*f*n/(n-f);return o},
+ ortho(l,r,b,t,n,f){const o=new Float32Array(16);o[0]=2/(r-l);o[5]=2/(t-b);o[10]=-2/(f-n);o[12]=-(r+l)/(r-l);o[13]=-(t+b)/(t-b);o[14]=-(f+n)/(f-n);o[15]=1;return o},
+ xf(m,p){const x=p[0],y=p[1],z=p[2];const w=m[3]*x+m[7]*y+m[11]*z+m[15];return [(m[0]*x+m[4]*y+m[8]*z+m[12])/w,(m[1]*x+m[5]*y+m[9]*z+m[13])/w,(m[2]*x+m[6]*y+m[10]*z+m[14])/w]}
+};
+const VS=`#version 300 es
+layout(location=0) in vec3 aP; layout(location=1) in vec3 aN; layout(location=2) in vec2 aU;
+uniform mat4 uM,uV,uP; uniform mat3 uNm; out vec3 vW; out vec3 vN; out vec2 vU;
+void main(){vec4 w=uM*vec4(aP,1.);vW=w.xyz;vN=normalize(uNm*aN);vU=aU;gl_Position=uP*uV*w;}`;
+const FS=`#version 300 es
+precision highp float; in vec3 vW; in vec3 vN; in vec2 vU; out vec4 o;
+uniform vec4 uBase; uniform float uMet,uRough; uniform vec3 uEye;
+uniform sampler2D tB,tMR,tN; uniform int hB,hMR,hN; uniform mat3 xB,xMR,xN; uniform float nScale;
+vec3 s2l(vec3 c){return pow(c,vec3(2.2));}
+vec3 aces(vec3 x){return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),0.,1.);}
+float D(float a,float nh){float a2=a*a;float d=nh*nh*(a2-1.)+1.;return a2/(3.14159*d*d);}
+vec3 light(vec3 n,vec3 v,vec3 l,vec3 col,vec3 alb,float met,float r){
+  vec3 h=normalize(l+v);float nl=max(dot(n,l),0.),nh=max(dot(n,h),0.),nv=max(dot(n,v),1e-3),vh=max(dot(v,h),0.);
+  vec3 f0=mix(vec3(.04),alb,met);vec3 F=f0+(1.-f0)*pow(1.-vh,5.);float a=max(r*r,.03);
+  float k=a/2.;float G=nl/(nl*(1.-k)+k)*nv/(nv*(1.-k)+k);
+  vec3 spec=D(a,nh)*F*G/max(4.*nl*nv,1e-3);vec3 diff=(1.-F)*(1.-met)*alb/3.14159;
+  return (diff+spec)*col*nl;}
+void main(){
+  vec4 b=uBase; if(hB==1){vec4 t=texture(tB,(xB*vec3(vU,1.)).xy);b*=vec4(s2l(t.rgb),t.a);}
+  float met=uMet,r=uRough; if(hMR==1){vec4 t=texture(tMR,(xMR*vec3(vU,1.)).xy);r*=t.g;met*=t.b;}
+  vec3 n=normalize(vN); if(!gl_FrontFacing)n=-n;
+  if(hN==1){vec3 dp1=dFdx(vW),dp2=dFdy(vW);vec2 u=(xN*vec3(vU,1.)).xy;vec2 du1=dFdx(u),du2=dFdy(u);
+    vec3 dp2p=cross(dp2,n),dp1p=cross(n,dp1);vec3 T=dp2p*du1.x+dp1p*du2.x;vec3 B=dp2p*du1.y+dp1p*du2.y;
+    float im=inversesqrt(max(dot(T,T),dot(B,B))+1e-20);vec3 tn=texture(tN,u).xyz*2.-1.;tn.xy*=nScale;
+    vec3 nn=normalize(mat3(T*im,B*im,n)*tn); if(dot(nn,nn)>.5) n=nn;}
+  vec3 v=normalize(uEye-vW); vec3 alb=b.rgb;
+  vec3 c=vec3(0.);
+  c+=light(n,v,normalize(vec3(-.35,.85,.55)),vec3(2.6),alb,met,r);
+  c+=light(n,v,normalize(vec3(.6,.5,-.6)),vec3(1.1),alb,met,r);
+  c+=light(n,v,normalize(vec3(.9,.25,.5)),vec3(.8),alb,met,r);
+  c+=light(n,v,normalize(vec3(-.8,.1,-.4)),vec3(.6),alb,met,r);
+  float hemi=.5+.5*n.y; vec3 amb=mix(vec3(.16,.155,.15),vec3(.42,.42,.44),hemi);
+  vec3 f0=mix(vec3(.04),alb,met);
+  c+=amb*alb*(1.-met)+amb*f0*(1.-r)*.9;
+  c=aces(c*1.15); o=vec4(pow(c,vec3(1./2.2)),1.);}`;
+const SVS=`#version 300 es
+layout(location=0) in vec3 aP; uniform mat4 uV,uP; out vec3 vW; void main(){vW=aP;gl_Position=uP*uV*vec4(aP,1.);}`;
+const SFS=`#version 300 es
+precision highp float; in vec3 vW; out vec4 o; uniform vec4 uBox; /* cx,cz,rx,rz */
+void main(){vec2 d=(vW.xz-uBox.xy)/uBox.zw;float r=length(d);float a=.55*(1.-smoothstep(.55,1.15,r));o=vec4(0.,0.,0.,a);}`;
+function prog(vs,fs){const p=gl.createProgram();for(const [t,s] of [[gl.VERTEX_SHADER,vs],[gl.FRAGMENT_SHADER,fs]]){const sh=gl.createShader(t);gl.shaderSource(sh,s);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(sh);gl.attachShader(p,sh)}gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw gl.getProgramInfoLog(p);return p}
+const P=prog(VS,FS),SP=prog(SVS,SFS);
+const U=(p,n)=>gl.getUniformLocation(p,n);
+function xfm(t){/* KHR_texture_transform -> mat3 (column-major) */
+  const e=(t&&t.extensions&&t.extensions.KHR_texture_transform)||{};const [ox,oy]=e.offset||[0,0],[sx,sy]=e.scale||[1,1],r=e.rotation||0;const c=Math.cos(r),s=Math.sin(r);
+  return new Float32Array([c*sx,-s*sx,0, s*sy,c*sy,0, ox,oy,1]);}
+let SCENE=null;
+async function load(url){
+  const buf=await (await fetch(url)).arrayBuffer();const dv=new DataView(buf);const jl=dv.getUint32(12,true);
+  const J=JSON.parse(new TextDecoder().decode(new Uint8Array(buf,20,jl)));const binOff=20+jl+8;const BIN=new Uint8Array(buf,binOff);
+  const texCache={};
+  async function tex(i,srgb){if(i==null)return null;const k=i+(srgb?'s':'l');if(texCache[k])return texCache[k];
+    const img=J.images[J.textures[i].source];const bv=J.bufferViews[img.bufferView];
+    const bm=await createImageBitmap(new Blob([BIN.subarray(bv.byteOffset||0,(bv.byteOffset||0)+bv.byteLength)],{type:img.mimeType}),{colorSpaceConversion:'none'});
+    const t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA8,gl.RGBA,gl.UNSIGNED_BYTE,bm);gl.generateMipmap(gl.TEXTURE_2D);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.REPEAT);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.REPEAT);
+    const ext=gl.getExtension('EXT_texture_filter_anisotropic');if(ext)gl.texParameterf(gl.TEXTURE_2D,ext.TEXTURE_MAX_ANISOTROPY_EXT,8);
+    return texCache[k]=t;}
+  const glbuf={};function bufFor(bvi,target){const k=bvi+':'+target;if(glbuf[k])return glbuf[k];const bv=J.bufferViews[bvi];const b=gl.createBuffer();gl.bindBuffer(target,b);gl.bufferData(target,BIN.subarray(bv.byteOffset||0,(bv.byteOffset||0)+bv.byteLength),gl.STATIC_DRAW);return glbuf[k]=b;}
+  const draws=[];const parent={};J.nodes.forEach((n,i)=>(n.children||[]).forEach(c=>parent[c]=i));
+  const world=i=>{let m=m4.trs(J.nodes[i]);while(parent[i]!=null){i=parent[i];m=m4.mul(m4.trs(J.nodes[i]),m)}return m};
+  let mn=[1e9,1e9,1e9],mx=[-1e9,-1e9,-1e9];
+  for(let ni=0;ni<J.nodes.length;ni++){const nd=J.nodes[ni];if(nd.mesh==null)continue;const M=world(ni);
+    for(const pr of J.meshes[nd.mesh].primitives){
+      const vao=gl.createVertexArray();gl.bindVertexArray(vao);
+      for(const [name,loc] of [['POSITION',0],['NORMAL',1],['TEXCOORD_0',2]]){const ai=pr.attributes[name];if(ai==null){gl.disableVertexAttribArray(loc);continue}
+        const a=J.accessors[ai];const bv=J.bufferViews[a.bufferView];gl.bindBuffer(gl.ARRAY_BUFFER,bufFor(a.bufferView,gl.ARRAY_BUFFER));
+        gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,NC[a.type],CT[a.componentType],!!a.normalized,bv.byteStride||0,a.byteOffset||0);
+        if(name==='POSITION'&&a.min){const c=[[a.min[0],a.min[1],a.min[2]],[a.max[0],a.max[1],a.max[2]]];for(const x of [0,1])for(const y of [0,1])for(const z of [0,1]){const p=m4.xf(M,[c[x][0],c[y][1],c[z][2]]);for(let q=0;q<3;q++){mn[q]=Math.min(mn[q],p[q]);mx[q]=Math.max(mx[q],p[q])}}}}
+      const ia=J.accessors[pr.indices];gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,bufFor(ia.bufferView,gl.ELEMENT_ARRAY_BUFFER));
+      const mat=J.materials[pr.material]||{};const pb=mat.pbrMetallicRoughness||{};
+      const nm=m4.inv(M);const N3=new Float32Array([nm[0],nm[4],nm[8],nm[1],nm[5],nm[9],nm[2],nm[6],nm[10]]);
+      draws.push({vao,M,N3,count:ia.count,type:CT[ia.componentType],off:(ia.byteOffset||0),
+        base:pb.baseColorFactor||[1,1,1,1],met:pb.metallicFactor??1,rough:pb.roughnessFactor??1,
+        tB:await tex(pb.baseColorTexture&&pb.baseColorTexture.index,true),xB:xfm(pb.baseColorTexture),
+        tMR:await tex(pb.metallicRoughnessTexture&&pb.metallicRoughnessTexture.index),xMR:xfm(pb.metallicRoughnessTexture),
+        tN:await tex(mat.normalTexture&&mat.normalTexture.index),xN:xfm(mat.normalTexture),nS:(mat.normalTexture&&mat.normalTexture.scale)||1,
+        dbl:!!mat.doubleSided,name:mat.name});}}
+  /* ground quad */
+  const y=mn[1]-0.0005,cx=(mn[0]+mx[0])/2,cz=(mn[2]+mx[2])/2,R=Math.max(mx[0]-mn[0],mx[2]-mn[2])*2;
+  const gv=gl.createVertexArray();gl.bindVertexArray(gv);const gb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,gb);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([cx-R,y,cz-R,cx+R,y,cz-R,cx+R,y,cz+R,cx-R,y,cz-R,cx+R,y,cz+R,cx-R,y,cz+R]),gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,3,gl.FLOAT,false,0,0);
+  SCENE={draws,mn,mx,ground:{vao:gv,box:[cx,cz,(mx[0]-mn[0])*.56,(mx[2]-mn[2])*.62]}};
+  return {mn,mx,count:draws.length};
+}
+function render(camWorld,proj,shadow=true,bg=[56,56,56]){
+  const V=m4.inv(new Float32Array(camWorld));const eye=[camWorld[12],camWorld[13],camWorld[14]];
+  gl.viewport(0,0,W,H);gl.clearColor(bg[0]/255,bg[1]/255,bg[2]/255,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+  if(shadow){gl.useProgram(SP);gl.disable(gl.DEPTH_TEST);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+    gl.uniformMatrix4fv(U(SP,'uV'),false,V);gl.uniformMatrix4fv(U(SP,'uP'),false,proj);gl.uniform4fv(U(SP,'uBox'),SCENE.ground.box);
+    gl.bindVertexArray(SCENE.ground.vao);gl.drawArrays(gl.TRIANGLES,0,6);gl.disable(gl.BLEND);}
+  gl.enable(gl.DEPTH_TEST);gl.useProgram(P);gl.uniformMatrix4fv(U(P,'uV'),false,V);gl.uniformMatrix4fv(U(P,'uP'),false,proj);gl.uniform3fv(U(P,'uEye'),eye);
+  gl.uniform1i(U(P,'tB'),0);gl.uniform1i(U(P,'tMR'),1);gl.uniform1i(U(P,'tN'),2);
+  for(const d of SCENE.draws){gl.bindVertexArray(d.vao);gl.uniformMatrix4fv(U(P,'uM'),false,d.M);gl.uniformMatrix3fv(U(P,'uNm'),true,d.N3);
+    gl.uniform4fv(U(P,'uBase'),d.base);gl.uniform1f(U(P,'uMet'),d.met);gl.uniform1f(U(P,'uRough'),d.rough);
+    for(const [slot,t,h,x] of [[0,d.tB,'hB','xB'],[1,d.tMR,'hMR','xMR'],[2,d.tN,'hN','xN']]){gl.activeTexture(gl.TEXTURE0+slot);gl.bindTexture(gl.TEXTURE_2D,t);gl.uniform1i(U(P,h),t?1:0);gl.uniformMatrix3fv(U(P,x),false,d[x]);}
+    gl.uniform1f(U(P,'nScale'),d.nS);
+    gl.drawElements(gl.TRIANGLES,d.count,d.type,d.off);}
+  gl.finish();
+}
+/* frame the shoe bbox for a camera: returns projection (ortho or perspective with distance fit) */
+function frameCam(camWorld,kind,yfov,margin){
+  const V=m4.inv(new Float32Array(camWorld));const {mn,mx}=SCENE;let l=1e9,r=-1e9,b=1e9,t=-1e9,n=1e9,f=-1e9;
+  for(const x of [mn[0],mx[0]])for(const y of [mn[1],mx[1]])for(const z of [mn[2],mx[2]]){const p=m4.xf(V,[x,y,z]);
+    if(kind==='persp'){const sx=p[0]/-p[2],sy=p[1]/-p[2];l=Math.min(l,sx);r=Math.max(r,sx);b=Math.min(b,sy);t=Math.max(t,sy)}else{l=Math.min(l,p[0]);r=Math.max(r,p[0]);b=Math.min(b,p[1]);t=Math.max(t,p[1])}
+    n=Math.min(n,-p[2]);f=Math.max(f,-p[2]);}
+  const asp=W/H,cx=(l+r)/2,cy=(b+t)/2;let hw=(r-l)/2,hh=(t-b)/2;if(hw/hh>asp)hh=hw/asp;else hw=hh*asp;hw*=margin;hh*=margin;
+  const near=Math.max(n*0.5,1e-3),far=f*2+1;
+  if(kind==='persp'){/* off-center frustum so the shoe is centered and fills the frame */
+    const o=new Float32Array(16);const L=(cx-hw)*near,R=(cx+hw)*near,B=(cy-hh)*near,T=(cy+hh)*near;
+    o[0]=2*near/(R-L);o[5]=2*near/(T-B);o[8]=(R+L)/(R-L);o[9]=(T+B)/(T-B);o[10]=-(far+near)/(far-near);o[11]=-1;o[14]=-2*far*near/(far-near);return o;}
+  return m4.ortho(cx-hw,cx+hw,cy-hh,cy+hh,-f*3-1,f*3+1);
+}
+window.load=load;window.shot=function(camWorld,kind,yfov,margin,shadow){render(camWorld,frameCam(camWorld,kind,yfov,margin),shadow);return cv.toDataURL('image/jpeg',0.92)};
+</script></body></html>

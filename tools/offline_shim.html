@@ -1,0 +1,4 @@
+<script>(function(){function norm(u){u=String(u).split('?')[0].split('#')[0];var o=[];u.split('/').forEach(function(s){if(s==='..')o.pop();else if(s&&s!=='.')o.push(s)});return o.join('/')}
+var of=window.fetch.bind(window);
+window.fetch=function(u,o){var s=typeof u==='string'?u:(u&&u.url)||String(u);if(/^(blob:|data:)/.test(s))return of(u,o);var el=document.getElementById('f:'+norm(s));
+return Promise.resolve(el?new Response(el.textContent,{status:200}):new Response('',{status:404}));};})();</script>
