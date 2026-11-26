@@ -204,31 +204,66 @@
    "rough": 0.85
   },
   "outsole__toe_bumper": {
-   "rename": "bumper"
+   "rename": "bumper",
+   "img": "$WORK/smooth_outsole__toe_bumper.png",
+   "n": "Knurl_NRM.png",
+   "cm": [
+    2.4,
+    2.4
+   ],
+   "rough": 0.65
   },
   "outsole__friction_tape_lateral": {
-   "rename": "沿條_friction_lateral"
+   "rename": "沿條_friction_lateral",
+   "img": "$WORK/smooth_outsole__friction_tape_lateral.png",
+   "n": "109743_NRM.png",
+   "r": "109743_ROUGH.png",
+   "cm": [
+    3,
+    3
+   ],
+   "rough": 0.6
   },
   "outsole__friction_tape_medial": {
-   "rename": "沿條_friction_medial"
+   "rename": "沿條_friction_medial",
+   "img": "$WORK/smooth_outsole__friction_tape_medial.png",
+   "n": "109743_NRM.png",
+   "r": "109743_ROUGH.png",
+   "cm": [
+    3,
+    3
+   ],
+   "rough": 0.6
   },
   "outsole__foxing_stripe_top_medial": {
-   "rename": "沿條_top_medial"
+   "rename": "沿條_top_medial",
+   "img": "$WORK/smooth_outsole__foxing_stripe_top_medial.png",
+   "rough": 0.6
   },
   "outsole__foxing_stripe_top_lateral": {
-   "rename": "沿條_top_lateral"
+   "rename": "沿條_top_lateral",
+   "img": "$WORK/smooth_outsole__foxing_stripe_top_lateral.png",
+   "rough": 0.6
   },
   "outsole__foxing_stripe_bottom_medial": {
-   "rename": "沿條_bottom_medial"
+   "rename": "沿條_bottom_medial",
+   "img": "$WORK/smooth_outsole__foxing_stripe_bottom_medial.png",
+   "rough": 0.6
   },
   "outsole__foxing_stripe_bottom_lateral": {
-   "rename": "沿條_bottom_lateral"
+   "rename": "沿條_bottom_lateral",
+   "img": "$WORK/smooth_outsole__foxing_stripe_bottom_lateral.png",
+   "rough": 0.6
   },
   "outsole__foxing_stripe_medial": {
-   "rename": "trim__stripe_medial"
+   "rename": "trim__stripe_medial",
+   "img": "$WORK/smooth_outsole__foxing_stripe_medial.png",
+   "rough": 0.6
   },
   "outsole__foxing_stripe_lateral": {
-   "rename": "trim__stripe_lateral"
+   "rename": "trim__stripe_lateral",
+   "img": "$WORK/smooth_outsole__foxing_stripe_lateral.png",
+   "rough": 0.6
   },
   "upper__vamp": {
    "rename": "upper__vamp",
