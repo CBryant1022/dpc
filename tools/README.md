@@ -61,3 +61,7 @@ Renders are read from `<base>/renders/`; model parts from `<base>/<file>` (a fil
 - Translucent rubber exports as dark red: set `color` from the render, `drop_base`, `no_trans`.
 - Moving a style to a new folder: renders stay under `base`; point `files` with `../newfolder/`.
 - Offline: model-viewer from git `google/model-viewer` branch `gh-pages` (`node_modules/@google/model-viewer/dist/model-viewer.min.js`); npm/CDN are blocked in the sandbox.
+
+## Upload
+
+Preferred: `git push` from the Claude session (Claude GitHub App installed on this repo). Fallback: GitHub web upload (<=3.8 MB per file, <=8 files per commit).
