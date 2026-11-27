@@ -1,7 +1,8 @@
 # Digital Product Creation｜版本紀錄
 
-線上版：https://claude.ai/artifact/LdrkGBCvMpawY5237hdM4H
-GitHub 版：https://cbryant1022.github.io/dpc/report/
+## v4.4（2026-11-27 09:30）
+- 月度總覽以「設備稼動率（3D 打印）」取代「交期達成率 OTD」：顯示各台平均稼動率與達標判定（標準 ≥ 60%），並列出每台機台稼動率與較上月變化
+- 交期達成頁維持不變
 
 ## v4.3（2026-11-26 16:45）
 - 右上角新增「唯讀／編輯」切換：預設唯讀，隱藏結論的編輯、排序、隱藏、新增，以及下月備註、設定、權杖與匯入 Excel；切到編輯才可修改，會記住選擇
